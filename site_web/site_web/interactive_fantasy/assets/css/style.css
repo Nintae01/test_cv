@@ -25,6 +25,8 @@
   --gate-aura-width: 40vw; /* gate glow width */
   --gate-aura-height: 40vh; /* gate glow height */
   --inner-zoom-extra: 1; /* multiplier applied in finale */
+  --fantasy-glow: 0 0 32px 8px rgba(244,216,150,0.18), 0 0 64px 16px rgba(34,197,94,0.10);
+  --castle-center: 50%;
 }
 
 html, body { height: 100%; background: var(--bg); color: var(--text); }
@@ -72,12 +74,61 @@ h1, h2, h3, .title, .chapter-title {
 .scene--inner { opacity: 0; transition: opacity .8s ease; transform-origin: var(--inner-origin-x, 50%) var(--inner-origin-y, 68%); transform: translateX(var(--inner-shift, 0px)) scale(calc(var(--inner-zoom, 1) * var(--inner-zoom-extra, 1))); }
 .is-inside .scene--inner { opacity: 1; }
 .is-inside .scene--outer { opacity: 0; }
-.layer--castle { bottom: 0; width: 160%; left: 50%; margin-left: -80%; opacity: 1; z-index: 3; filter: drop-shadow(0 22px 50px rgba(0,0,0,0.75)) brightness(1.20) contrast(1.18) saturate(1.15); image-rendering: -webkit-optimize-contrast; }
+.layer--castle { 
+  bottom: 0;
+  width: 160%;
+  left: var(--castle-center, 50%);
+  margin-left: -80%;
+  opacity: 1;
+  z-index: 3;
+  filter: drop-shadow(0 22px 50px rgba(0,0,0,0.75)) brightness(1.20) contrast(1.18) saturate(1.15);
+  image-rendering: -webkit-optimize-contrast;
+  box-shadow: var(--fantasy-glow);
+}
 .layer--hills { bottom: 0; width: 135%; left: 50%; margin-left: -67.5%; opacity: 0.95; z-index: 2; filter: brightness(1.08) contrast(1.05); }
-.layer--causeway { bottom: var(--causeway-bottom); width: 130%; left: 50%; margin-left: -65%; opacity: 1; z-index: 4; filter: drop-shadow(0 18px 40px rgba(0,0,0,0.70)) brightness(1.10) contrast(1.12); image-rendering: -webkit-optimize-contrast; }
-.layer--courtyard { bottom: 0; width: 160%; left: 50%; margin-left: -80%; opacity: 1; z-index: 2; filter: drop-shadow(0 22px 48px rgba(0,0,0,0.65)) brightness(1.14) contrast(1.14) saturate(1.10); image-rendering: -webkit-optimize-contrast; }
-.layer--towers { top: 4vh; left: 50%; width: 160%; margin-left: -80%; z-index: 1; opacity: 0.92; filter: drop-shadow(0 14px 32px rgba(0,0,0,0.55)) brightness(1.08) contrast(1.05); image-rendering: -webkit-optimize-contrast; }
-.layer--nearhouses { bottom: -2vh; left: 50%; width: 180%; margin-left: -90%; z-index: 5; filter: drop-shadow(0 24px 52px rgba(0,0,0,0.7)) brightness(1.12) contrast(1.10); image-rendering: -webkit-optimize-contrast; }
+.layer--causeway { 
+  bottom: var(--causeway-bottom);
+  width: 130%;
+  left: var(--castle-center, 50%);
+  margin-left: -65%;
+  opacity: 1;
+  z-index: 4;
+  filter: drop-shadow(0 18px 40px rgba(0,0,0,0.70)) brightness(1.10) contrast(1.12);
+  image-rendering: -webkit-optimize-contrast;
+  box-shadow: var(--fantasy-glow);
+}
+.layer--courtyard { 
+  bottom: 0;
+  width: 160%;
+  left: var(--castle-center, 50%);
+  margin-left: -80%;
+  opacity: 1;
+  z-index: 2;
+  filter: drop-shadow(0 22px 48px rgba(0,0,0,0.65)) brightness(1.14) contrast(1.14) saturate(1.10);
+  image-rendering: -webkit-optimize-contrast;
+  box-shadow: var(--fantasy-glow);
+}
+.layer--towers { 
+  top: 4vh;
+  left: var(--castle-center, 50%);
+  width: 160%;
+  margin-left: -80%;
+  z-index: 1;
+  opacity: 0.92;
+  filter: drop-shadow(0 14px 32px rgba(0,0,0,0.55)) brightness(1.08) contrast(1.05);
+  image-rendering: -webkit-optimize-contrast;
+  box-shadow: var(--fantasy-glow);
+}
+.layer--nearhouses { 
+  bottom: -2vh;
+  left: var(--castle-center, 50%);
+  width: 180%;
+  margin-left: -90%;
+  z-index: 5;
+  filter: drop-shadow(0 24px 52px rgba(0,0,0,0.7)) brightness(1.12) contrast(1.10);
+  image-rendering: -webkit-optimize-contrast;
+  box-shadow: var(--fantasy-glow);
+}
 .layer--gate-aura { left: calc(var(--gate-aura-x, 50%) + var(--gate-aura-shift, 0px)); bottom: var(--gate-aura-bottom, 20vh); width: var(--gate-aura-width, 40vw); height: var(--gate-aura-height, 40vh); margin-left: calc(-1 * var(--gate-aura-width, 40vw) / 2); z-index: 2; pointer-events: none; background:
   radial-gradient(60% 60% at 50% 72%, rgba(230,208,156,0.22), rgba(230,208,156,0.0) 60%);
   filter: blur(14px) saturate(1.05);
@@ -238,9 +289,27 @@ h1, h2, h3, .title, .chapter-title {
   border-color: rgba(230,200,120,0.45);
   box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 24px rgba(230,200,120,0.15);
 }
-.weapon i { color: var(--gold-bright); font-size: 24px; }
-.weapon strong { font-family: 'Cinzel', serif; font-size: 16px; letter-spacing: 0.5px; }
-.weapon span { color: var(--muted); font-size: 14px; }
+.weapon i { 
+  color: var(--gold-bright); 
+  font-size: 32px; 
+  display: block;
+  margin: 0 auto 8px auto;
+  text-align: center;
+  filter: drop-shadow(0 0 8px rgba(244,216,150,0.18));
+}
+.weapon strong { 
+  font-family: 'Cinzel', serif; 
+  font-size: 18px; 
+  letter-spacing: 0.5px; 
+  display: block;
+  text-align: center;
+}
+.weapon span { 
+  color: var(--muted); 
+  font-size: 15px; 
+  display: block;
+  text-align: center;
+}
 /* Card shape variants */
 .weapon--notch { clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px); }
 .weapon--diagonal { clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%); }
