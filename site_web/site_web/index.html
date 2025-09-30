@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Portfolio of Enzo Dupuy – Cybersecurity Student & Developer" />
+  <title>Enzo Dupuy – Cybersecurity Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4RhisWm1G9H0hZ1IsfRSAxEPPYUajF2iGaZ3Gd2KKKj3DFkQfVIAtF3YXx7dYg4Zppg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <canvas id="bgCanvas" aria-hidden="true"></canvas>
+
+  <header class="site-header" id="top">
+    <div class="container nav-wrap">
+      <a class="brand" href="#top"><span class="logo">ED</span><span class="brand-text">Enzo Dupuy</span></a>
+      <nav class="site-nav" aria-label="Primary">
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false"><span></span><span></span><span></span></button>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#cv">CV</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#timeline">Timeline</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li>
+            <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+              <i class="fa-solid fa-moon"></i>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero section" id="hero" aria-label="Intro">
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <h1><span class="hi">Hi, I'm</span> <span class="name">Enzo Dupuy</span></h1>
+          <p class="subtitle">Cybersecurity Student & Developer</p>
+          <div class="cta">
+            <a class="btn primary" href="#projects"><i class="fa-solid fa-rocket"></i> View Projects</a>
+            <a class="btn ghost" href="#contact"><i class="fa-solid fa-envelope"></i> Contact Me</a>
+          </div>
+          <ul class="socials" aria-label="Social links">
+            <li><a href="https://github.com/enzodupuy" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a></li>
+            <li><a href="https://www.linkedin.com/in/enzodupuy" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a></li>
+            <li><a href="#contact" aria-label="Email"><i class="fa-solid fa-envelope"></i></a></li>
+          </ul>
+        </div>
+        <div class="hero-visual">
+          <div class="profile-card tilt" aria-hidden="true">
+            <img src="assets/img/portrait.svg" alt="Abstract portrait" />
+            <div class="glow"></div>
+          </div>
+        </div>
+      </div>
+      <a href="#about" class="scroll-down" aria-label="Scroll to content"><i class="fa-solid fa-angles-down"></i></a>
+    </section>
+
+    <section class="section about" id="about">
+      <div class="container grid two">
+        <div>
+          <h2 class="section-title">About</h2>
+          <p>
+            I'm a cybersecurity student at <strong>2600: The Hacker School</strong> with hands-on experience in system &
+            network administration, LLM projects, ESET deployment, Microsoft 365, and internal security tools.
+            Passionate about pentesting, automation, and ethical hacking.
+          </p>
+          <div class="quick-stats">
+            <div class="stat">
+              <span class="num" data-target="5">0</span>
+              <span class="label">Years Experience</span>
+            </div>
+            <div class="stat">
+              <span class="num" data-target="32">0</span>
+              <span class="label">Projects</span>
+            </div>
+            <div class="stat">
+              <span class="num" data-target="12">0</span>
+              <span class="label">Happy Clients</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <ul class="highlights">
+            <li><i class="fa-solid fa-user-ninja"></i> Pentesting & Red Teaming</li>
+            <li><i class="fa-solid fa-network-wired"></i> System & Network Administration</li>
+            <li><i class="fa-brands fa-microsoft"></i> Microsoft 365 & Endpoint Management</li>
+            <li><i class="fa-solid fa-gears"></i> Automation (PowerApps / Flows)</li>
+            <li><i class="fa-solid fa-shield-halved"></i> Security Hardening & Compliance</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="cv">
+      <div class="container">
+        <h2 class="section-title">CV / Resume</h2>
+        <p>Download my CV:</p>
+        <div class="highlights" style="margin-top:12px;">
+          <li><i class="fa-solid fa-file-pdf"></i> <a href="cv_french.pdf" target="_blank" rel="noopener">French CV (PDF)</a></li>
+          <li><i class="fa-solid fa-file-pdf"></i> <a href="cv_english.pdf" target="_blank" rel="noopener">English CV (PDF)</a></li>
+        </div>
+      </div>
+    </section>
+
+    <section class="section projects" id="projects">
+      <div class="container">
+        <h2 class="section-title">Featured Projects</h2>
+        <div class="project-grid">
+          <article class="card project reveal">
+            <img src="assets/img/project1.svg" alt="LLM Automation visual" />
+            <div class="card-body">
+              <h3>LLM Automation & Security Analysis</h3>
+              <p>Implemented LLMs to assist security workflow automation and vulnerability analysis.</p>
+              <div class="tags">
+                <span>Python</span><span>LLM</span><span>Security</span>
+              </div>
+              <div class="actions">
+                <a href="#" class="btn small ghost">Details</a>
+              </div>
+            </div>
+          </article>
+          <article class="card project reveal">
+            <img src="assets/img/project2.svg" alt="PowerApps Flows visual" />
+            <div class="card-body">
+              <h3>PowerApps Flows & Internal Tools</h3>
+              <p>Automated ticketing and internal operations with PowerApps and Power Automate.</p>
+              <div class="tags">
+                <span>PowerApps</span><span>Power Automate</span><span>Ops</span>
+              </div>
+              <div class="actions">
+                <a href="#" class="btn small ghost">Details</a>
+              </div>
+            </div>
+          </article>
+          <article class="card project reveal">
+            <img src="assets/img/project3.svg" alt="ESET Deployment visual" />
+            <div class="card-body">
+              <h3>ESET Deployment & Maintenance</h3>
+              <p>Managed endpoint deployment, updates, and maintenance across infrastructure.</p>
+              <div class="tags">
+                <span>ESET</span><span>Endpoint</span><span>Admin</span>
+              </div>
+              <div class="actions">
+                <a href="#" class="btn small ghost">Details</a>
+              </div>
+            </div>
+          </article>
+          <article class="card project reveal">
+            <img src="assets/img/project2.svg" alt="3CF Compliance visual" />
+            <div class="card-body">
+              <h3>3CF Compliance Project</h3>
+              <p>Supported regulatory compliance implementation for an aerospace company.</p>
+              <div class="tags">
+                <span>Compliance</span><span>Security</span><span>Docs</span>
+              </div>
+              <div class="actions">
+                <a href="#" class="btn small ghost">Details</a>
+              </div>
+            </div>
+          </article>
+          <article class="card project reveal">
+            <img src="assets/img/project1.svg" alt="Microsoft 365 Admin visual" />
+            <div class="card-body">
+              <h3>Microsoft 365 Administration</h3>
+              <p>Managed users, GPOs, and endpoint solutions in a Microsoft 365 environment.</p>
+              <div class="tags">
+                <span>M365</span><span>Intune</span><span>Admin</span>
+              </div>
+              <div class="actions">
+                <a href="#" class="btn small ghost">Details</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section skills" id="skills">
+      <div class="container">
+        <h2 class="section-title">Skills</h2>
+        <div class="skills-wrap">
+          <div class="skill-bar"><span data-skill="Security Ops" data-level="85"></span></div>
+          <div class="skill-bar"><span data-skill="Pentesting" data-level="80"></span></div>
+          <div class="skill-bar"><span data-skill="Microsoft 365 Admin" data-level="78"></span></div>
+          <div class="skill-bar"><span data-skill="Automation / PowerApps" data-level="82"></span></div>
+          <div class="skill-bar"><span data-skill="Network & Systems" data-level="84"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section timeline" id="timeline">
+      <div class="container">
+        <h2 class="section-title">Timeline</h2>
+        <div class="tl">
+          <div class="tl-item reveal">
+            <div class="tl-dot"></div>
+            <div class="tl-card">
+              <h3>Senior Frontend Engineer</h3>
+              <span class="muted">2023 – Present</span>
+              <p>Leading UI architecture and design systems at Acme Corp.</p>
+            </div>
+          </div>
+          <div class="tl-item reveal">
+            <div class="tl-dot"></div>
+            <div class="tl-card">
+              <h3>Frontend Engineer</h3>
+              <span class="muted">2021 – 2023</span>
+              <p>Built dashboards and component libraries at Startup XYZ.</p>
+            </div>
+          </div>
+          <div class="tl-item reveal">
+            <div class="tl-dot"></div>
+            <div class="tl-card">
+              <h3>Freelance</h3>
+              <span class="muted">2019 – 2021</span>
+              <p>Delivered bespoke websites and branding for clients.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section contact" id="contact">
+      <div class="container grid two">
+        <div>
+          <h2 class="section-title">Get in touch</h2>
+          <p>Have a project in mind, or just want to say hi? Drop a message.</p>
+          <ul class="contact-list">
+            <li><i class="fa-solid fa-location-dot"></i> France</li>
+            <li><i class="fa-solid fa-envelope"></i> <a href="mailto:dupuy.enzo@gmail.com">dupuy.enzo@gmail.com</a></li>
+            <li><i class="fa-solid fa-phone"></i> 06 29 10 41 18</li>
+            <li><i class="fa-brands fa-linkedin"></i> <a href="https://www.linkedin.com/in/enzodupuy" target="_blank" rel="noopener">linkedin.com/in/enzodupuy</a></li>
+            <li><i class="fa-brands fa-github"></i> <a href="https://github.com/enzodupuy" target="_blank" rel="noopener">github.com/enzodupuy</a></li>
+          </ul>
+        </div>
+        <form class="contact-form" action="#" method="post" onsubmit="return false;">
+          <label>
+            <span>Name</span>
+            <input type="text" name="name" placeholder="Jane Doe" required />
+          </label>
+          <label>
+            <span>Email</span>
+            <input type="email" name="email" placeholder="jane@domain.com" required />
+          </label>
+          <label>
+            <span>Message</span>
+            <textarea name="message" placeholder="Hello..." rows="5" required></textarea>
+          </label>
+          <button class="btn primary" type="submit"><i class="fa-solid fa-paper-plane"></i> Send</button>
+          <p class="form-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© <span id="year"></span> Enzo Dupuy. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <button id="toTop" class="to-top" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

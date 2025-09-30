@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1920" height="900" viewBox="0 0 1920 900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="stone2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0f2236"/>
+      <stop offset="100%" stop-color="#091a2b"/>
+    </linearGradient>
+    <radialGradient id="warm2" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#ffe7b0"/>
+      <stop offset="100%" stop-color="#e6d09c"/>
+    </radialGradient>
+    <filter id="g2" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Near foreground houses left -->
+  <g filter="url(#g2)">
+    <g>
+      <rect x="-40" y="560" width="360" height="240" fill="url(#stone2)" stroke="#081522" stroke-width="4"/>
+      <path d="M-40 560 L140 440 L320 560 Z" fill="url(#stone2)" stroke="#081522" stroke-width="4"/>
+      <rect x="40" y="640" width="30" height="46" rx="4" fill="url(#warm2)"><animate attributeName="opacity" values="0.6;1;0.8;0.95;0.7" dur="2.4s" repeatCount="indefinite"/></rect>
+      <rect x="90" y="676" width="24" height="38" rx="4" fill="url(#warm2)"><animate attributeName="opacity" values="0.7;0.95;0.75;1;0.72" dur="2.9s" repeatCount="indefinite"/></rect>
+      <circle cx="210" cy="700" r="9" fill="url(#warm2)"><animate attributeName="opacity" values="0.65;1;0.8;0.9;0.68" dur="2.1s" repeatCount="indefinite"/></circle>
+    </g>
+  </g>
+
+  <!-- Near foreground houses right -->
+  <g filter="url(#g2)">
+    <g>
+      <rect x="1600" y="560" width="360" height="240" fill="url(#stone2)" stroke="#081522" stroke-width="4"/>
+      <path d="M1600 560 L1780 440 L1960 560 Z" fill="url(#stone2)" stroke="#081522" stroke-width="4"/>
+      <rect x="1710" y="640" width="30" height="46" rx="4" fill="url(#warm2)"><animate attributeName="opacity" values="0.6;1;0.8;0.95;0.7" dur="2.2s" repeatCount="indefinite"/></rect>
+      <rect x="1760" y="676" width="24" height="38" rx="4" fill="url(#warm2)"><animate attributeName="opacity" values="0.7;0.95;0.75;1;0.72" dur="3.1s" repeatCount="indefinite"/></rect>
+      <circle cx="1880" cy="700" r="9" fill="url(#warm2)"><animate attributeName="opacity" values="0.65;1;0.8;0.9;0.68" dur="1.9s" repeatCount="indefinite"/></circle>
+    </g>
+  </g>
+
+  <!-- Ground blending -->
+  <rect x="0" y="820" width="1920" height="80" fill="#0b1624"/>
+</svg>

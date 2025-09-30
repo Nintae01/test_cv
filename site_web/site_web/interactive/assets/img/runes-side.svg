@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="140" height="800" viewBox="0 0 140 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="runesG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#86efac" stop-opacity="0.25"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <g fill="none" stroke="url(#runesG)" stroke-width="3" filter="url(#glow)">
+    <path d="M30 60 L70 60 L70 110 L30 110 Z"/>
+    <path d="M40 160 L100 160 M70 140 L70 180"/>
+    <path d="M50 240 L90 220 L90 260 Z"/>
+    <path d="M30 320 L70 360 L30 360 Z"/>
+    <path d="M40 420 L100 420 L70 460 Z"/>
+    <path d="M50 520 L90 520 L70 560 Z"/>
+    <path d="M40 640 L100 640 M70 620 L70 660"/>
+    <path d="M30 720 L70 760 L30 760 Z"/>
+  </g>
+</svg>

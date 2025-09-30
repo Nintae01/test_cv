@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Interactive Cybersecurity Portfolio – Enzo Dupuy" />
+  <title>Enzo Dupuy – Interactive Cybersecurity</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Share+Tech+Mono&family=Poppins:wght@600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <div class="progress-top" aria-hidden="true"><span class="bar"></span></div>
+  <!-- Background layers -->
+  <canvas id="matrixCanvas" aria-hidden="true"></canvas>
+  <div class="scanlines" aria-hidden="true"></div>
+  <div class="grid-overlay" aria-hidden="true"></div>
+  <div class="parallax" aria-hidden="true">
+    <img class="layer layer--sky" data-depth="0.00" src="assets/img/sky.svg" alt="Sky" />
+    <svg class="layer layer--sun" data-depth="0.02" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <radialGradient id="sun" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#fde68a" />
+          <stop offset="100%" stop-color="#fbbf24" />
+        </radialGradient>
+      </defs>
+      <circle cx="70" cy="70" r="60" fill="url(#sun)"/>
+    </svg>
+    <svg class="layer layer--clouds" data-depth="0.05" viewBox="0 0 1200 300" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g fill="#ffffff" opacity="0.8">
+        <ellipse cx="200" cy="120" rx="120" ry="48"/>
+        <ellipse cx="300" cy="130" rx="140" ry="56"/>
+        <ellipse cx="420" cy="120" rx="110" ry="44"/>
+        <ellipse cx="900" cy="90" rx="160" ry="60"/>
+        <ellipse cx="1020" cy="100" rx="120" ry="46"/>
+      </g>
+    </svg>
+    <svg class="layer layer--mountains-far" data-depth="0.08" viewBox="0 0 1920 600" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M0 400 L200 260 L380 360 L520 220 L760 380 L980 260 L1240 420 L1500 280 L1680 360 L1920 260 L1920 600 L0 600 Z" fill="#0e2a40" />
+    </svg>
+    <svg class="layer layer--mountains-mid" data-depth="0.12" viewBox="0 0 1920 600" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M0 420 L220 300 L400 380 L560 260 L760 420 L980 320 L1240 460 L1520 320 L1720 400 L1920 300 L1920 600 L0 600 Z" fill="#123b5a" />
+    </svg>
+    <svg class="layer layer--hills-near" data-depth="0.18" viewBox="0 0 1920 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M0 260 C220 220 420 320 640 280 C860 240 1100 320 1320 260 C1540 200 1720 280 1920 240 L1920 400 L0 400 Z" fill="#165173" />
+    </svg>
+    <!-- Side depth elements -->
+    <img id="rockLeft" class="layer side layer--rock-left" data-depth="0.25" src="assets/img/rock-left.svg" alt="Rock left" />
+    <img id="rockRight" class="layer side layer--rock-right" data-depth="0.23" src="assets/img/rock-right.svg" alt="Rock right" />
+    <img id="runesLeft" class="layer side layer--runes-left" data-depth="0.20" src="assets/img/runes-side.svg" alt="Runes left" />
+    <img id="runesRight" class="layer side layer--runes-right" data-depth="0.19" src="assets/img/runes-side.svg" alt="Runes right" />
+    <img id="swordRight" class="layer side layer--sword-right" data-depth="0.28" src="assets/img/sword.svg" alt="Sword right" />
+    <img id="shieldSide" class="layer side layer--shield-side" data-depth="0.22" src="assets/img/shield.svg" alt="Shield" />
+  </div>
+  <div class="vignette" aria-hidden="true"></div>
+  <aside class="chapter-card text-panel" aria-live="polite" aria-atomic="true">
+    <h3 class="mono">Chapter: About</h3>
+    <p>Security student and builder. From networks to automation, shining a lantern on complex systems.</p>
+  </aside>
+
+  <!-- Custom cursor -->
+  <div class="cursor-dot" aria-hidden="true"></div>
+  <div class="cursor-ring" aria-hidden="true"></div>
+  <div class="spotlight" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="#top"><span class="logo">ED</span><span class="brand-text">Enzo Dupuy</span></a>
+      <nav class="site-nav" aria-label="Primary">
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false"><span></span><span></span><span></span></button>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a class="btn small ghost" href="../index.html">Classic</a></li>
+          <li>
+            <button id="themeToggle" class="theme-toggle magnetic" aria-label="Toggle theme">
+              <i class="fa-solid fa-moon"></i>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <aside class="rail" aria-label="Sections">
+    <ul>
+      <li><a href="#about" data-section="about"><span class="dot"></span><span class="label">About</span></a></li>
+      <li><a href="#projects" data-section="projects"><span class="dot"></span><span class="label">Projects</span></a></li>
+      <li><a href="#skills" data-section="skills"><span class="dot"></span><span class="label">Skills</span></a></li>
+      <li><a href="#contact" data-section="contact"><span class="dot"></span><span class="label">Contact</span></a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <section class="hero section" id="top">
+      <div class="container hero-inner">
+        <div class="hero-copy text-panel">
+          <h1 class="glitch" data-glitch="ENZO DUPUY">ENZO DUPUY</h1>
+          <p class="subtitle mono typing"><span id="typewriter" data-strings='["> defender.init()", "> scanning: networks, endpoints, cloud", "> neutralizing threats with code"]'></span><span class="caret">|</span></p>
+          <div class="cta">
+            <a class="btn primary magnetic" href="#projects"><i class="fa-solid fa-terminal"></i> Explore</a>
+            <a class="btn ghost magnetic" href="#contact"><i class="fa-solid fa-paper-plane"></i> Contact</a>
+          </div>
+          <ul class="socials" aria-label="Social links">
+            <li><a class="magnetic" href="https://github.com/enzodupuy" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a></li>
+            <li><a class="magnetic" href="https://www.linkedin.com/in/enzodupuy" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a></li>
+          </ul>
+        </div>
+        <div class="hero-visual">
+          <div class="profile-card tilt neon">
+            <img src="../assets/img/portrait.svg" alt="Abstract portrait" />
+            <div class="glow"></div>
+          </div>
+        </div>
+      </div>
+      <a href="#about" class="scroll-down" aria-label="Scroll to content"><i class="fa-solid fa-angles-down"></i></a>
+    </section>
+
+    <section class="section about" id="about">
+      <div class="container grid two">
+        <div class="text-panel">
+          <h2 class="section-title mono">About</h2>
+          <p>
+            I study at <strong>2600: The Hacker School</strong>. I work on system & network admin, LLM-aided security automation,
+            ESET deployment, Microsoft 365, and internal security tools. I love pentesting, building tools,
+            and turning noisy data into clear action.
+          </p>
+          <div class="quick-stats">
+            <div class="stat">
+              <span class="num" data-target="5">0</span>
+              <span class="label">Years Experience</span>
+            </div>
+            <div class="stat">
+              <span class="num" data-target="32">0</span>
+              <span class="label">Projects</span>
+            </div>
+            <div class="stat">
+              <span class="num" data-target="12">0</span>
+              <span class="label">Happy Clients</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <ul class="highlights">
+            <li><i class="fa-solid fa-user-ninja"></i> Pentesting & Red Teaming</li>
+            <li><i class="fa-solid fa-network-wired"></i> Systems & Networks</li>
+            <li><i class="fa-brands fa-microsoft"></i> Microsoft 365 & Endpoint</li>
+            <li><i class="fa-solid fa-robot"></i> Automation & LLM tooling</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section projects" id="projects">
+      <div class="container text-panel">
+        <h2 class="section-title mono">Featured Projects</h2>
+        <div class="project-grid">
+          <article class="card project tilt neon" tabindex="0">
+            <img src="../assets/img/project1.svg" alt="LLM Automation visual" />
+            <div class="card-body">
+              <h3>LLM Automation & Security Analysis</h3>
+              <p>LLMs integrated into security triage and vulnerability checks.</p>
+              <div class="tags"><span>Python</span><span>LLM</span><span>Security</span></div>
+              <div class="actions">
+                <button class="btn small magnetic" data-expand>Expand</button>
+              </div>
+              <div class="chapter" hidden>
+                <h4 class="mono">Chapter: Approach</h4>
+                <ul>
+                  <li>Automated triage rules with prompt templates</li>
+                  <li>Confidence thresholds and human-in-the-loop review</li>
+                  <li>Exports findings to dashboards</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+          <article class="card project tilt neon" tabindex="0">
+            <img src="../assets/img/project2.svg" alt="PowerApps visual" />
+            <div class="card-body">
+              <h3>PowerApps Flows & Internal Tools</h3>
+              <p>Ticketing automation with PowerApps and Power Automate.</p>
+              <div class="tags"><span>PowerApps</span><span>Automation</span></div>
+              <div class="actions">
+                <button class="btn small magnetic" data-expand>Expand</button>
+              </div>
+              <div class="chapter" hidden>
+                <h4 class="mono">Chapter: Outcome</h4>
+                <ul>
+                  <li>Reduced manual routing by 70%</li>
+                  <li>Proactive alerts for SLA breaches</li>
+                  <li>Auditable flows and approvals</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+          <article class="card project tilt neon" tabindex="0">
+            <img src="../assets/img/project3.svg" alt="ESET visual" />
+            <div class="card-body">
+              <h3>ESET Deployment & Maintenance</h3>
+              <p>Endpoint rollout, updates, and monitoring.</p>
+              <div class="tags"><span>ESET</span><span>Endpoint</span></div>
+              <div class="actions">
+                <button class="btn small magnetic" data-expand>Expand</button>
+              </div>
+              <div class="chapter" hidden>
+                <h4 class="mono">Chapter: Scale</h4>
+                <ul>
+                  <li>Policy baselines per environment</li>
+                  <li>Automated update windows</li>
+                  <li>Incident follow-up playbooks</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section skills" id="skills">
+      <div class="container text-panel">
+        <h2 class="section-title mono">Skills</h2>
+        <div class="skills-wrap">
+          <div class="skill-bar"><span data-skill="Security Ops" data-level="85"></span></div>
+          <div class="skill-bar"><span data-skill="Pentesting" data-level="80"></span></div>
+          <div class="skill-bar"><span data-skill="Microsoft 365" data-level="78"></span></div>
+          <div class="skill-bar"><span data-skill="Automation" data-level="82"></span></div>
+          <div class="skill-bar"><span data-skill="Networks" data-level="84"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section contact" id="contact">
+      <div class="container grid two">
+        <div class="text-panel">
+          <h2 class="section-title mono">Get in touch</h2>
+          <p>Reach me via the channels below. Click to copy.</p>
+          <ul class="contact-list">
+            <li data-copy="France"><i class="fa-solid fa-location-dot"></i> France</li>
+            <li data-copy="enzo.dupuy@ecole2600.com"><i class="fa-solid fa-envelope"></i> enzo.dupuy@ecole2600.com <span class="copy-tag">Copy</span></li>
+            <li><i class="fa-brands fa-linkedin"></i> <a href="https://www.linkedin.com/in/enzodupuy" target="_blank" rel="noopener">linkedin.com/in/enzodupuy</a></li>
+            <li><i class="fa-brands fa-github"></i> <a href="https://github.com/enzodupuy" target="_blank" rel="noopener">github.com/enzodupuy</a></li>
+          </ul>
+          <p class="copy-status mono" role="status" aria-live="polite"></p>
+        </div>
+        <form class="contact-form text-panel" action="#" method="post" onsubmit="return false;">
+          <label>
+            <span>Name</span>
+            <input type="text" name="name" placeholder="Jane Doe" required />
+          </label>
+          <label>
+            <span>Email</span>
+            <input type="email" name="email" placeholder="jane@domain.com" required />
+          </label>
+          <label>
+            <span>Message</span>
+            <textarea name="message" placeholder=":(){ :|:& };:" rows="5" required></textarea>
+          </label>
+          <button class="btn primary magnetic" type="submit"><i class="fa-solid fa-paper-plane"></i> Send</button>
+          <p class="form-status mono" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modals -->
+  <div class="modal" id="modal-llm" role="dialog" aria-modal="true" aria-labelledby="modal-llm-title" hidden>
+    <div class="modal-dialog">
+      <h3 id="modal-llm-title" class="mono">LLM Automation & Security Analysis</h3>
+      <p>Automating triage with LLM prompts, parsing findings, and flagging anomalies for review.</p>
+      <button class="btn small magnetic close-modal" data-close>Close</button>
+    </div>
+  </div>
+  <div class="modal" id="modal-powerapps" role="dialog" aria-modal="true" aria-labelledby="modal-powerapps-title" hidden>
+    <div class="modal-dialog">
+      <h3 id="modal-powerapps-title" class="mono">PowerApps Flows & Internal Tools</h3>
+      <p>Low-code flows for ticket routing, approvals, and proactive notifications.</p>
+      <button class="btn small magnetic close-modal" data-close>Close</button>
+    </div>
+  </div>
+  <div class="modal" id="modal-eset" role="dialog" aria-modal="true" aria-labelledby="modal-eset-title" hidden>
+    <div class="modal-dialog">
+      <h3 id="modal-eset-title" class="mono">ESET Deployment & Maintenance</h3>
+      <p>Rollouts with policy baselines, update channels, and incident follow-up.</p>
+      <button class="btn small magnetic close-modal" data-close>Close</button>
+    </div>
+  </div>
+
+  <footer class="site-footer mono">
+    <div class="container">
+      <p>© <span id="year"></span> Enzo Dupuy • Interactive Edition</p>
+    </div>
+  </footer>
+
+  <button id="toTop" class="to-top" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

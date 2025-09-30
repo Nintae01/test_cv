@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Enzo Dupuy – Cybersecurity Professional | Pentester | System Administrator | 2600: The Hacker School" />
+  <title>Enzo Dupuy – Cybersecurity Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Crimson+Text:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <div class="progress-top" aria-hidden="true"><span class="bar"></span></div>
+  <div class="bg">
+    <div class="paper" aria-hidden="true"></div>
+    <div class="ornate ornate--top" aria-hidden="true"></div>
+    <div class="ornate ornate--bottom" aria-hidden="true"></div>
+    <div class="circuit" aria-hidden="true"></div>
+    <div class="scene scene--outer" aria-hidden="true">
+      <canvas id="stars"></canvas>
+      <img class="layer layer--moon" data-depth="0.04" src="assets/img/moon.svg" alt="" />
+      <img class="layer grounded layer--castle" data-depth="0.22" src="assets/img/castle-close.svg" alt="" />
+      <img class="layer grounded layer--hills" data-depth="0.14" src="assets/img/hills-near.svg" alt="" />
+      <div class="layer grounded ground-shadow" data-depth="0.14"></div>
+      <img class="layer grounded layer--causeway" data-depth="0.25" src="assets/img/causeway.svg" alt="" />
+      <img class="layer rise layer--trees-left" data-depth="0.22" data-rise="360" src="assets/img/trees-left.svg" alt="" />
+      <img class="layer rise layer--trees-right" data-depth="0.23" data-rise="360" src="assets/img/trees-right.svg" alt="" />
+      <canvas id="fireflies"></canvas>
+      <div class="layer fog fog--a" data-depth="0.18"></div>
+      <div class="layer fog fog--b" data-depth="0.20"></div>
+    </div>
+    <!-- Inner courtyard scene (revealed when entering Arsenal) -->
+    <div class="scene scene--inner" aria-hidden="true">
+      <canvas id="fireflies-inner"></canvas>
+      <img class="layer layer--towers" data-depth="0.08" src="assets/img/towers.svg" alt="" />
+      <img class="layer grounded layer--courtyard" data-depth="0.20" src="assets/img/courtyard.svg" alt="" />
+      <div class="layer grounded layer--gate-aura" data-depth="0.20" aria-hidden="true"></div>
+      <img class="layer grounded layer--nearhouses" data-depth="0.30" src="assets/img/nearhouses.svg" alt="" />
+    </div>
+    <div class="vignette" aria-hidden="true"></div>
+  </div>
+
+  <header class="masthead">
+    <div class="container">
+      <div class="brand">
+        <img class="crest" src="assets/img/crest.svg" alt="Crest" />
+        <div class="wordmark">
+          <span class="name">Enzo Dupuy</span>
+          <span class="tag mono">Cybersecurity Professional</span>
+        </div>
+      </div>
+      <nav class="nav" aria-label="Primary">
+        <ul>
+          <li><a href="#prologue">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#cv">CV</a></li>
+          <li><a href="#timeline">Timeline</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li class="sep"></li>
+          <li><a class="btn ghost" href="../interactive/index.html">Interactive</a></li>
+          <li><a class="btn ghost" href="../interactive_alt/index.html">Alt</a></li>
+          <li><a class="btn ghost" href="../index.html">Classic</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <aside class="rail" aria-label="Chapters">
+    <ul>
+      <li><a href="#prologue" data-section="prologue"><span class="dot"></span>Home</a></li>
+      <li><a href="#about" data-section="about"><span class="dot"></span>About</a></li>
+      <li><a href="#experience" data-section="experience"><span class="dot"></span>Experience</a></li>
+      <li><a href="#cv" data-section="cv"><span class="dot"></span>CV</a></li>
+      <li><a href="#timeline" data-section="timeline"><span class="dot"></span>Timeline</a></li>
+      <li><a href="#skills" data-section="skills"><span class="dot"></span>Skills</a></li>
+      <li><a href="#contact" data-section="contact"><span class="dot"></span>Contact</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <section id="prologue" class="chapter hero">
+      <div class="container">
+        <div class="scroll panel reveal">
+          <h1 class="title">ENZO DUPUY</h1>
+          <p class="subtitle mono typing"><span id="tw" data-strings='["> Cybersecurity Student", "> Penetration Tester", "> System Administrator", "> Security Automation"]'></span><span class="caret">|</span></p>
+          <p class="lede">Cybersecurity student at <strong>2600: The Hacker School</strong> specializing in penetration testing, system administration, and security automation. Combining technical precision with creative problem-solving to defend digital infrastructures.</p>
+          <div class="cta">
+            <a class="btn primary" href="#experience"><i class="fa-solid fa-briefcase"></i> View Experience</a>
+            <a class="btn ghost" href="#contact"><i class="fa-solid fa-envelope"></i> Contact Me</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="chapter">
+      <div class="container">
+        <div class="scroll panel reveal">
+          <h2 class="chapter-title"><i class="fa-solid fa-user-shield"></i> About Me</h2>
+          <p class="dropcap">Currently pursuing cybersecurity studies at <strong>2600: The Hacker School</strong>, I specialize in penetration testing, system administration, and security automation. My expertise spans endpoint management, scripting, network security, and data analysis—combining technical precision with creative problem-solving to protect and secure digital infrastructures.</p>
+          <ul class="illuminations">
+            <li><i class="fa-solid fa-user-ninja"></i> <strong>Penetration Testing & Red Teaming</strong> – Identifying vulnerabilities through comprehensive security assessments</li>
+            <li><i class="fa-solid fa-network-wired"></i> <strong>Systems & Network Administration</strong> – Managing and securing IT infrastructure</li>
+            <li><i class="fa-brands fa-microsoft"></i> <strong>Microsoft 365 & Endpoint Management</strong> – Enterprise administration and security</li>
+            <li><i class="fa-solid fa-robot"></i> <strong>Automation & LLM Integration</strong> – Streamlining security operations with intelligent tools</li>
+            <li><i class="fa-solid fa-shield-halved"></i> <strong>Security Hardening & Compliance</strong> – Implementing best practices and regulatory standards</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience" class="chapter">
+      <div class="container">
+        <div class="scroll panel reveal">
+          <h2 class="chapter-title"><i class="fa-solid fa-laptop-code"></i> Key Projects & Experience</h2>
+          <p>Hands-on experience across security operations, automation, and infrastructure management.</p>
+          <div class="entries">
+            <article class="entry">
+              <header>
+                <h3><i class="fa-solid fa-brain"></i> LLM Automation & Security Analysis</h3>
+                <button class="toggle" aria-expanded="false"><i class="fa-solid fa-chevron-down"></i></button>
+              </header>
+              <div class="entry-body" hidden>
+                <p><strong>Challenge:</strong> Security teams were overwhelmed with alert volumes and manual triage processes, leading to delayed threat responses.</p>
+                <p><strong>Solution:</strong> Developed LLM-powered automation pipelines that parse security findings, apply confidence thresholds, and route alerts with context-aware prioritization while maintaining human oversight.</p>
+                <p><strong>Impact:</strong> Reduced analyst workload by 60%, improved mean time to response, and created clear dashboards for executive reporting.</p>
+                <p><strong>Technologies:</strong> Python, LLM APIs, Security Information Systems, Data Parsers</p>
+              </div>
+            </article>
+            <article class="entry">
+              <header>
+                <h3><i class="fa-solid fa-gears"></i> PowerApps Flows & Internal Tools</h3>
+                <button class="toggle" aria-expanded="false"><i class="fa-solid fa-chevron-down"></i></button>
+              </header>
+              <div class="entry-body" hidden>
+                <p><strong>Challenge:</strong> Manual ticketing processes caused approval bottlenecks and unclear task ownership across departments.</p>
+                <p><strong>Solution:</strong> Built low-code automation workflows using PowerApps and Power Automate with SLA monitoring, automated routing rules, and audit trails for compliance.</p>
+                <p><strong>Impact:</strong> Eliminated approval delays, improved accountability through clear ownership tracking, and reduced operational overhead by 45%.</p>
+                <p><strong>Technologies:</strong> Microsoft Power Platform, PowerApps, Power Automate, SharePoint</p>
+              </div>
+            </article>
+            <article class="entry">
+              <header>
+                <h3><i class="fa-solid fa-shield-halved"></i> ESET Deployment & Endpoint Management</h3>
+                <button class="toggle" aria-expanded="false"><i class="fa-solid fa-chevron-down"></i></button>
+              </header>
+              <div class="entry-body" hidden>
+                <p><strong>Challenge:</strong> Inconsistent endpoint protection across infrastructure with gaps in patch management and policy enforcement.</p>
+                <p><strong>Solution:</strong> Orchestrated enterprise-wide ESET deployment with standardized policy baselines, automated update windows, and comprehensive incident response playbooks.</p>
+                <p><strong>Impact:</strong> Achieved 99% endpoint coverage, reduced security incidents by 70%, and established repeatable deployment procedures.</p>
+                <p><strong>Technologies:</strong> ESET Security Management Center, Group Policy, PowerShell Scripting</p>
+              </div>
+            </article>
+            <article class="entry">
+              <header>
+                <h3><i class="fa-solid fa-file-shield"></i> 3CF Compliance & Security Framework</h3>
+                <button class="toggle" aria-expanded="false"><i class="fa-solid fa-chevron-down"></i></button>
+              </header>
+              <div class="entry-body" hidden>
+                <p><strong>Challenge:</strong> Aerospace company required compliance with stringent 3CF regulatory standards with limited documentation.</p>
+                <p><strong>Solution:</strong> Supported compliance implementation through gap analysis, control mapping, evidence collection, and documentation of security procedures aligned with regulatory requirements.</p>
+                <p><strong>Impact:</strong> Successfully passed audit with zero critical findings, established repeatable compliance processes, and improved security posture.</p>
+                <p><strong>Technologies:</strong> Compliance Frameworks, Risk Assessment, Security Documentation</p>
+              </div>
+            </article>
+            <article class="entry">
+              <header>
+                <h3><i class="fa-brands fa-microsoft"></i> Microsoft 365 Administration & Security</h3>
+                <button class="toggle" aria-expanded="false"><i class="fa-solid fa-chevron-down"></i></button>
+              </header>
+              <div class="entry-body" hidden>
+                <p><strong>Challenge:</strong> Managing user access, security policies, and endpoint compliance across distributed workforce.</p>
+                <p><strong>Solution:</strong> Administered Microsoft 365 environment including user provisioning, conditional access policies, Intune device management, and security baselines using Microsoft Graph API automation.</p>
+                <p><strong>Impact:</strong> Streamlined user onboarding from 2 days to 2 hours, enforced zero-trust principles, and maintained 100% device compliance.</p>
+                <p><strong>Technologies:</strong> Microsoft 365 Admin Center, Intune, Azure AD, PowerShell, Microsoft Graph API</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cv" class="chapter">
+      <div class="container">
+        <div class="scroll panel reveal">
+          <h2 class="chapter-title"><i class="fa-solid fa-file-lines"></i> Resume / CV</h2>
+          <p>Download my comprehensive CV in your preferred language:</p>
+          <ul class="contacts">
+            <li><a class="link" href="../cv_french.pdf" target="_blank" rel="noopener"><i class="fa-solid fa-file-pdf"></i> CV Français (PDF)</a></li>
+            <li><a class="link" href="../cv_english.pdf" target="_blank" rel="noopener"><i class="fa-solid fa-file-pdf"></i> English Resume (PDF)</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="timeline" class="chapter timeline">
+      <div class="container">
+        <div class="scroll panel reveal">
+          <h2 class="chapter-title"><i class="fa-solid fa-timeline"></i> Professional Journey</h2>
+          <div class="tl">
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-card">
+                <h3><i class="fa-solid fa-graduation-cap"></i> Cybersecurity Student · 2600: The Hacker School</h3>
+                <span class="muted">2024 – Present</span>
+                <p>Comprehensive training in offensive and defensive security, system administration, network security, and automation. Hands-on labs covering penetration testing, incident response, and infrastructure hardening.</p>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-card">
+                <h3><i class="fa-solid fa-gears"></i> Operations & Automation Specialist · Internal Tools</h3>
+                <span class="muted">2023 – 2024</span>
+                <p>Developed PowerApps/Power Automate solutions, automation scripts, and operational dashboards to streamline IT operations, reduce manual workload, and improve service delivery metrics.</p>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-card">
+                <h3><i class="fa-solid fa-shield-halved"></i> Security & System Administrator</h3>
+                <span class="muted">2022 – 2023</span>
+                <p>Managed endpoint security deployment (ESET), Microsoft 365 administration, compliance auditing, and infrastructure security hardening across enterprise environments.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills" class="chapter">
+      <div class="container">
+        <div class="scroll panel reveal">
+          <h2 class="chapter-title"><i class="fa-solid fa-toolbox"></i> Technical Skills & Tools</h2>
+          <p>Proficient across security operations, infrastructure management, and development.</p>
+          <div class="skills">
+            <div class="skill"><span data-skill="Security Operations" data-level="85"></span></div>
+            <div class="skill"><span data-skill="Penetration Testing" data-level="80"></span></div>
+            <div class="skill"><span data-skill="System Administration" data-level="84"></span></div>
+            <div class="skill"><span data-skill="Microsoft 365 Admin" data-level="78"></span></div>
+            <div class="skill"><span data-skill="Automation & Scripting" data-level="82"></span></div>
+          </div>
+          <div class="armory">
+            <div class="weapon weapon--ribbon"><i class="fa-solid fa-terminal"></i><strong>Linux</strong><span>Server Ops & Hardening</span></div>
+            <div class="weapon weapon--diagonal"><i class="fa-brands fa-python"></i><strong>Python</strong><span>Automation & Security Tools</span></div>
+            <div class="weapon weapon--notch"><i class="fa-solid fa-bolt"></i><strong>PowerShell</strong><span>Windows Administration</span></div>
+            <div class="weapon weapon--ribbon"><i class="fa-solid fa-network-wired"></i><strong>Nmap</strong><span>Network Reconnaissance</span></div>
+            <div class="weapon weapon--diagonal"><i class="fa-solid fa-water"></i><strong>Wireshark</strong><span>Packet Analysis</span></div>
+            <div class="weapon weapon--notch"><i class="fa-solid fa-bug"></i><strong>Burp Suite</strong><span>Web Application Testing</span></div>
+            <div class="weapon weapon--ribbon"><i class="fa-solid fa-shield-halved"></i><strong>ESET</strong><span>Endpoint Security</span></div>
+            <div class="weapon weapon--diagonal"><i class="fa-brands fa-microsoft"></i><strong>Intune</strong><span>Device Management</span></div>
+            <div class="weapon weapon--notch"><i class="fa-solid fa-eye"></i><strong>SIEM</strong><span>Log Analysis & Monitoring</span></div>
+          </div>
+
+          <div class="entries" style="margin-top: 24px;">
+            <article class="entry">
+              <header>
+                <h3>Linux · Operations & Hardening</h3>
+                <button class="toggle" aria-expanded="false"><i class="fa-solid fa-chevron-down"></i></button>
+              </header>
+              <div class="entry-body" hidden>
+                <ul>
+                  <li>Security baseline implementation (SSH hardening, fail2ban, auditd, file integrity monitoring)</li>
+                  <li>Service management with systemd, log aggregation with journald pipelines</li>
+                  <li>Automated backup strategies with disaster recovery testing and validation</li>
+                </ul>
+              </div>
+            </article>
+            <article class="entry">
+              <header>
+                <h3>Python · Automation & Security Tooling</h3>
+                <button class="toggle" aria-expanded="false"><i class="fa-solid fa-chevron-down"></i></button>
+              </header>
+              <div class="entry-body" hidden>
+                <ul>
+                  <li>Security log parsers, vulnerability report generators, and automated triage systems</li>
+                  <li>RESTful API integrations for security platforms and enrichment workflows</li>
+                  <li>CLI tools with robust error handling, retry logic, and rate limiting</li>
+                </ul>
+              </div>
+            </article>
+            <article class="entry">
+              <header>
+                <h3>PowerShell · Windows Administration & M365</h3>
+                <button class="toggle" aria-expanded="false"><i class="fa-solid fa-chevron-down"></i></button>
+              </header>
+              <div class="entry-body" hidden>
+                <ul>
+                  <li>Inventory management, configuration drift detection, and automated remediation</li>
+                  <li>Microsoft Graph API automation for Intune, Azure AD, and compliance policies</li>
+                  <li>Documented runbooks with transcription logging for audit trails</li>
+                </ul>
+              </div>
+            </article>
+            <article class="entry">
+              <header>
+                <h3>Network Security · Reconnaissance & Analysis</h3>
+                <button class="toggle" aria-expanded="false"><i class="fa-solid fa-chevron-down"></i></button>
+              </header>
+              <div class="entry-body" hidden>
+                <ul>
+                  <li>Network discovery with Nmap: service enumeration, version detection, vulnerability scanning</li>
+                  <li>Packet capture analysis with Wireshark for incident investigation and root cause analysis</li>
+                  <li>Traffic baseline creation and anomaly detection dashboards</li>
+                </ul>
+              </div>
+            </article>
+            <article class="entry">
+              <header>
+                <h3>Web Application Security · Burp Suite</h3>
+                <button class="toggle" aria-expanded="false"><i class="fa-solid fa-chevron-down"></i></button>
+              </header>
+              <div class="entry-body" hidden>
+                <ul>
+                  <li>Manual penetration testing with comprehensive checks for authentication, authorization, and input validation</li>
+                  <li>Session handling, proxy automation workflows, and repeater-based attack chains</li>
+                  <li>Professional reporting with clear reproduction steps and remediation guidance</li>
+                </ul>
+              </div>
+            </article>
+            <article class="entry">
+              <header>
+                <h3>Endpoint Management · ESET / Intune</h3>
+                <button class="toggle" aria-expanded="false"><i class="fa-solid fa-chevron-down"></i></button>
+              </header>
+              <div class="entry-body" hidden>
+                <ul>
+                  <li>Security policy baselines, update management, and compliance health monitoring</li>
+                  <li>Phased deployment strategies with staged validation across organizational units</li>
+                  <li>Incident response playbooks for quarantine, updates, and exception handling</li>
+                </ul>
+              </div>
+            </article>
+            <article class="entry">
+              <header>
+                <h3>Security Monitoring · SIEM & Log Analysis</h3>
+                <button class="toggle" aria-expanded="false"><i class="fa-solid fa-chevron-down"></i></button>
+              </header>
+              <div class="entry-body" hidden>
+                <ul>
+                  <li>Log aggregation pipelines from diverse sources with searchable long-term retention</li>
+                  <li>Use case development: detection rules, correlation alerts, and triage dashboards</li>
+                  <li>Post-incident review processes with metrics tracking and continuous improvement</li>
+                </ul>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="chapter">
+      <div class="container">
+        <div class="scroll panel reveal">
+          <h2 class="chapter-title"><i class="fa-solid fa-paper-plane"></i> Get In Touch</h2>
+          <p>Interested in collaborating on a security project, discussing opportunities, or just want to connect? Feel free to reach out using any of the methods below.</p>
+          <ul class="contacts">
+            <li><button class="copy" data-copy="enzo.dupuy@ecole2600.com"><i class="fa-solid fa-envelope"></i> enzo.dupuy@ecole2600.com</button></li>
+            <li><a class="link" href="https://www.linkedin.com/in/enzodupuy" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> linkedin.com/in/enzodupuy</a></li>
+            <li><a class="link" href="https://github.com/enzodupuy" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> github.com/enzodupuy</a></li>
+          </ul>
+          <form id="contactForm" class="contact-form" onsubmit="return false;">
+            <label>
+              <span>Name</span>
+              <input type="text" name="name" placeholder="Your name" required />
+            </label>
+            <label>
+              <span>Email</span>
+              <input type="email" name="email" placeholder="you@domain.com" required />
+            </label>
+            <label>
+              <span>Message</span>
+              <textarea name="message" rows="5" placeholder="Your message..." required></textarea>
+            </label>
+            <button class="btn primary" type="submit"><i class="fa-solid fa-paper-plane"></i> Send Message</button>
+            <p class="status mono" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer mono">
+    <div class="container">© <span id="year"></span> Enzo Dupuy • Cybersecurity Portfolio</div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

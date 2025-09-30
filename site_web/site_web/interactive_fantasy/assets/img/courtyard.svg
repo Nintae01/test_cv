@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1920" height="900" viewBox="0 0 1920 900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="stone" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#13263b"/>
+      <stop offset="100%" stop-color="#0b1a2a"/>
+    </linearGradient>
+    <radialGradient id="warm" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#ffe7b0"/>
+      <stop offset="100%" stop-color="#e6d09c"/>
+    </radialGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softGlow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Ground -->
+  <rect x="0" y="740" width="1920" height="160" fill="#0b1624"/>
+
+  <!-- Inner walls -->
+  <g fill="url(#stone)" stroke="#081522" stroke-width="3">
+    <!-- Left wall -->
+    <path d="M0 740 L0 420 L180 420 L180 400 L220 400 L220 420 L260 420 L260 400 L300 400 L300 420 L340 420 L340 400 L380 400 L380 420 L420 420 L420 740 Z"/>
+    <!-- Right wall -->
+    <path d="M1500 740 L1500 420 L1540 420 L1540 400 L1580 400 L1580 420 L1620 420 L1620 400 L1660 400 L1660 420 L1700 420 L1700 400 L1740 400 L1740 420 L1780 420 L1780 740 Z"/>
+    <!-- Back wall with gate -->
+    <rect x="380" y="300" width="1160" height="320" rx="6"/>
+    <path d="M860 620 L860 470 C860 420 915 380 960 380 C1005 380 1060 420 1060 470 L1060 620 Z" fill="#0b1624"/>
+    <!-- Crenels on back wall -->
+    <path d="M380 300 L380 260 L420 260 L420 300 L460 300 L460 260 L500 260 L500 300 L540 300 L540 260 L580 260 L580 300 L620 300 L620 260 L660 260 L660 300 L700 300 L700 260 L740 260 L740 300 L780 300 L780 260 L820 260 L820 300 L860 300 L860 260 L900 260 L900 300 L940 300 L940 260 L980 260 L980 300 L1020 300 L1020 260 L1060 260 L1060 300 L1100 300 L1100 260 L1140 260 L1140 300 L1180 300 L1180 260 L1220 260 L1220 300 L1260 300 L1260 260 L1300 260 L1300 300 L1340 300 L1340 260 L1380 260 L1380 300 L1420 300 L1420 260 L1460 260 L1460 300 L1540 300"/>
+  </g>
+
+  <!-- Tall-tower castle silhouette beyond the back wall -->
+  <g fill="#0a1829" opacity="0.95">
+    <!-- Central keep with towers -->
+    <rect x="820" y="120" width="280" height="180"/>
+    <rect x="780" y="160" width="60" height="160"/>
+    <rect x="1100" y="160" width="60" height="160"/>
+    <!-- Tower roofs -->
+    <path d="M780 160 L810 120 L840 160 Z"/>
+    <path d="M1100 160 L1130 120 L1160 160 Z"/>
+    <path d="M860 120 L960 60 L1060 120 Z"/>
+  </g>
+
+  <!-- Warm windows (with twinkle) -->
+  <g filter="url(#glow)">
+    <rect x="520" y="420" width="18" height="28" rx="4" fill="url(#warm)">
+      <animate attributeName="opacity" values="0.7;1;0.8;1;0.75" dur="2.8s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="560" y="440" width="14" height="22" rx="4" fill="url(#warm)">
+      <animate attributeName="opacity" values="0.6;0.9;0.7;1;0.65" dur="3.1s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="1200" y="420" width="18" height="28" rx="4" fill="url(#warm)">
+      <animate attributeName="opacity" values="0.75;1;0.82;1;0.7" dur="2.6s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="1240" y="440" width="14" height="22" rx="4" fill="url(#warm)">
+      <animate attributeName="opacity" values="0.65;0.95;0.7;1;0.66" dur="2.9s" repeatCount="indefinite"/>
+    </rect>
+    <circle cx="840" cy="520" r="5" fill="url(#warm)">
+      <animate attributeName="opacity" values="0.6;1;0.7;0.95;0.65" dur="2.4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1080" cy="520" r="5" fill="url(#warm)">
+      <animate attributeName="opacity" values="0.8;1;0.85;1;0.8" dur="2.2s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Courtyard silhouettes (tents, crates) -->
+  <g fill="#0a1422" opacity="0.9">
+    <path d="M460 740 L520 620 L580 740 Z"/>
+    <rect x="620" y="680" width="60" height="40" rx="6"/>
+    <rect x="1260" y="680" width="70" height="42" rx="6"/>
+    <path d="M1360 740 L1420 630 L1480 740 Z"/>
+  </g>
+
+  <!-- Perspective path from foreground to inner gate (aligned to gate, deeper) -->
+  <g fill="#0d1c2c" opacity="0.95">
+    <!-- Near band -->
+    <path d="M760 900 L960 620 L1160 900 Z"/>
+    <!-- Mid band -->
+    <path d="M820 900 L960 640 L1100 900 Z" opacity="0.6"/>
+    <!-- Far band -->
+    <path d="M880 900 L960 660 L1040 900 Z" opacity="0.35"/>
+  </g>
+
+  <!-- Medieval houses along the path (left and right) with twinkling windows -->
+  <g filter="url(#softGlow)">
+    <!-- Left row -->
+    <g>
+      <rect x="300" y="560" width="110" height="120" fill="#0f2032" stroke="#081522" stroke-width="3"/>
+      <path d="M300 560 L355 510 L410 560 Z" fill="#0f2032" stroke="#081522" stroke-width="3"/>
+      <rect x="328" y="606" width="18" height="26" rx="3" fill="url(#warm)"><animate attributeName="opacity" values="0.6;0.95;0.7;1;0.65" dur="2.7s" repeatCount="indefinite"/></rect>
+      <rect x="360" y="628" width="14" height="22" rx="3" fill="url(#warm)"><animate attributeName="opacity" values="0.7;1;0.82;0.95;0.7" dur="3.4s" repeatCount="indefinite"/></rect>
+    </g>
+    <g>
+      <rect x="470" y="540" width="120" height="140" fill="#0f2032" stroke="#081522" stroke-width="3"/>
+      <path d="M470 540 L530 490 L590 540 Z" fill="#0f2032" stroke="#081522" stroke-width="3"/>
+      <rect x="500" y="592" width="18" height="26" rx="3" fill="url(#warm)"><animate attributeName="opacity" values="0.6;0.9;0.7;1;0.66" dur="2.2s" repeatCount="indefinite"/></rect>
+      <rect x="534" y="616" width="14" height="22" rx="3" fill="url(#warm)"><animate attributeName="opacity" values="0.8;1;0.85;1;0.8" dur="2.8s" repeatCount="indefinite"/></rect>
+    </g>
+    <!-- Right row -->
+    <g>
+      <rect x="1410" y="560" width="110" height="120" fill="#0f2032" stroke="#081522" stroke-width="3"/>
+      <path d="M1410 560 L1465 510 L1520 560 Z" fill="#0f2032" stroke="#081522" stroke-width="3"/>
+      <rect x="1438" y="606" width="18" height="26" rx="3" fill="url(#warm)"><animate attributeName="opacity" values="0.65;1;0.8;0.95;0.7" dur="3s" repeatCount="indefinite"/></rect>
+      <rect x="1470" y="628" width="14" height="22" rx="3" fill="url(#warm)"><animate attributeName="opacity" values="0.6;0.9;0.7;1;0.66" dur="2.5s" repeatCount="indefinite"/></rect>
+    </g>
+    <g>
+      <rect x="1230" y="540" width="120" height="140" fill="#0f2032" stroke="#081522" stroke-width="3"/>
+      <path d="M1230 540 L1290 490 L1350 540 Z" fill="#0f2032" stroke="#081522" stroke-width="3"/>
+      <rect x="1260" y="592" width="18" height="26" rx="3" fill="url(#warm)"><animate attributeName="opacity" values="0.7;1;0.75;0.95;0.7" dur="2.6s" repeatCount="indefinite"/></rect>
+      <rect x="1294" y="616" width="14" height="22" rx="3" fill="url(#warm)"><animate attributeName="opacity" values="0.6;0.9;0.65;1;0.7" dur="3.3s" repeatCount="indefinite"/></rect>
+    </g>
+  </g>
+
+  <!-- Lantern posts along the path (flicker) -->
+  <g filter="url(#glow)">
+    <g>
+      <rect x="860" y="770" width="4" height="60" fill="#0f2032"/>
+      <circle cx="862" cy="770" r="8" fill="url(#warm)"><animate attributeName="opacity" values="0.6;1;0.7;0.95;0.65" dur="1.9s" repeatCount="indefinite"/></circle>
+    </g>
+    <g>
+      <rect x="1060" y="770" width="4" height="60" fill="#0f2032"/>
+      <circle cx="1062" cy="770" r="8" fill="url(#warm)"><animate attributeName="opacity" values="0.7;0.95;0.8;1;0.72" dur="2.1s" repeatCount="indefinite"/></circle>
+    </g>
+    <g>
+      <rect x="920" y="720" width="4" height="60" fill="#0f2032"/>
+      <circle cx="922" cy="720" r="8" fill="url(#warm)"><animate attributeName="opacity" values="0.6;1;0.78;0.92;0.64" dur="2.3s" repeatCount="indefinite"/></circle>
+    </g>
+    <g>
+      <rect x="1000" y="720" width="4" height="60" fill="#0f2032"/>
+      <circle cx="1002" cy="720" r="8" fill="url(#warm)"><animate attributeName="opacity" values="0.65;0.95;0.8;1;0.7" dur="2.05s" repeatCount="indefinite"/></circle>
+    </g>
+  </g>
+</svg>

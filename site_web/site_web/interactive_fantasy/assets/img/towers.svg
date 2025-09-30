@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1920" height="900" viewBox="0 0 1920 900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="mist" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0c1a29"/>
+      <stop offset="100%" stop-color="#071422"/>
+    </linearGradient>
+  </defs>
+  <!-- distant silhouette of inner castle towers; transparent background -->
+  <g fill="url(#mist)" opacity="0.85">
+    <rect x="820" y="120" width="280" height="180"/>
+    <rect x="780" y="160" width="60" height="160"/>
+    <rect x="1100" y="160" width="60" height="160"/>
+    <path d="M780 160 L810 120 L840 160 Z"/>
+    <path d="M1100 160 L1130 120 L1160 160 Z"/>
+    <path d="M860 120 L960 60 L1060 120 Z"/>
+  </g>
+</svg>

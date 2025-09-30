@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1920" height="720" viewBox="0 0 1920 720" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="stone" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a3450"/>
+      <stop offset="100%" stop-color="#0f2235"/>
+    </linearGradient>
+    <linearGradient id="highlight" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="rgba(230,208,156,0.35)"/>
+      <stop offset="100%" stop-color="rgba(230,208,156,0.0)"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Ground baseline -->
+  <rect x="0" y="560" width="1920" height="160" fill="#0b1624"/>
+
+  <!-- Outer curtain wall -->
+  <g fill="url(#stone)" stroke="#081522" stroke-width="3">
+    <!-- Left wall with merlons -->
+    <path d="M120 520 L120 360 L160 360 L160 340 L200 340 L200 360 L240 360 L240 340 L280 340 L280 360 L320 360 L320 340 L360 340 L360 360 L400 360 L400 340 L440 340 L440 360 L480 360 L480 520 Z"/>
+    <!-- Right wall with merlons -->
+    <path d="M1440 520 L1440 360 L1480 360 L1480 340 L1520 340 L1520 360 L1560 360 L1560 340 L1600 340 L1600 360 L1640 360 L1640 340 L1680 340 L1680 360 L1720 360 L1720 340 L1760 340 L1760 360 L1800 360 L1800 520 Z"/>
+
+    <!-- Central gatehouse with towers -->
+    <g>
+      <!-- Gatehouse body -->
+      <rect x="640" y="290" width="640" height="230" rx="8"/>
+      <!-- Crenellations -->
+      <path d="M640 290 L640 260 L680 260 L680 290 L720 290 L720 260 L760 260 L760 290 L800 290 L800 260 L840 260 L840 290 L880 290 L880 260 L920 260 L920 290 L960 290 L960 260 L1000 260 L1000 290 L1040 290 L1040 260 L1080 260 L1080 290 L1120 290 L1120 260 L1160 260 L1160 290 L1200 290 L1200 260 L1240 260 L1240 290 L1280 290 L1280 260 L1320 260 L1320 290"/>
+      <!-- Arch gate -->
+      <path d="M900 520 L900 420 C900 375 940 340 960 340 C980 340 1020 375 1020 420 L1020 520 Z" fill="#0b1624"/>
+      <!-- Portcullis -->
+      <g stroke="#0c1a29" stroke-width="4">
+        <path d="M920 520 L920 408"/>
+        <path d="M940 520 L940 394"/>
+        <path d="M960 520 L960 388"/>
+        <path d="M980 520 L980 394"/>
+        <path d="M1000 520 L1000 408"/>
+        <path d="M920 440 L1000 440"/>
+        <path d="M920 470 L1000 470"/>
+      </g>
+      <!-- Arrow slits on gatehouse -->
+      <g fill="#0a1422">
+        <rect x="700" y="380" width="10" height="32" rx="3"/>
+        <rect x="760" y="400" width="10" height="32" rx="3"/>
+        <rect x="1180" y="380" width="10" height="32" rx="3"/>
+        <rect x="1120" y="400" width="10" height="32" rx="3"/>
+      </g>
+      <!-- Side towers -->
+      <g>
+        <rect x="600" y="240" width="80" height="340" rx="6"/>
+        <path d="M600 240 L600 210 L620 210 L620 240 L640 240 L640 210 L660 210 L660 240 L680 240 L680 210 L700 210 L700 240"/>
+        <rect x="1240" y="240" width="80" height="340" rx="6"/>
+        <path d="M1240 240 L1240 210 L1260 210 L1260 240 L1280 240 L1280 210 L1300 210 L1300 240 L1320 240 L1320 210 L1340 210 L1340 240"/>
+      </g>
+      <!-- Flags -->
+      <g fill="#d4b36c" opacity="0.9" stroke="#8c713e" stroke-width="2">
+        <path d="M640 210 L640 180 L690 195 L640 210 Z"/>
+        <path d="M1280 210 L1280 180 L1330 195 L1280 210 Z"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- Highlight strokes -->
+  <g stroke="url(#highlight)" stroke-width="2" opacity="0.6">
+    <path d="M120 520 L120 360"/>
+    <path d="M1800 520 L1800 360"/>
+    <path d="M640 290 L1320 290"/>
+    <path d="M600 240 L700 240"/>
+    <path d="M1240 240 L1340 240"/>
+  </g>
+</svg>

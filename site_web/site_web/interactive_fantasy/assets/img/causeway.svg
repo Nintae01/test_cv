@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1920" height="900" viewBox="0 0 1920 900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="stone" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#172a40"/>
+      <stop offset="100%" stop-color="#0b1a2a"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="rgba(230,208,156,0.28)"/>
+      <stop offset="100%" stop-color="rgba(230,208,156,0.0)"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Perspective causeway: trapezoid widening toward the viewer -->
+  <g>
+    <path d="M880 480 L1040 480 L1380 880 L540 880 Z" fill="url(#stone)" stroke="#081522" stroke-width="3"/>
+
+    <!-- Center seam and edge highlights -->
+    <g stroke="rgba(230,208,156,0.15)" stroke-width="2" filter="url(#glow)">
+      <path d="M960 480 L960 880"/>
+      <path d="M920 500 L1000 500"/>
+      <path d="M900 540 L1020 540"/>
+      <path d="M880 590 L1040 590"/>
+      <path d="M860 650 L1060 650"/>
+      <path d="M840 720 L1080 720"/>
+      <path d="M820 800 L1100 800"/>
+    </g>
+
+    <!-- Stone slabs (subtle) -->
+    <g stroke="rgba(255,255,255,0.06)" stroke-width="2">
+      <path d="M880 520 L1040 520"/>
+      <path d="M870 560 L1050 560"/>
+      <path d="M860 610 L1060 610"/>
+      <path d="M850 670 L1070 670"/>
+      <path d="M840 740 L1080 740"/>
+      <path d="M830 820 L1090 820"/>
+    </g>
+  </g>
+</svg>

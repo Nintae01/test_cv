@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="360" height="420" viewBox="0 0 360 420" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="rockR" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0b2233"/>
+      <stop offset="100%" stop-color="#10324a"/>
+    </linearGradient>
+  </defs>
+  <path d="M360 420 L360 210 L300 160 L240 130 L160 120 L100 150 L60 210 L40 300 L40 420 Z" fill="url(#rockR)" stroke="#0d273b"/>
+  <path d="M320 220 L270 190 L220 170 L160 165 L110 200 L80 260" fill="none" stroke="#1b3952" stroke-width="3" opacity="0.5"/>
+</svg>

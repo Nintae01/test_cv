@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1920" height="420" viewBox="0 0 1920 420" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1920" height="420" fill="none"/>
+  <g fill="#0c1b2c" opacity="0.85">
+    <path d="M0 340 L160 340 L160 300 L200 300 L200 340 L320 340 L320 280 L360 280 L360 340 L520 340 L520 260 L560 260 L560 340 L720 340 L720 300 L760 300 L760 340 L920 340 L920 240 L960 240 L960 340 L1120 340 L1120 280 L1160 280 L1160 340 L1320 340 L1320 260 L1360 260 L1360 340 L1520 340 L1520 300 L1560 300 L1560 340 L1760 340 L1760 280 L1800 280 L1800 340 L1920 340 L1920 420 L0 420 Z"/>
+    <!-- Towers and merlons -->
+    <rect x="430" y="220" width="30" height="120"/>
+    <rect x="630" y="210" width="28" height="130"/>
+    <rect x="1000" y="200" width="34" height="140"/>
+    <rect x="1460" y="210" width="26" height="130"/>
+    <!-- Flags -->
+    <path d="M1017 200 L1017 170 L1060 185 L1017 200 Z" fill="#d4b36c" opacity="0.8"/>
+    <path d="M1469 210 L1469 180 L1512 195 L1469 210 Z" fill="#d4b36c" opacity="0.8"/>
+  </g>
+</svg>

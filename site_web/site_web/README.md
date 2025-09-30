@@ -27,4 +27,3 @@ Just open `index.html` in a modern browser. No build step required.
 ## Deploy
 
 You can host this on any static hosting provider (GitHub Pages, Netlify, Vercel). Simply upload the contents of this folder.
-# test_cv
