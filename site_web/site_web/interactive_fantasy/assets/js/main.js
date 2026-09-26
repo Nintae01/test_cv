@@ -1,6 +1,21 @@
 // Fantasy interactive variant JS
 const $ = (s, c=document) => c.querySelector(s);
 const $$ = (s, c=document) => Array.from(c.querySelectorAll(s));
+const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+// A section is "current" while it crosses this band near mid-screen. Unlike a visibility
+// threshold, this still works for sections taller than the viewport (e.g. Skills, or any
+// chapter with its entries expanded).
+const CURRENT_SECTION = { rootMargin: '-40% 0px -55% 0px' };
+
+// Collapsible nav (small screens)
+(function navToggle(){
+  const btn = $('.nav-toggle'); if (!btn) return;
+  const setOpen = (open)=>{ btn.setAttribute('aria-expanded', String(open)); document.body.classList.toggle('nav-open', open); };
+  btn.addEventListener('click', ()=> setOpen(btn.getAttribute('aria-expanded')!=='true'));
+  $$('.nav a').forEach(a=> a.addEventListener('click', ()=> setOpen(false)));
+  document.addEventListener('keydown', (e)=>{ if (e.key==='Escape') setOpen(false); });
+  document.addEventListener('click', (e)=>{ if (!e.target.closest('.nav')) setOpen(false); });
+})();
 
 // Progress bar
 (function progress(){
@@ -15,7 +30,7 @@ const $$ = (s, c=document) => Array.from(c.querySelectorAll(s));
   const sections = links.map(a=>({ id:a.getAttribute('data-section'), el: document.getElementById(a.getAttribute('data-section')||'') })).filter(x=>x.el);
   const io = new IntersectionObserver(es=>{
     es.forEach(en=>{ if(!en.isIntersecting) return; const id=en.target.id; links.forEach(a=> a.classList.toggle('active', a.getAttribute('data-section')===id)); });
-  }, {threshold:0.6});
+  }, CURRENT_SECTION);
   sections.forEach(s=> io.observe(s.el));
 })();
 
@@ -23,16 +38,20 @@ const $$ = (s, c=document) => Array.from(c.querySelectorAll(s));
 (function typing(){
   const el = document.getElementById('tw'); if(!el) return;
   let strings=[]; try{ strings = JSON.parse(el.getAttribute('data-strings')||'[]'); }catch{}
+  if (REDUCED_MOTION) { el.textContent = strings[0] || ''; return; }
   let si=0, ci=0, del=false;
   function tick(){ const str=strings[si]||''; if(!del){ ci++; el.textContent=str.slice(0,ci); if(ci>=str.length){ del=true; setTimeout(tick,1000); return; } } else { ci--; el.textContent=str.slice(0,ci); if(ci<=0){ del=false; si=(si+1)%strings.length; } } setTimeout(tick, del?30:50); }
   tick();
 })();
 
-// Accordion entries
+// Accordion entries: the whole header row toggles; the button stays the keyboard target
 (function accordion(){
   $$('.entry .toggle').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const body = btn.closest('.entry')?.querySelector('.entry-body');
+    const entry = btn.closest('.entry');
+    const title = entry?.querySelector('h3')?.textContent.trim();
+    if (title) btn.setAttribute('aria-label', title);
+    entry?.querySelector('header')?.addEventListener('click', ()=>{
+      const body = entry.querySelector('.entry-body');
       const expanded = btn.getAttribute('aria-expanded')==='true';
       btn.setAttribute('aria-expanded', String(!expanded));
       if(body){ if(expanded) body.setAttribute('hidden',''); else body.removeAttribute('hidden'); }
@@ -42,12 +61,28 @@ const $$ = (s, c=document) => Array.from(c.querySelectorAll(s));
 
 // Contacts copy
 (function copy(){
-  const status = document.querySelector('.status');
+  const status = document.querySelector('.copy-status');
   $$('.copy').forEach(btn=>{
     btn.addEventListener('click', async ()=>{
       try{ await navigator.clipboard.writeText(btn.getAttribute('data-copy')||''); if(status){ status.textContent='Copied!'; setTimeout(()=> status.textContent='', 1200);} }
       catch(e){ if(status){ status.textContent='Failed to copy'; setTimeout(()=> status.textContent='',1200);} }
     });
+  });
+})();
+
+// Contact form: there is no backend, so hand the message to the visitor's email app
+(function contactForm(){
+  const form = $('#contactForm'); if (!form) return;
+  const status = $('.status', form);
+  form.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const to = form.getAttribute('data-mailto') || '';
+    const data = new FormData(form);
+    const name = String(data.get('name')||'').trim();
+    const subject = `Portfolio contact from ${name}`;
+    const body = `${data.get('message')||''}\n\n${name} <${data.get('email')||''}>`;
+    window.location.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    if (status) status.textContent = `Your email app should open with this message ready to send. If it doesn't, write to ${to}.`;
   });
 })();
 
@@ -57,7 +92,7 @@ const $$ = (s, c=document) => Array.from(c.querySelectorAll(s));
 // Parallax scene (moon, castle, hills, fog) - REDUCED horizontal movement for better centering
 (function parallax(){
   const layers = $$('.scene .layer');
-  if (!layers.length) return;
+  if (!layers.length || REDUCED_MOTION) return;
   let mx = innerWidth/2, my = innerHeight/2, sx = 0, sy = 0;
   const lerp = (a,b,t)=> a + (b-a)*t;
   window.addEventListener('mousemove', (e)=>{ mx = e.clientX; my = e.clientY; }, { passive: true });
@@ -121,7 +156,7 @@ const $$ = (s, c=document) => Array.from(c.querySelectorAll(s));
         io.unobserve(en.target);
       }
     });
-  }, { threshold: 0.2, rootMargin: '0px 0px -10% 0px' });
+  }, { threshold: 0, rootMargin: '0px 0px -10% 0px' }); // a ratio threshold never fires for panels taller than the screen
   els.forEach(el=> io.observe(el));
 })();
 
@@ -139,7 +174,7 @@ const $$ = (s, c=document) => Array.from(c.querySelectorAll(s));
       const inside = (id === 'skills' || id === 'contact');
       body.classList.toggle('is-inside', inside);
     });
-  }, { threshold: 0.55 });
+  }, CURRENT_SECTION);
   sections.forEach(sec => io.observe(sec));
 })();
 
@@ -148,7 +183,7 @@ const $$ = (s, c=document) => Array.from(c.querySelectorAll(s));
   const root = document.documentElement;
   const body = document.body;
   const arsenal = document.getElementById('skills');
-  if (!arsenal) return;
+  if (!arsenal || REDUCED_MOTION) return;
   const maxZoom = 1.18; // target zoom factor at end of section
   function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
   function onScroll(){

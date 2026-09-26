@@ -10,6 +10,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Crimson+Text:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" type="image/svg+xml" href="assets/img/crest.svg" />
+  <noscript><style>.reveal { opacity: 1 !important; transform: none !important; }</style></noscript>
 </head>
 <body>
   <div class="progress-top" aria-hidden="true"><span class="bar"></span></div>
@@ -52,7 +54,8 @@
         </div>
       </div>
       <nav class="nav" aria-label="Primary">
-        <ul>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primary-menu"><span></span><span></span><span></span></button>
+        <ul id="primary-menu">
           <li><a href="#prologue">Home</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#experience">Experience</a></li>
@@ -236,11 +239,11 @@
           <h2 class="chapter-title"><i class="fa-solid fa-toolbox"></i> Technical Skills & Tools</h2>
           <p>Proficient across security operations, infrastructure management, and development.</p>
           <div class="skills">
-            <div class="skill"><span data-skill="Security Operations" data-level="85"></span></div>
-            <div class="skill"><span data-skill="Penetration Testing" data-level="80"></span></div>
-            <div class="skill"><span data-skill="System Administration" data-level="84"></span></div>
-            <div class="skill"><span data-skill="Microsoft 365 Admin" data-level="78"></span></div>
-            <div class="skill"><span data-skill="Automation & Scripting" data-level="82"></span></div>
+            <div class="skill"><span style="--lvl:85%">Security Operations</span></div>
+            <div class="skill"><span style="--lvl:80%">Penetration Testing</span></div>
+            <div class="skill"><span style="--lvl:84%">System Administration</span></div>
+            <div class="skill"><span style="--lvl:78%">Microsoft 365 Admin</span></div>
+            <div class="skill"><span style="--lvl:82%">Automation & Scripting</span></div>
           </div>
           <div class="armory">
             <div class="weapon weapon--ribbon"><i class="fa-solid fa-terminal"></i><strong>Linux</strong><span>Server Ops & Hardening</span></div>
@@ -361,7 +364,8 @@
             <li><a class="link" href="https://www.linkedin.com/in/enzodupuy" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> linkedin.com/in/enzodupuy</a></li>
             <li><a class="link" href="https://github.com/enzodupuy" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> github.com/enzodupuy</a></li>
           </ul>
-          <form id="contactForm" class="contact-form" onsubmit="return false;">
+          <p class="status copy-status mono" aria-live="polite"></p>
+          <form id="contactForm" class="contact-form" data-mailto="enzo.dupuy@ecole2600.com">
             <label>
               <span>Name</span>
               <input type="text" name="name" placeholder="Your name" required />
