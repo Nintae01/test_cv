@@ -1,5 +1,5 @@
 /* Fantasy Interactive Variant: Heavy fantasy storytelling with light cyber accents */
-@import url("../../../assets/css/style.css");
+@import url("style.css");
 
 :root {
   --bg: #0a0e14;
@@ -164,12 +164,11 @@ h1, h2, h3, .title, .chapter-title {
 .nav ul { display: flex; align-items: center; gap: 10px; list-style: none; margin: 0; padding: 0; }
 .nav a { color: var(--muted); text-decoration: none; padding: 8px 10px; border-radius: 8px; transition: background .15s ease, color .15s ease; }
 .nav a:hover { color: #fff; background: rgba(255,255,255,0.06); }
-.nav .sep { width: 1px; height: 18px; background: var(--border); margin: 0 4px; }
 .nav-toggle { border-color: rgba(230,200,120,0.35); background: rgba(230,200,120,0.08); cursor: pointer; }
 .nav-toggle span { background: var(--gold-bright); }
 
-/* Below this width the full nav no longer fits beside the brand: collapse it behind the toggle */
-@media (max-width: 1180px) {
+/* Below this width the full nav no longer fits beside the brand (~870px needed): collapse it behind the toggle */
+@media (max-width: 940px) {
   body { height: auto; min-height: 100%; } /* a 100%-high body stops the sticky masthead after one screen */
   .masthead { background: linear-gradient(180deg, rgba(10,16,26,0.95), rgba(10,16,26,0.82)); backdrop-filter: blur(8px); }
   .masthead .container { position: relative; }
@@ -177,7 +176,6 @@ h1, h2, h3, .title, .chapter-title {
   .nav ul { display: none; position: absolute; top: calc(100% + 8px); right: 20px; width: min(280px, calc(100vw - 40px)); flex-direction: column; align-items: stretch; gap: 4px; padding: 12px; background: linear-gradient(180deg, rgba(28,24,16,0.97), rgba(22,19,12,0.97)); border: 1px solid rgba(230,200,120,0.35); border-radius: 14px; box-shadow: 0 24px 60px rgba(0,0,0,0.65), 0 0 40px rgba(230,200,120,0.08); }
   .nav-open .nav ul { display: flex; }
   .nav a { display: block; padding: 10px 12px; }
-  .nav .sep { width: auto; height: 1px; margin: 6px 4px; }
   .layer--moon { top: calc(6vh + 64px); }
 }
 
