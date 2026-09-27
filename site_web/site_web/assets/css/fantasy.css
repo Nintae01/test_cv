@@ -16,10 +16,10 @@
   --causeway-offset: 0vw; /* CENTERED with castle */
   --causeway-bottom: -22vh; /* lowers the causeway toward viewer */
   /* Inner scene tuning */
-  --inner-shift: 40%; /* nudge inner scene left/right (e.g., 24px or 2vw) */
-  --inner-origin-x: 48%; /* zoom focal X for inner scene */
+  --inner-shift: 0px; /* nudge inner scene left/right (e.g., 24px or 2vw) */
+  --inner-origin-x: 50%; /* zoom focal X for inner scene */
   --inner-origin-y: 62%; /* zoom focal Y for inner scene */
-  --gate-aura-shift: -10px; /* nudge gate glow left/right */
+  --gate-aura-shift: 0px; /* nudge gate glow left/right */
   --gate-aura-x: 50%; /* anchor of gate glow horizontally */
   --gate-aura-bottom: 20vh; /* vertical position from bottom */
   --gate-aura-width: 40vw; /* gate glow width */
@@ -68,27 +68,28 @@ h1, h2, h3, .title, .chapter-title {
 .scene canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 #stars { opacity: 0.8; mix-blend-mode: screen; z-index: 0; }
 #fireflies { opacity: 0.9; mix-blend-mode: screen; z-index: 5; }
-.layer { position: absolute; will-change: transform; }
+.layer { position: absolute; max-width: none; will-change: transform; } /* style.css caps every <img> at max-width:100%; lift it so layer widths apply as written */
 .layer--moon { top: 6vh; left: 8vw; width: 220px; opacity: 0.9; filter: drop-shadow(0 12px 24px rgba(243,224,180,0.28)); z-index: 0; }
 .scene--inner { opacity: 0; transition: opacity .8s ease; transform-origin: var(--inner-origin-x, 50%) var(--inner-origin-y, 68%); transform: translateX(var(--inner-shift, 0px)) scale(calc(var(--inner-zoom, 1) * var(--inner-zoom-extra, 1))); }
 .is-inside .scene--inner { opacity: 1; }
 .is-inside .scene--outer { opacity: 0; }
+/* Full-width layers overhang each edge by 6px so the mouse parallax (a few px) never uncovers one */
 .layer--castle { 
   bottom: 0;
-  width: 160%;
+  width: calc(100% + 12px);
   left: var(--castle-center, 50%);
-  margin-left: -80%;
+  margin-left: calc(-50% - 6px);
   opacity: 1;
   z-index: 3;
   filter: drop-shadow(0 22px 50px rgba(0,0,0,0.75)) brightness(1.20) contrast(1.18) saturate(1.15);
   image-rendering: -webkit-optimize-contrast;
 }
-.layer--hills { bottom: 0; width: 135%; left: 50%; margin-left: -67.5%; opacity: 0.95; z-index: 2; filter: brightness(1.08) contrast(1.05); }
+.layer--hills { bottom: 0; width: calc(100% + 12px); left: 50%; margin-left: calc(-50% - 6px); opacity: 0.95; z-index: 2; filter: brightness(1.08) contrast(1.05); }
 .layer--causeway { 
   bottom: var(--causeway-bottom);
-  width: 130%;
+  width: calc(100% + 12px);
   left: var(--castle-center, 50%);
-  margin-left: -65%;
+  margin-left: calc(-50% - 6px);
   opacity: 1;
   z-index: 4;
   filter: drop-shadow(0 18px 40px rgba(0,0,0,0.70)) brightness(1.10) contrast(1.12);
@@ -96,9 +97,9 @@ h1, h2, h3, .title, .chapter-title {
 }
 .layer--courtyard { 
   bottom: 0;
-  width: 160%;
+  width: calc(100% + 12px);
   left: var(--castle-center, 50%);
-  margin-left: -80%;
+  margin-left: calc(-50% - 6px);
   opacity: 1;
   z-index: 2;
   filter: drop-shadow(0 22px 48px rgba(0,0,0,0.65)) brightness(1.14) contrast(1.14) saturate(1.10);
@@ -107,8 +108,8 @@ h1, h2, h3, .title, .chapter-title {
 .layer--towers { 
   top: 4vh;
   left: var(--castle-center, 50%);
-  width: 160%;
-  margin-left: -80%;
+  width: calc(100% + 12px);
+  margin-left: calc(-50% - 6px);
   z-index: 1;
   opacity: 0.92;
   filter: drop-shadow(0 14px 32px rgba(0,0,0,0.55)) brightness(1.08) contrast(1.05);
@@ -117,8 +118,8 @@ h1, h2, h3, .title, .chapter-title {
 .layer--nearhouses { 
   bottom: -2vh;
   left: var(--castle-center, 50%);
-  width: 180%;
-  margin-left: -90%;
+  width: calc(100% + 12px);
+  margin-left: calc(-50% - 6px);
   z-index: 5;
   filter: drop-shadow(0 24px 52px rgba(0,0,0,0.7)) brightness(1.12) contrast(1.10);
   image-rendering: -webkit-optimize-contrast;
@@ -430,10 +431,6 @@ button { font-family: inherit; } /* <button> ignores the page font by default */
 /* Section-specific tuning */
 body.is-inside {
   /* tuned for inner courtyard alignment */
-  --inner-shift: 36px; /* keep modest translate for predictable alignment */
-  --inner-origin-x: 54%;
-  --gate-aura-x: 52%;
-  --gate-aura-shift: 8px;
   --gate-aura-bottom: 20vh;
   --gate-aura-width: 40vw;
   --gate-aura-height: 40vh;
@@ -484,17 +481,8 @@ body.is-finale {
 .footer { text-align:center; padding: 24px 0 40px; color: var(--muted); }
 
 /* Responsive improvements */
-@media (max-width: 1200px) {
-  .layer--castle { width: 170%; margin-left: -85%; }
-  .layer--courtyard { width: 170%; margin-left: -85%; }
-}
-
 @media (max-width: 768px) {
   .layer--moon { width: 150px; left: 6vw; }
-  .layer--castle { width: 200%; margin-left: -100%; }
-  .layer--causeway { width: 160%; margin-left: -80%; }
-  .layer--hills { width: 160%; margin-left: -80%; }
-  .layer--courtyard { width: 200%; margin-left: -100%; }
   .panel { padding: 20px; }
   .armory { grid-template-columns: 1fr; }
   .illuminations { gap: 12px; }
