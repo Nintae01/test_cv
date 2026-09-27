@@ -1,5 +1,5 @@
 /* Fantasy Interactive Variant: Heavy fantasy storytelling with light cyber accents */
-@import url("../../../assets/css/style.css");
+@import url("style.css");
 
 :root {
   --bg: #0a0e14;
@@ -25,7 +25,6 @@
   --gate-aura-width: 40vw; /* gate glow width */
   --gate-aura-height: 40vh; /* gate glow height */
   --inner-zoom-extra: 1; /* multiplier applied in finale */
-  --fantasy-glow: 0 0 32px 8px rgba(244,216,150,0.18), 0 0 64px 16px rgba(34,197,94,0.10);
   --castle-center: 50%;
 }
 
@@ -83,7 +82,6 @@ h1, h2, h3, .title, .chapter-title {
   z-index: 3;
   filter: drop-shadow(0 22px 50px rgba(0,0,0,0.75)) brightness(1.20) contrast(1.18) saturate(1.15);
   image-rendering: -webkit-optimize-contrast;
-  box-shadow: var(--fantasy-glow);
 }
 .layer--hills { bottom: 0; width: 135%; left: 50%; margin-left: -67.5%; opacity: 0.95; z-index: 2; filter: brightness(1.08) contrast(1.05); }
 .layer--causeway { 
@@ -95,7 +93,6 @@ h1, h2, h3, .title, .chapter-title {
   z-index: 4;
   filter: drop-shadow(0 18px 40px rgba(0,0,0,0.70)) brightness(1.10) contrast(1.12);
   image-rendering: -webkit-optimize-contrast;
-  box-shadow: var(--fantasy-glow);
 }
 .layer--courtyard { 
   bottom: 0;
@@ -106,7 +103,6 @@ h1, h2, h3, .title, .chapter-title {
   z-index: 2;
   filter: drop-shadow(0 22px 48px rgba(0,0,0,0.65)) brightness(1.14) contrast(1.14) saturate(1.10);
   image-rendering: -webkit-optimize-contrast;
-  box-shadow: var(--fantasy-glow);
 }
 .layer--towers { 
   top: 4vh;
@@ -117,7 +113,6 @@ h1, h2, h3, .title, .chapter-title {
   opacity: 0.92;
   filter: drop-shadow(0 14px 32px rgba(0,0,0,0.55)) brightness(1.08) contrast(1.05);
   image-rendering: -webkit-optimize-contrast;
-  box-shadow: var(--fantasy-glow);
 }
 .layer--nearhouses { 
   bottom: -2vh;
@@ -127,7 +122,6 @@ h1, h2, h3, .title, .chapter-title {
   z-index: 5;
   filter: drop-shadow(0 24px 52px rgba(0,0,0,0.7)) brightness(1.12) contrast(1.10);
   image-rendering: -webkit-optimize-contrast;
-  box-shadow: var(--fantasy-glow);
 }
 .layer--gate-aura { left: calc(var(--gate-aura-x, 50%) + var(--gate-aura-shift, 0px)); bottom: var(--gate-aura-bottom, 20vh); width: var(--gate-aura-width, 40vw); height: var(--gate-aura-height, 40vh); margin-left: calc(-1 * var(--gate-aura-width, 40vw) / 2); z-index: 2; pointer-events: none; background:
   radial-gradient(60% 60% at 50% 72%, rgba(230,208,156,0.22), rgba(230,208,156,0.0) 60%);
@@ -162,15 +156,28 @@ h1, h2, h3, .title, .chapter-title {
 /* Masthead */
 .masthead { position: sticky; top: 0; z-index: 20; background: linear-gradient(180deg, rgba(10,16,26,0.85), rgba(10,16,26,0)); backdrop-filter: none; border-bottom: 1px solid var(--border); }
 .masthead .container { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 20px; }
-.brand { display: flex; align-items: center; gap: 12px; }
+.brand { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 .brand .crest { width: 40px; height: 40px; filter: drop-shadow(0 6px 14px rgba(0,0,0,0.6)); }
 .brand .wordmark { display: grid; }
 .brand .name { font-family: 'Cinzel', serif; font-size: 22px; color: #fff; }
-.brand .tag { color: var(--muted); font-size: 12px; }
+.brand .tag { color: var(--muted); font-size: 12px; white-space: nowrap; }
 .nav ul { display: flex; align-items: center; gap: 10px; list-style: none; margin: 0; padding: 0; }
 .nav a { color: var(--muted); text-decoration: none; padding: 8px 10px; border-radius: 8px; transition: background .15s ease, color .15s ease; }
 .nav a:hover { color: #fff; background: rgba(255,255,255,0.06); }
-.nav .sep { width: 1px; height: 18px; background: var(--border); margin: 0 4px; }
+.nav-toggle { border-color: rgba(230,200,120,0.35); background: rgba(230,200,120,0.08); cursor: pointer; }
+.nav-toggle span { background: var(--gold-bright); }
+
+/* Below this width the full nav no longer fits beside the brand (~870px needed): collapse it behind the toggle */
+@media (max-width: 940px) {
+  body { height: auto; min-height: 100%; } /* a 100%-high body stops the sticky masthead after one screen */
+  .masthead { background: linear-gradient(180deg, rgba(10,16,26,0.95), rgba(10,16,26,0.82)); backdrop-filter: blur(8px); }
+  .masthead .container { position: relative; }
+  .nav-toggle { display: inline-block; }
+  .nav ul { display: none; position: absolute; top: calc(100% + 8px); right: 20px; width: min(280px, calc(100vw - 40px)); flex-direction: column; align-items: stretch; gap: 4px; padding: 12px; background: linear-gradient(180deg, rgba(28,24,16,0.97), rgba(22,19,12,0.97)); border: 1px solid rgba(230,200,120,0.35); border-radius: 14px; box-shadow: 0 24px 60px rgba(0,0,0,0.65), 0 0 40px rgba(230,200,120,0.08); }
+  .nav-open .nav ul { display: flex; }
+  .nav a { display: block; padding: 10px 12px; }
+  .layer--moon { top: calc(6vh + 64px); }
+}
 
 /* Rail */
 .rail { position: fixed; left: 18px; top: 50%; transform: translateY(-50%); z-index: 18; }
@@ -253,7 +260,7 @@ h1, h2, h3, .title, .chapter-title {
   border-color: rgba(230,200,120,0.45);
   box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 30px rgba(230,200,120,0.1);
 }
-.entry header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; }
+.entry header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px; cursor: pointer; }
 .entry h3 { margin: 0; font-size: 19px; letter-spacing: 0.5px; }
 .entry .toggle { 
   border: 1px solid rgba(230,200,120,0.3); 
@@ -262,12 +269,15 @@ h1, h2, h3, .title, .chapter-title {
   border-radius: 10px; 
   padding: 8px 12px;
   cursor: pointer;
+  flex-shrink: 0;
   transition: all 0.2s ease;
 }
-.entry .toggle:hover {
+.entry .toggle:hover, .entry header:hover .toggle {
   background: rgba(230,200,120,0.15);
   border-color: rgba(230,200,120,0.5);
 }
+.entry .toggle i { transition: transform .25s ease; }
+.entry .toggle[aria-expanded="true"] i { transform: rotate(180deg); }
 .entry-body { padding: 0 20px 20px; color: #f0f4f8; line-height: 1.7; }
 .entry-body[hidden] { display: none; }
 
@@ -370,6 +380,8 @@ h1, h2, h3, .title, .chapter-title {
 .status { color: var(--gold-bright); font-weight: 600; }
 
 /* Buttons */
+button { font-family: inherit; } /* <button> ignores the page font by default */
+.cta { flex-wrap: wrap; }
 .btn { 
   display: inline-flex; 
   align-items: center; 
@@ -381,6 +393,7 @@ h1, h2, h3, .title, .chapter-title {
   text-decoration: none;
   font-weight: 600;
   font-size: 16px;
+  white-space: nowrap;
   transition: all 0.3s ease;
   cursor: pointer;
 }
@@ -477,8 +490,7 @@ body.is-finale {
 }
 
 @media (max-width: 768px) {
-  .masthead .container { flex-direction: column; align-items: flex-start; }
-  .nav ul { flex-direction: column; width: 100%; align-items: flex-start; }
+  .layer--moon { width: 150px; left: 6vw; }
   .layer--castle { width: 200%; margin-left: -100%; }
   .layer--causeway { width: 160%; margin-left: -80%; }
   .layer--hills { width: 160%; margin-left: -80%; }
