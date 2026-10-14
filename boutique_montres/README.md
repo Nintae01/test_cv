@@ -4,7 +4,8 @@ Site vitrine et boutique pour une maison d'horlogerie, entièrement en français
 
 ## Aperçu
 
-- **Accueil** : hero avec montre vectorielle dont les aiguilles indiquent l'heure réelle, bandeau défilant, collections, catalogue filtrable (collection, recherche, tri), savoir-faire avec compteurs animés, services, témoignages, questions fréquentes, newsletter, contact.
+- **Accueil** : hero avec montre vectorielle, bandeau défilant (avec l'offre d'ouverture), collections, catalogue filtrable (collection, recherche, tri), présentation de la maison avec compteurs animés, services, mot du fondateur, questions fréquentes, newsletter, contact.
+- **Montres toujours à l'heure** : chaque montre affichée (accueil, catalogue, fiche, panier) indique l'heure réelle du visiteur, à la seconde, et le guichet de date affiche le jour du mois. Le mouvement est fluide, ou tic par seconde si le visiteur a demandé à réduire les animations.
 - **Fiche produit** (modale) : description, choix du bracelet avec supplément éventuel, caractéristiques, quantité, ajout au panier.
 - **Panier** (tiroir latéral) : persistant sur l'appareil (stockage local), quantités, suppression, totaux.
 - **Paiement** (`paiement.html`) : coordonnées, adresse, mode de livraison, moyen de paiement, code promotionnel, TVA, validation des champs, puis paiement.
@@ -12,6 +13,18 @@ Site vitrine et boutique pour une maison d'horlogerie, entièrement en français
 - **Informations** (`informations.html`) : livraison, CGV, mentions légales, confidentialité (textes d'exemple à remplacer).
 
 Typographie : *Cormorant Garamond* pour les titres et *Jost* pour le texte (Google Fonts). Palette noir profond et or champagne, angles chanfreinés, grain subtil, curseur personnalisé, animations à l'apparition. Les animations respectent la préférence système « réduire les animations ».
+
+## Checklist avant l'ouverture
+
+Les textes du site sont écrits pour une jeune boutique qui vient d'ouvrir. Avant la mise en ligne, relisez et adaptez :
+
+1. **Le mot du fondateur** et la section « La maison » dans `index.html` : mettez-y vos mots, votre prénom, votre histoire.
+2. **Les coordonnées** (adresse, horaires, téléphone, e-mail) dans `index.html` et `informations.html`.
+3. **Les mentions légales** dans `informations.html` : forme juridique, RCS, TVA, nom du directeur de la publication.
+4. **Les montres** dans `assets/data/montres.js` : les neuf modèles fournis sont des exemples à remplacer par vos vraies références, prix et stocks. Ajoutez vos photos avec le champ `images`.
+5. **L'offre d'ouverture** : le bandeau annonce « −5 % avec le code BIENVENUE ». Le code se règle dans `assets/js/config.js` (`codesPromo`) ; supprimez la ligne du bandeau dans `index.html` pour retirer l'offre.
+6. **La garantie et les délais** annoncés (deux ans, expédition sous 48 h, retour sous trente jours) : vérifiez qu'ils correspondent à ce que vous pouvez tenir.
+7. **Le paiement** : laissez `modePaiement: "demo"` tant que Stripe n'est pas configuré (voir plus bas).
 
 ## Structure
 

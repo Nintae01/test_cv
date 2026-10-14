@@ -16,9 +16,6 @@
     if (!conteneur) return;
     const montre = trouverMontre(conteneur.dataset.produit) || MONTRES[0];
     conteneur.innerHTML = rendreVisuel(montre, null, { anime: true });
-    const svg = conteneur.querySelector("svg");
-    if (svg && !reduireMouvement) animerMontre(svg);
-
     const zone = $("#hero-visuel");
     if (zone && !reduireMouvement && window.matchMedia("(hover: hover)").matches) {
       zone.addEventListener("mousemove", e => {
@@ -153,7 +150,7 @@
     $("#modale-carac").innerHTML = Object.entries(m.caracteristiques || {}).map(([k, val]) => `<li><span>${echapper(k)}</span><span>${echapper(val)}</span></li>`).join("");
     $("#modale-prix").innerHTML = `<small>Prix, TVA incluse</small>${formaterPrix(prixUnitaire(m, v) * modale.quantite)}`;
     const stock = $("#modale-stock");
-    stock.textContent = m.stock <= 3 ? `Plus que ${m.stock} pièce${m.stock > 1 ? "s" : ""} en atelier` : "Disponible, expédiée sous 48 h";
+    stock.textContent = m.stock <= 3 ? `Plus que ${m.stock} pièce${m.stock > 1 ? "s" : ""} en boutique` : "Disponible, expédiée sous 48 h";
     stock.classList.toggle("faible", m.stock <= 3);
     $("#modale-quantite").textContent = modale.quantite;
   }
@@ -205,9 +202,9 @@
     if (visuel) {
       const m = trouverMontre(visuel.dataset.produit) || MONTRES[0];
       visuel.innerHTML = rendreVisuel(m, null, { anime: true });
-      const svg = visuel.querySelector("svg");
-      if (svg && !reduireMouvement) animerMontre(svg);
     }
+    const compteurCatalogue = $("[data-compteur-catalogue]");
+    if (compteurCatalogue) compteurCatalogue.dataset.compteur = MONTRES.length;
     const compteurs = $$("[data-compteur]");
     if (!compteurs.length || !("IntersectionObserver" in window)) { compteurs.forEach(c => c.textContent = c.dataset.compteur); return; }
     const obs = new IntersectionObserver(entries => {

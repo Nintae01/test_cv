@@ -215,19 +215,20 @@
 
     const dateur = v.style !== "chrono" ? `<g>
       <rect x="${cx + rCadran - 40}" y="${cy - 9}" width="24" height="18" fill="${texteCadranClair ? '#fbfaf6' : '#f4efe4'}" stroke="${mat[1]}" stroke-width="1"/>
-      <text x="${cx + rCadran - 28}" y="${cy + 5}" text-anchor="middle" font-family="Jost, Arial, sans-serif" font-size="12" font-weight="500" fill="#1b1a18">14</text>
+      <text x="${cx + rCadran - 28}" y="${cy + 5}" text-anchor="middle" font-family="Jost, Arial, sans-serif" font-size="12" font-weight="500" fill="#1b1a18" data-dateur>${new Date().getDate()}</text>
     </g>` : "";
 
     const logo = `<g>
       <text x="${cx}" y="${cy - 52}" text-anchor="middle" font-family="'Cormorant Garamond', Georgia, serif" font-size="14.5" font-style="italic" letter-spacing="0.6" fill="${encre}">La Roux du Temps</text>
       <text x="${cx}" y="${cy - 38}" text-anchor="middle" font-family="Jost, Arial, sans-serif" font-size="6.5" letter-spacing="2.4" fill="${encre}" opacity="0.8">PARIS</text>
-      <text x="${cx}" y="${cy + (v.style === "chrono" ? 100 : 78)}" text-anchor="middle" font-family="Jost, Arial, sans-serif" font-size="6" letter-spacing="1.8" fill="${encre}" opacity="0.7">${v.style === "plongee" ? "AUTOMATIQUE · 300 M" : v.style === "chrono" ? "CHRONOGRAPHE" : "MANUFACTURE"}</text>
+      <text x="${cx}" y="${cy + (v.style === "chrono" ? 100 : 78)}" text-anchor="middle" font-family="Jost, Arial, sans-serif" font-size="6" letter-spacing="1.8" fill="${encre}" opacity="0.7">${v.style === "plongee" ? "AUTOMATIQUE · 300 M" : v.style === "chrono" ? "CHRONOGRAPHE" : "MÉCANIQUE"}</text>
     </g>`;
 
     /* ------------------------------------------------------------- aiguilles */
-    const angleH = options.angleH != null ? options.angleH : 305;
-    const angleM = options.angleM != null ? options.angleM : 56;
-    const angleS = options.angleS != null ? options.angleS : 212;
+    const maintenant = anglesActuels();
+    const angleH = options.angleH != null ? options.angleH : maintenant.h;
+    const angleM = options.angleM != null ? options.angleM : maintenant.m;
+    const angleS = options.angleS != null ? options.angleS : maintenant.s;
     const lumeFill = v.style === "plongee" ? "#eef6dc" : aiguilles;
     let formeH, formeM;
     if (v.style === "plongee") {
@@ -284,31 +285,84 @@
       </linearGradient>
     </defs>`;
 
-    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 560" role="img" aria-label="${options.libelle || 'Montre La Roux du Temps'}"${classe}${anime}>
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 560" role="img" aria-label="${options.libelle || 'Montre La Roux du Temps'}" data-montre="1"${classe}${anime}>
       ${defs}${bracelet}${cornes}${couronne}${boitier}${lunette}${cadran}
     </svg>`;
   }
 
-  /* Anime les aiguilles d'un SVG (attribut data-montre-animee) sur l'heure réelle. */
-  function animerMontre(svg) {
+  /* ------------------------------------------------------------ horloge
+     Une seule boucle met à l'heure toutes les montres de la page (aiguilles
+     et guichet de date). Mouvement fluide en temps normal, tic par seconde
+     si l'utilisateur préfère réduire les animations. Les montres retirées
+     de la page sont oubliées automatiquement. */
+  const horloge = { montres: new Set(), lancee: false, lisse: true };
+
+  function anglesActuels() {
+    const d = new Date();
+    const sec = d.getSeconds() + (horloge.lisse ? d.getMilliseconds() / 1000 : 0);
+    const min = d.getMinutes() + sec / 60;
+    const hr = (d.getHours() % 12) + min / 60;
+    return { h: hr * 30, m: min * 6, s: sec * 6, jour: d.getDate() };
+  }
+
+  function reglerMontre(svg, a) {
     const h = svg.querySelector('[data-aiguille="h"]');
     const m = svg.querySelector('[data-aiguille="m"]');
-    const s = svg.querySelector('[data-aiguille="s"]');
-    if (!h || !m || !s) return;
-    function tic() {
-      const d = new Date();
-      const ms = d.getMilliseconds();
-      const sec = d.getSeconds() + ms / 1000;
-      const min = d.getMinutes() + sec / 60;
-      const hr = (d.getHours() % 12) + min / 60;
-      s.setAttribute("transform", `rotate(${sec * 6} 200 280)`);
-      m.setAttribute("transform", `rotate(${min * 6} 200 280)`);
-      h.setAttribute("transform", `rotate(${hr * 30} 200 280)`);
-      requestAnimationFrame(tic);
-    }
-    tic();
+    const sx = svg.querySelector('[data-aiguille="s"]');
+    if (h) h.setAttribute("transform", `rotate(${a.h.toFixed(3)} 200 280)`);
+    if (m) m.setAttribute("transform", `rotate(${a.m.toFixed(3)} 200 280)`);
+    if (sx) sx.setAttribute("transform", `rotate(${a.s.toFixed(3)} 200 280)`);
+    const dateur = svg.querySelector("[data-dateur]");
+    if (dateur && dateur.textContent !== String(a.jour)) dateur.textContent = a.jour;
+  }
+
+  function tic() {
+    const a = anglesActuels();
+    horloge.montres.forEach(svg => {
+      if (!svg.isConnected) { horloge.montres.delete(svg); return; }
+      reglerMontre(svg, a);
+    });
+    if (horloge.lisse) requestAnimationFrame(tic);
+  }
+
+  function demarrerHorloge() {
+    if (horloge.lancee || typeof window === "undefined") return;
+    horloge.lancee = true;
+    horloge.lisse = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    if (horloge.lisse) requestAnimationFrame(tic);
+    else { tic(); setInterval(tic, 1000); }
+  }
+
+  /* Met une montre à l'heure et la maintient à l'heure. */
+  function animerMontre(svg) {
+    if (!svg || svg.dataset.horloge) return;
+    svg.dataset.horloge = "1";
+    horloge.montres.add(svg);
+    reglerMontre(svg, anglesActuels());
+    demarrerHorloge();
+  }
+
+  /* Active toutes les montres d'un conteneur (ou de la page). */
+  function activerMontres(conteneur) {
+    (conteneur || document).querySelectorAll("svg[data-montre]:not([data-horloge])").forEach(animerMontre);
+  }
+
+  if (typeof document !== "undefined") {
+    const demarrer = () => {
+      activerMontres(document);
+      /* Toute montre ajoutée plus tard (catalogue filtré, fiche, panier…) est prise en charge. */
+      let prevu = false;
+      new MutationObserver(() => {
+        if (prevu) return;
+        prevu = true;
+        requestAnimationFrame(() => { prevu = false; activerMontres(document); });
+      }).observe(document.body, { childList: true, subtree: true });
+    };
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", demarrer);
+    else demarrer();
   }
 
   racine.genererMontreSVG = genererMontreSVG;
   racine.animerMontre = animerMontre;
+  racine.activerMontres = activerMontres;
 })(typeof window !== "undefined" ? window : globalThis);

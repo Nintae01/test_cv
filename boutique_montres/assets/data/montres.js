@@ -75,7 +75,7 @@
       stock: 3,
       reference: "LRT-H36-NA",
       description:
-        "Un format intime, un cadran en nacre naturelle dont chaque pièce est unique. Les index sont sertis de diamants taille brillant, posés un à un dans notre atelier.",
+        "Un format intime, un cadran en nacre naturelle dont chaque pièce est unique. Les index sont sertis de diamants taille brillant, posés un à un.",
       caracteristiques: {
         "Diamètre": "36 mm",
         "Boîtier": "Or rose 18 carats",
@@ -246,7 +246,7 @@
     heritage: {
       nom: "Héritage",
       accroche: "La montre habillée dans sa forme la plus pure.",
-      description: "Des boîtiers fins, des cadrans dépouillés, des mouvements à remontage manuel que l'on prend plaisir à armer chaque matin."
+      description: "Des boîtiers fins, des cadrans dépouillés, des mouvements que l'on prend plaisir à remonter chaque matin."
     },
     abysse: {
       nom: "Abysse",
@@ -256,7 +256,7 @@
     chronographe: {
       nom: "Chronographe",
       accroche: "La mesure du temps court, à la main.",
-      description: "Roue à colonnes, embrayage vertical, finitions haute horlogerie : nos chronographes sont assemblés par un seul horloger, du début à la fin."
+      description: "Roue à colonnes, embrayage vertical, finitions soignées : des chronographes choisis pour leur mécanique autant que pour leur dessin."
     }
   };
 
