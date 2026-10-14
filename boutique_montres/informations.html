@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Informations — La Roux du Temps</title>
+  <meta name="theme-color" content="#09090b">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="curseur" aria-hidden="true"></div>
+  <div class="curseur-halo" aria-hidden="true"></div>
+
+  <header class="entete reduite" id="entete">
+    <div class="conteneur">
+      <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav-mobile"><span></span><span></span><span></span></button>
+      <nav class="nav" aria-label="Navigation principale">
+        <a href="index.html#collections">Collections</a><a href="index.html#catalogue">Catalogue</a><a href="index.html#la-maison">La maison</a><a href="index.html#contact">Contact</a>
+      </nav>
+      <a href="index.html" class="logo" aria-label="La Roux du Temps, retour à l'accueil"><span class="marque">La Roux du Temps</span><span class="ville">Paris · Horlogerie</span></a>
+      <div class="entete-actions">
+        <button class="icone-btn" id="ouvrir-panier" aria-label="Ouvrir le panier">
+          <svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+          <span class="pastille" id="panier-compteur">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+  <nav class="nav-mobile" id="nav-mobile" aria-label="Navigation mobile">
+    <a href="index.html#collections">Collections</a><a href="index.html#catalogue">Catalogue</a><a href="index.html#la-maison">La maison</a><a href="index.html#contact">Contact</a>
+  </nav>
+
+  <main class="page-interne">
+    <div class="conteneur juridique">
+      <div class="fil-ariane"><a href="index.html">Accueil</a><span>Informations</span></div>
+      <span class="surtitre">Informations</span>
+      <h1 style="font-size:clamp(2.4rem,5vw,4rem);margin-top:14px">Tout ce qu'il faut <em class="accent">savoir.</em></h1>
+
+      <h2 id="livraison">Livraison et retours</h2>
+      <p>Chaque montre est expédiée sous 48 heures ouvrées depuis notre boutique parisienne, dans son écrin, accompagnée de ses papiers et de sa carte de garantie.</p>
+      <ul>
+        <li><strong>Livraison assurée</strong> (offerte) : transporteur spécialisé, 3 à 5 jours ouvrés, assurance à la valeur totale, remise contre signature.</li>
+        <li><strong>Coursier sécurisé</strong> (49 €) : remise en main propre sous 24 heures en Île-de-France.</li>
+        <li><strong>Retours</strong> : trente jours pour changer d'avis, à condition que la montre n'ait pas été gravée. Les frais de retour assuré sont à notre charge en France métropolitaine.</li>
+      </ul>
+
+      <h2 id="cgv">Conditions générales de vente</h2>
+      <p>Les présentes conditions régissent les ventes conclues sur le site de La Roux du Temps. Toute commande implique leur acceptation sans réserve.</p>
+      <ul>
+        <li><strong>Prix</strong> : exprimés en euros, toutes taxes comprises. Les éventuels droits de douane hors Union européenne restent à la charge de l'acheteur.</li>
+        <li><strong>Paiement</strong> : par carte bancaire, Apple Pay ou Google Pay via notre prestataire Stripe, ou par virement bancaire. La commande est confirmée à réception du paiement.</li>
+        <li><strong>Disponibilité</strong> : nos pièces sont disponibles en très petites quantités. En cas de rupture après commande, vous serez intégralement remboursé sous dix jours.</li>
+        <li><strong>Garantie</strong> : deux ans sur le mouvement et le boîtier, hors usure normale, chocs et interventions extérieures.</li>
+        <li><strong>Droit de rétractation</strong> : quatorze jours légaux, étendus à trente jours par la maison.</li>
+      </ul>
+
+      <h2 id="mentions">Mentions légales</h2>
+      <p>La Roux du Temps — [forme juridique et capital à compléter], 12 rue des Francs-Bourgeois, 75003 Paris. RCS Paris 000 000 000. Numéro de TVA intracommunautaire : FR00 000000000. Directeur de la publication : [nom du fondateur]. Hébergement : GitHub Pages (GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis).</p>
+      <p class="texte-gris" style="font-size:0.85rem">Ces mentions sont fournies à titre d'exemple et doivent être remplacées par les informations réelles de l'entreprise avant la mise en ligne.</p>
+
+      <h2 id="confidentialite">Confidentialité</h2>
+      <p>Les données collectées lors de votre commande (identité, adresse, e-mail, téléphone) servent exclusivement au traitement et à la livraison de celle-ci. Aucune donnée bancaire n'est stockée par La Roux du Temps : le paiement est traité par Stripe, certifié PCI-DSS. Conformément au RGPD, vous disposez d'un droit d'accès, de rectification et de suppression en écrivant à <a href="mailto:atelier@larouxdutemps.fr" style="color:var(--or)">atelier@larouxdutemps.fr</a>.</p>
+      <p>Le panier est conservé sur votre appareil uniquement (stockage local du navigateur) et n'est transmis à nos serveurs qu'au moment du paiement.</p>
+    </div>
+  </main>
+
+  <footer class="pied" style="margin-top:100px">
+    <div class="conteneur"><div class="pied-bas" style="border-top:0;padding-top:0"><span>© <span id="annee"></span> La Roux du Temps — Tous droits réservés</span><a href="index.html" style="color:var(--or)">Retour à l'accueil</a></div></div>
+  </footer>
+
+  <div class="panier" id="panier" aria-hidden="true">
+    <div class="panier-fond" data-fermer-panier></div>
+    <aside class="panier-tiroir" role="dialog" aria-modal="true" aria-label="Votre panier">
+      <div class="panier-entete"><h3>Panier <small id="panier-nombre">0 article</small></h3>
+        <button class="icone-btn" data-fermer-panier aria-label="Fermer le panier"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <div class="panier-liste" id="panier-liste"></div>
+      <div class="panier-pied">
+        <div class="ligne-total"><span>Sous-total</span><span class="prix" id="panier-sous-total">0 €</span></div>
+        <div class="ligne-total grand"><span>Total</span><span class="prix" id="panier-total">0 €</span></div>
+        <a href="paiement.html" class="btn btn-or" id="panier-commander">Passer la commande <span class="reflet"></span></a>
+      </div>
+    </aside>
+  </div>
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/data/montres.js"></script>
+  <script src="assets/js/montre-svg.js"></script>
+  <script src="assets/js/commun.js"></script>
+</body>
+</html>
