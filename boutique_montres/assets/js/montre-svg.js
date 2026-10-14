@@ -1,5 +1,5 @@
 /* =====================================================================
-   Rendu vectoriel des montres — Maison Aurèle
+   Rendu vectoriel des montres — La Roux du Temps
    ---------------------------------------------------------------------
    genererMontreSVG(visuel, options) retourne une chaîne SVG décrivant
    une montre à partir d'un simple descripteur (boîtier, cadran, bracelet,
@@ -219,7 +219,7 @@
     </g>` : "";
 
     const logo = `<g>
-      <text x="${cx}" y="${cy - 52}" text-anchor="middle" font-family="'Cormorant Garamond', Georgia, serif" font-size="19" font-style="italic" letter-spacing="1" fill="${encre}">Aurèle</text>
+      <text x="${cx}" y="${cy - 52}" text-anchor="middle" font-family="'Cormorant Garamond', Georgia, serif" font-size="14.5" font-style="italic" letter-spacing="0.6" fill="${encre}">La Roux du Temps</text>
       <text x="${cx}" y="${cy - 38}" text-anchor="middle" font-family="Jost, Arial, sans-serif" font-size="6.5" letter-spacing="2.4" fill="${encre}" opacity="0.8">PARIS</text>
       <text x="${cx}" y="${cy + (v.style === "chrono" ? 100 : 78)}" text-anchor="middle" font-family="Jost, Arial, sans-serif" font-size="6" letter-spacing="1.8" fill="${encre}" opacity="0.7">${v.style === "plongee" ? "AUTOMATIQUE · 300 M" : v.style === "chrono" ? "CHRONOGRAPHE" : "MANUFACTURE"}</text>
     </g>`;
@@ -284,7 +284,7 @@
       </linearGradient>
     </defs>`;
 
-    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 560" role="img" aria-label="${options.libelle || 'Montre Maison Aurèle'}"${classe}${anime}>
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 560" role="img" aria-label="${options.libelle || 'Montre La Roux du Temps'}"${classe}${anime}>
       ${defs}${bracelet}${cornes}${couronne}${boitier}${lunette}${cadran}
     </svg>`;
   }

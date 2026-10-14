@@ -1,18 +1,18 @@
 /* =====================================================================
-   Page de paiement — Maison Aurèle
+   Page de paiement — La Roux du Temps
    Récapitulatif, livraison, code promotionnel, validation du formulaire
    et déclenchement du paiement (mode démo ou Stripe Checkout).
    ===================================================================== */
 (function () {
   "use strict";
-  const { $, $$, formaterPrix, echapper, rendreVisuel, detailsPanier, viderPanier, notifier } = window.Aurele;
+  const { $, $$, formaterPrix, echapper, rendreVisuel, detailsPanier, viderPanier, notifier } = window.LaRoux;
   const CONFIG = window.CONFIG || {};
-  const CLE_COMMANDE = "aurele_commande_en_cours";
+  const CLE_COMMANDE = "laroux_commande_en_cours";
 
   const etat = { livraison: "standard", moyen: "carte", promo: null };
 
   const TEXTES_PAIEMENT = {
-    carte: "Vous serez redirigé vers notre page de paiement sécurisée (Stripe). Aucune donnée bancaire n'est stockée par Maison Aurèle.",
+    carte: "Vous serez redirigé vers notre page de paiement sécurisée (Stripe). Aucune donnée bancaire n'est stockée par La Roux du Temps.",
     wallet: "Apple Pay et Google Pay sont proposés automatiquement sur la page de paiement sécurisée si votre appareil les prend en charge.",
     virement: "Nos coordonnées bancaires vous seront communiquées par e-mail. La montre est réservée 5 jours ouvrés, puis expédiée dès réception du virement."
   };
@@ -128,7 +128,7 @@
   function numeroCommande() {
     const d = new Date();
     const aleatoire = Math.random().toString(36).slice(2, 6).toUpperCase();
-    return `AUR-${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}-${aleatoire}`;
+    return `LRT-${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}-${aleatoire}`;
   }
 
   /* ------------------------------------------------------------- paiement */

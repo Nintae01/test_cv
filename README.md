@@ -30,6 +30,6 @@ You can host this on any static hosting provider (GitHub Pages, Netlify, Vercel)
 # test_cv
 ---
 
-## Boutique de montres — Maison Aurèle
+## Boutique de montres — La Roux du Temps
 
 Le dossier [`boutique_montres/`](boutique_montres/) contient un site marchand complet, en français, pour une maison d'horlogerie : catalogue filtrable, fiches produit, panier, passage en caisse et intégration Stripe prête à l'emploi. Voir [`boutique_montres/README.md`](boutique_montres/README.md) pour la configuration et le déploiement.

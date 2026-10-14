@@ -1,5 +1,5 @@
 /* =====================================================================
-   Serveur de paiement — Maison Aurèle
+   Serveur de paiement — La Roux du Temps
    ---------------------------------------------------------------------
    Crée des sessions Stripe Checkout à partir du catalogue partagé avec
    le site (assets/data/montres.js). Les prix sont TOUJOURS recalculés
@@ -148,12 +148,12 @@ app.get("/api/commande/:sessionId", async (req, res) => {
 app.get("/api/montres", (req, res) => res.json(MONTRES));
 app.get("/api/sante", (req, res) => res.json({ ok: true, boutique: CONFIG.nomBoutique }));
 
-app.listen(PORT, () => console.log(`Serveur de paiement Maison Aurèle à l'écoute sur http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`Serveur de paiement La Roux du Temps à l'écoute sur http://localhost:${PORT}`));
 
 /* ------------------------------------------------------------- utilitaires */
 function genererNumero() {
   const d = new Date();
-  return `AUR-${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
+  return `LRT-${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
 }
 
 /* Lit config.js du site (fichier navigateur) sans l'exécuter dans un contexte DOM. */

@@ -1,4 +1,4 @@
-# Maison Aurèle — Boutique de montres en ligne
+# La Roux du Temps — Boutique de montres en ligne
 
 Site vitrine et boutique pour une maison d'horlogerie, entièrement en français. Aucune étape de compilation : le site est constitué de pages HTML, d'une feuille de style et de quelques scripts, et peut être hébergé tel quel sur GitHub Pages.
 
@@ -58,7 +58,7 @@ Tout se passe dans `assets/data/montres.js`. Chaque montre est un objet :
   prix: 489000,                      // en centimes : 4 890 €
   nouveaute: true,
   stock: 6,
-  reference: "AUR-H38-IV",
+  reference: "LRT-H38-IV",
   description: "…",
   caracteristiques: { "Diamètre": "38 mm", … },
   variantes: [ { id: "alligator-noir", nom: "Alligator noir", supplement: 0, couleurBracelet: "#1c1a19" } ],

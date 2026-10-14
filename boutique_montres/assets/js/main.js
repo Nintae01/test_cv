@@ -1,11 +1,11 @@
 /* =====================================================================
-   Page d'accueil — Maison Aurèle
+   Page d'accueil — La Roux du Temps
    Hero animé, collections, catalogue filtrable, fiche produit, FAQ,
    témoignages, compteurs, formulaires.
    ===================================================================== */
 (function () {
   "use strict";
-  const { $, $$, formaterPrix, echapper, trouverMontre, trouverVariante, prixUnitaire, rendreVisuel, ajouterAuPanier, notifier } = window.Aurele;
+  const { $, $$, formaterPrix, echapper, trouverMontre, trouverVariante, prixUnitaire, rendreVisuel, ajouterAuPanier, notifier } = window.LaRoux;
   const MONTRES = window.MONTRES || [];
   const COLLECTIONS = window.COLLECTIONS || {};
   const reduireMouvement = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -299,6 +299,6 @@
     initTemoignages();
     initFaq();
     initFormulaires();
-    window.Aurele.revelerNouveaux();
+    window.LaRoux.revelerNouveaux();
   });
 })();

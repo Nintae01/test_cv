@@ -1,5 +1,5 @@
 /* =====================================================================
-   Catalogue des montres — Maison Aurèle
+   Catalogue des montres — La Roux du Temps
    ---------------------------------------------------------------------
    Ce fichier est la source unique du catalogue. Il est lu à la fois par
    le site (navigateur) et par le serveur de paiement (Node.js) afin que
@@ -23,7 +23,7 @@
       prix: 489000,
       nouveaute: true,
       stock: 6,
-      reference: "AUR-H38-IV",
+      reference: "LRT-H38-IV",
       description:
         "Une montre habillée d'une sobriété absolue. Le cadran ivoire grené reçoit des index appliqués en or et des aiguilles feuille polies à la main. Le mouvement manufacture à remontage manuel se dévoile à travers le fond saphir.",
       caracteristiques: {
@@ -48,7 +48,7 @@
       prix: 279000,
       nouveaute: false,
       stock: 9,
-      reference: "AUR-H38-AR",
+      reference: "LRT-H38-AR",
       description:
         "La même architecture épurée, dans une expression plus contemporaine. Le cadran ardoise soleillé change de ton avec la lumière, du gris profond à l'anthracite bleuté.",
       caracteristiques: {
@@ -73,7 +73,7 @@
       prix: 529000,
       nouveaute: true,
       stock: 3,
-      reference: "AUR-H36-NA",
+      reference: "LRT-H36-NA",
       description:
         "Un format intime, un cadran en nacre naturelle dont chaque pièce est unique. Les index sont sertis de diamants taille brillant, posés un à un dans notre atelier.",
       caracteristiques: {
@@ -98,7 +98,7 @@
       prix: 349000,
       nouveaute: false,
       stock: 12,
-      reference: "AUR-A42-NR",
+      reference: "LRT-A42-NR",
       description:
         "Conçue pour les profondeurs, portée en ville. Lunette unidirectionnelle en céramique, index luminescents généreux et couronne vissée protégée par des épaulements.",
       caracteristiques: {
@@ -123,7 +123,7 @@
       prix: 359000,
       nouveaute: true,
       stock: 7,
-      reference: "AUR-A42-BL",
+      reference: "LRT-A42-BL",
       description:
         "Le bleu profond du cadran, obtenu par dépôt galvanique, s'assombrit vers les bords comme la lumière qui s'éteint sous la surface.",
       caracteristiques: {
@@ -148,7 +148,7 @@
       prix: 399000,
       nouveaute: false,
       stock: 4,
-      reference: "AUR-A40-BZ",
+      reference: "LRT-A40-BZ",
       description:
         "Le bronze vit avec vous : sa patine évolue au fil des années et rend chaque pièce singulière. Le cadran vert forêt s'accorde à un bracelet en cuir de veau huilé.",
       caracteristiques: {
@@ -173,7 +173,7 @@
       prix: 649000,
       nouveaute: false,
       stock: 5,
-      reference: "AUR-C41-PA",
+      reference: "LRT-C41-PA",
       description:
         "Un chronographe à roue à colonnes et embrayage vertical, pour une mise en marche sans à-coup. Le cadran argenté contraste avec deux compteurs noirs au dessin classique.",
       caracteristiques: {
@@ -198,7 +198,7 @@
       prix: 1290000,
       nouveaute: true,
       stock: 2,
-      reference: "AUR-C41-OR",
+      reference: "LRT-C41-OR",
       description:
         "La pièce maîtresse de la collection. Boîtier or jaune massif, cadran laqué noir à compteurs dorés, et un mouvement chronographe décoré selon les codes de la haute horlogerie : anglage à la main, côtes de Genève, perlage.",
       caracteristiques: {
@@ -223,7 +223,7 @@
       prix: 589000,
       nouveaute: false,
       stock: 8,
-      reference: "AUR-C39-GL",
+      reference: "LRT-C39-GL",
       description:
         "Un format plus contenu et un cadran bleu glacier aux compteurs argentés. La lisibilité est totale, l'élégance aussi.",
       caracteristiques: {

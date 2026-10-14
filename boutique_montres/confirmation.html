@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Commande confirmée — Maison Aurèle</title>
+  <title>Commande confirmée — La Roux du Temps</title>
   <meta name="robots" content="noindex">
   <meta name="theme-color" content="#09090b">
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
@@ -21,7 +21,7 @@
       <nav class="nav" aria-label="Navigation principale">
         <a href="index.html#collections">Collections</a><a href="index.html#catalogue">Catalogue</a><a href="index.html#savoir-faire">Savoir-faire</a><a href="index.html#contact">Contact</a>
       </nav>
-      <a href="index.html" class="logo" aria-label="Maison Aurèle, retour à l'accueil"><span class="marque">Aurèle</span><span class="ville">Paris · Manufacture</span></a>
+      <a href="index.html" class="logo" aria-label="La Roux du Temps, retour à l'accueil"><span class="marque">La Roux du Temps</span><span class="ville">Paris · Manufacture</span></a>
       <div class="entete-actions"></div>
     </div>
   </header>
@@ -50,10 +50,10 @@
   <script src="assets/js/commun.js"></script>
   <script>
     (function () {
-      const { $, formaterPrix, echapper, viderPanier } = window.Aurele;
+      const { $, formaterPrix, echapper, viderPanier } = window.LaRoux;
       const params = new URLSearchParams(window.location.search);
       let commande = null;
-      try { commande = JSON.parse(sessionStorage.getItem("aurele_commande_en_cours")); } catch (e) {}
+      try { commande = JSON.parse(sessionStorage.getItem("laroux_commande_en_cours")); } catch (e) {}
       const sessionId = params.get("session_id");
 
       async function verifierStripe() {

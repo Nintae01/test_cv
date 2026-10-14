@@ -1,7 +1,7 @@
 {
-  "name": "maison-aurele-serveur-paiement",
+  "name": "la-roux-du-temps-serveur-paiement",
   "version": "1.0.0",
-  "description": "Serveur de paiement Stripe Checkout pour la boutique Maison Aurèle",
+  "description": "Serveur de paiement Stripe Checkout pour la boutique La Roux du Temps",
   "main": "server.js",
   "private": true,
   "scripts": {

@@ -1,5 +1,5 @@
 /* =====================================================================
-   Configuration du site — Maison Aurèle
+   Configuration du site — La Roux du Temps
    ---------------------------------------------------------------------
    modePaiement :
      "demo"   → aucun paiement réel. Le passage en caisse simule un
@@ -10,7 +10,7 @@
                 vers la page de paiement hébergée par Stripe.
    ===================================================================== */
 window.CONFIG = {
-  nomBoutique: "Maison Aurèle",
+  nomBoutique: "La Roux du Temps",
   devise: "EUR",
   modePaiement: "demo",
   // Adresse du serveur de paiement (sans barre oblique finale)
@@ -20,6 +20,6 @@ window.CONFIG = {
     express: { nom: "Coursier sécurisé", delai: "24 h, remise en main propre", prix: 4900 }
   },
   // Codes promotionnels : { code: pourcentage de remise }
-  codesPromo: { BIENVENUE: 5, AURELE10: 10 },
+  codesPromo: { BIENVENUE: 5, LAROUX10: 10 },
   seuilTVA: 20
 };

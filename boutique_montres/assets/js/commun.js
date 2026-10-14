@@ -1,12 +1,12 @@
 /* =====================================================================
-   Fonctions communes à toutes les pages — Maison Aurèle
+   Fonctions communes à toutes les pages — La Roux du Temps
    Panier (localStorage), formatage des prix, notifications, entête,
    curseur personnalisé, tiroir du panier.
    ===================================================================== */
 (function () {
   "use strict";
 
-  const CLE_PANIER = "aurele_panier_v1";
+  const CLE_PANIER = "laroux_panier_v1";
   const $ = (sel, racine) => (racine || document).querySelector(sel);
   const $$ = (sel, racine) => Array.from((racine || document).querySelectorAll(sel));
 
@@ -220,5 +220,5 @@
     const annee = $("#annee"); if (annee) annee.textContent = new Date().getFullYear();
   });
 
-  window.Aurele = { $, $$, formaterPrix, echapper, trouverMontre, trouverVariante, prixUnitaire, rendreVisuel, lirePanier, ecrirePanier, ajouterAuPanier, modifierQuantite, retirerDuPanier, viderPanier, detailsPanier, notifier, rendrePanier, revelerNouveaux };
+  window.LaRoux = { $, $$, formaterPrix, echapper, trouverMontre, trouverVariante, prixUnitaire, rendreVisuel, lirePanier, ecrirePanier, ajouterAuPanier, modifierQuantite, retirerDuPanier, viderPanier, detailsPanier, notifier, rendrePanier, revelerNouveaux };
 })();
