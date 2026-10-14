@@ -28,3 +28,6 @@ Just open `index.html` in a modern browser. No build step required.
 
 You can host this on any static hosting provider (GitHub Pages, Netlify, Vercel). Simply upload the contents of this folder.
 # test_cv
+## La Roux du Temps
+
+Boutique de montres interactive (en français) dans `la_roux_du_temps/`. Voir `la_roux_du_temps/README.md` pour le lancement local et le déploiement sur le serveur maison.

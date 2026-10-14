@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Roux du Temps — Horlogerie de caractère</title>
+  <meta name="description" content="La Roux du Temps : montres automatiques, chronographes et pièces vintage sélectionnées par un horloger roux et passionné. Livraison offerte dès 150 €.">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#collection">Aller au contenu principal</a>
+
+  <!-- Bandeau promo -->
+  <div class="promo-bar" role="status">
+    <div class="promo-track" aria-hidden="true">
+      <span>✦ Livraison offerte dès 150 €</span><span>✦ Garantie 2 ans sur toutes nos montres</span><span>✦ Code <strong>ROUX10</strong> : -10 % sur votre première commande</span><span>✦ Réglage et mise à l'heure gratuits en atelier</span>
+      <span>✦ Livraison offerte dès 150 €</span><span>✦ Garantie 2 ans sur toutes nos montres</span><span>✦ Code <strong>ROUX10</strong> : -10 % sur votre première commande</span><span>✦ Réglage et mise à l'heure gratuits en atelier</span>
+    </div>
+  </div>
+
+  <!-- En-tête -->
+  <header class="site-header" id="header">
+    <div class="container header-inner">
+      <a href="#accueil" class="brand" aria-label="La Roux du Temps — accueil">
+        <span class="brand-logo" id="brand-logo" aria-hidden="true"></span>
+        <span class="brand-text"><span class="brand-la">La</span> Roux <span class="brand-du">du</span> Temps</span>
+      </a>
+
+      <nav class="nav" id="nav" aria-label="Navigation principale">
+        <a href="#collection">Collection</a>
+        <a href="#atelier">Atelier</a>
+        <a href="#histoire">Notre histoire</a>
+        <a href="#avis">Avis</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Changer de thème" title="Changer de thème">
+          <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="icon-btn" id="wishlist-btn" type="button" aria-label="Mes favoris" title="Mes favoris">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C1 8.2 3.3 4.5 7 4.5c2 0 3.4 1 5 2.8 1.6-1.8 3-2.8 5-2.8 3.7 0 6 3.7 4.6 7.2C19.5 16.4 12 21 12 21Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+          <span class="badge-count" id="wishlist-count" hidden>0</span>
+        </button>
+        <button class="icon-btn cart-btn" id="cart-btn" type="button" aria-label="Ouvrir le panier" title="Mon panier">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.5L21 8H6.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="20.5" r="1.5" fill="currentColor"/><circle cx="17" cy="20.5" r="1.5" fill="currentColor"/></svg>
+          <span class="badge-count" id="cart-count" hidden>0</span>
+        </button>
+        <button class="icon-btn burger" id="burger" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Héros -->
+    <section class="hero" id="accueil">
+      <div class="hero-bg" aria-hidden="true">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <svg class="gear gear-1" viewBox="0 0 100 100"><path d="M50 8l6 10 11-4 2 12 12 2-4 11 10 6-10 6 4 11-12 2-2 12-11-4-6 10-6-10-11 4-2-12-12-2 4-11-10-6 10-6-4-11 12-2 2-12 11 4z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="50" r="14" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+        <svg class="gear gear-2" viewBox="0 0 100 100"><path d="M50 8l6 10 11-4 2 12 12 2-4 11 10 6-10 6 4 11-12 2-2 12-11-4-6 10-6-10-11 4-2-12-12-2 4-11-10-6 10-6-4-11 12-2 2-12 11 4z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="50" cy="50" r="14" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+      </div>
+
+      <div class="container hero-inner">
+        <div class="hero-copy reveal">
+          <p class="eyebrow"><span class="dot"></span> Horlogerie indépendante · Lyon</p>
+          <h1>Le temps a enfin <em>une couleur.</em></h1>
+          <p class="lead">Montres automatiques, chronographes et pièces vintage choisies une à une par un horloger roux, passionné et un brin obsessionnel. Chaque montre est réglée, contrôlée et garantie deux ans dans notre atelier.</p>
+          <div class="hero-cta">
+            <a href="#collection" class="btn btn-primary">Découvrir la collection</a>
+            <a href="#atelier" class="btn btn-ghost">Nos services d'atelier</a>
+          </div>
+          <ul class="hero-stats" aria-label="Chiffres clés">
+            <li><strong data-counter="1200">0</strong><span>montres remises à l'heure</span></li>
+            <li><strong data-counter="98" data-suffix=" %">0</strong><span>de clients ravis</span></li>
+            <li><strong data-counter="12" data-suffix=" ans">0</strong><span>d'expérience (et de rousseur)</span></li>
+          </ul>
+        </div>
+
+        <div class="hero-visual reveal" aria-label="Horloge en direct">
+          <div class="hero-watch" id="hero-watch"></div>
+          <div class="hero-time-chip">
+            <span class="live-dot"></span>
+            <span>Il est <strong id="hero-time">--:--:--</strong> à l'atelier</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Collection -->
+    <section class="section collection" id="collection">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">La collection</p>
+          <h2>Des montres qui ont <em>du tempérament</em></h2>
+          <p>Filtrez, comparez, craquez. Chaque modèle est disponible en plusieurs bracelets : cliquez sur une montre pour la personnaliser.</p>
+        </div>
+
+        <div class="toolbar reveal">
+          <div class="search-wrap">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <input type="search" id="search" placeholder="Rechercher une montre…" aria-label="Rechercher une montre">
+          </div>
+
+          <div class="chips" id="category-chips" role="group" aria-label="Filtrer par catégorie">
+            <button type="button" class="chip is-active" data-cat="toutes">Toutes</button>
+            <button type="button" class="chip" data-cat="automatique">Automatiques</button>
+            <button type="button" class="chip" data-cat="chronographe">Chronographes</button>
+            <button type="button" class="chip" data-cat="quartz">Quartz</button>
+            <button type="button" class="chip" data-cat="vintage">Vintage</button>
+          </div>
+
+          <div class="toolbar-right">
+            <label class="range-wrap">
+              <span>Budget max : <strong id="price-label">2 000 €</strong></span>
+              <input type="range" id="price-range" min="200" max="2000" step="50" value="2000" aria-label="Budget maximum">
+            </label>
+            <label class="select-wrap">
+              <span class="sr-only">Trier</span>
+              <select id="sort" aria-label="Trier la collection">
+                <option value="pertinence">Tri : nos coups de cœur</option>
+                <option value="prix-asc">Prix croissant</option>
+                <option value="prix-desc">Prix décroissant</option>
+                <option value="note">Mieux notées</option>
+                <option value="nouveau">Nouveautés</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <p class="results-info" id="results-info" aria-live="polite"></p>
+        <div class="product-grid" id="product-grid"></div>
+        <div class="empty-state" id="empty-state" hidden>
+          <p>Aucune montre ne correspond à votre recherche… même les rousses ont leurs limites.</p>
+          <button type="button" class="btn btn-ghost" id="reset-filters">Réinitialiser les filtres</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Atelier -->
+    <section class="section atelier" id="atelier">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">L'atelier</p>
+          <h2>On ne vend pas que des montres, <em>on les soigne.</em></h2>
+          <p>Révision complète, changement de pile, bracelet sur mesure ou gravure : estimez votre devis en quelques clics.</p>
+        </div>
+
+        <div class="atelier-grid">
+          <div class="service-cards reveal">
+            <article class="service-card">
+              <span class="service-icon">🔧</span>
+              <h3>Révision complète</h3>
+              <p>Démontage, nettoyage aux ultrasons, lubrification et réglage sur banc de précision.</p>
+              <strong>dès 120 €</strong>
+            </article>
+            <article class="service-card">
+              <span class="service-icon">🔋</span>
+              <h3>Changement de pile</h3>
+              <p>Pile suisse, joint contrôlé et test d'étanchéité inclus. En 15 minutes, montre en main.</p>
+              <strong>dès 15 €</strong>
+            </article>
+            <article class="service-card">
+              <span class="service-icon">🧵</span>
+              <h3>Bracelet sur mesure</h3>
+              <p>Cuir, maille milanaise, caoutchouc ou NATO : coupé et ajusté à votre poignet.</p>
+              <strong>dès 45 €</strong>
+            </article>
+            <article class="service-card">
+              <span class="service-icon">✒️</span>
+              <h3>Gravure personnalisée</h3>
+              <p>Un prénom, une date, une déclaration : gravée au laser sur le fond de boîte.</p>
+              <strong>dès 30 €</strong>
+            </article>
+          </div>
+
+          <form class="estimator reveal" id="estimator" novalidate>
+            <h3>Estimez votre devis</h3>
+            <label>
+              <span>Prestation</span>
+              <select id="est-service">
+                <option value="revision">Révision complète</option>
+                <option value="pile">Changement de pile</option>
+                <option value="bracelet">Bracelet sur mesure</option>
+                <option value="gravure">Gravure personnalisée</option>
+              </select>
+            </label>
+            <label>
+              <span>Type de montre</span>
+              <select id="est-type">
+                <option value="quartz">Quartz</option>
+                <option value="automatique">Automatique</option>
+                <option value="chronographe">Chronographe</option>
+                <option value="vintage">Vintage / ancienne</option>
+              </select>
+            </label>
+            <label class="checkbox">
+              <input type="checkbox" id="est-urgent">
+              <span>Service express (sous 48 h) <em>+40 %</em></span>
+            </label>
+            <label class="checkbox">
+              <input type="checkbox" id="est-client">
+              <span>Montre achetée chez La Roux du Temps <em>-20 %</em></span>
+            </label>
+            <div class="estimate-result">
+              <span>Estimation</span>
+              <strong id="est-price">120 €</strong>
+              <small id="est-delay">Délai indicatif : 10 à 15 jours</small>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Prendre rendez-vous</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Histoire -->
+    <section class="section histoire" id="histoire">
+      <div class="container histoire-inner">
+        <div class="portrait reveal" aria-hidden="true">
+          <svg viewBox="0 0 300 340" class="portrait-svg">
+            <defs>
+              <radialGradient id="pg-bg" cx="50%" cy="40%" r="70%"><stop offset="0" stop-color="#ff8a3d"/><stop offset="1" stop-color="#5a1a7a"/></radialGradient>
+              <linearGradient id="pg-hair" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff7a1f"/><stop offset="1" stop-color="#b8420e"/></linearGradient>
+            </defs>
+            <circle cx="150" cy="150" r="140" fill="url(#pg-bg)"/>
+            <ellipse cx="150" cy="330" rx="110" ry="60" fill="#2a1a3f"/>
+            <rect x="95" y="230" width="110" height="80" rx="30" fill="#1e4b4f"/>
+            <path d="M120 240 L150 300 L180 240 Z" fill="#ffffff"/>
+            <path d="M138 240 L150 300 L162 240 L150 255 Z" fill="#ff5a1f"/>
+            <rect x="140" y="185" width="20" height="40" fill="#f3c6a0"/>
+            <ellipse cx="150" cy="150" rx="55" ry="68" fill="#f7d2ad"/>
+            <path d="M95 140 C 90 70, 210 70, 205 140 C 205 110, 190 95, 150 90 C 110 95, 95 110, 95 140 Z" fill="url(#pg-hair)"/>
+            <path d="M100 112 C 120 80, 180 80, 200 112 C 180 100, 120 100, 100 112 Z" fill="#ff9a4d"/>
+            <path d="M112 190 C 110 230, 190 230, 188 190 C 185 212, 150 220, 112 190 Z" fill="url(#pg-hair)"/>
+            <path d="M130 196 C 140 206, 160 206, 170 196 C 160 203, 140 203, 130 196 Z" fill="#f7d2ad"/>
+            <circle cx="130" cy="150" r="6" fill="#2a1a3f"/><circle cx="170" cy="150" r="6" fill="#2a1a3f"/>
+            <circle cx="132" cy="148" r="2" fill="#fff"/><circle cx="172" cy="148" r="2" fill="#fff"/>
+            <path d="M118 135 q12 -8 24 0" fill="none" stroke="#c4521a" stroke-width="4" stroke-linecap="round"/>
+            <path d="M158 135 q12 -8 24 0" fill="none" stroke="#c4521a" stroke-width="4" stroke-linecap="round"/>
+            <g fill="#e8955f"><circle cx="118" cy="165" r="2"/><circle cx="126" cy="172" r="1.6"/><circle cx="112" cy="174" r="1.6"/><circle cx="182" cy="165" r="2"/><circle cx="174" cy="172" r="1.6"/><circle cx="188" cy="174" r="1.6"/><circle cx="121" cy="180" r="1.3"/><circle cx="179" cy="180" r="1.3"/></g>
+            <circle cx="170" cy="150" r="14" fill="none" stroke="#2a1a3f" stroke-width="3"/>
+            <path d="M184 150 l20 -6" stroke="#2a1a3f" stroke-width="3" stroke-linecap="round"/>
+            <g transform="translate(230 250)">
+              <circle r="26" fill="#1b0f2e" stroke="#ffc542" stroke-width="6"/>
+              <path d="M0 0 L0 -16 M0 0 L11 6" stroke="#ff8a3d" stroke-width="3" stroke-linecap="round"/>
+              <circle r="2.5" fill="#ff8a3d"/>
+            </g>
+          </svg>
+          <span class="portrait-tag">Roux, horloger & fondateur</span>
+        </div>
+
+        <div class="histoire-copy reveal">
+          <p class="eyebrow">Notre histoire</p>
+          <h2>Un roux, une loupe, <em>et beaucoup de patience.</em></h2>
+          <p>Tout a commencé en 2014 dans un atelier de 12 m² à la Croix-Rousse (oui, le quartier s'appelait déjà comme ça, c'est un signe). Roux réparait les montres de quartier, les réveils des grands-mères et le chronographe cassé de son propre père.</p>
+          <p>Aujourd'hui, La Roux du Temps sélectionne des montres de petites manufactures européennes et japonaises, les contrôle une par une et les garantit deux ans. Pas de marketing tapageur : juste des belles mécaniques, et un horloger qui répond au téléphone.</p>
+          <ul class="timeline">
+            <li><span class="year">2014</span><div><strong>L'atelier de la Croix-Rousse</strong><p>Premières réparations, premiers clients fidèles.</p></div></li>
+            <li><span class="year">2018</span><div><strong>Première collection</strong><p>Trois modèles automatiques, épuisés en six semaines.</p></div></li>
+            <li><span class="year">2022</span><div><strong>Le laboratoire d'étanchéité</strong><p>Tests jusqu'à 20 ATM réalisés sur place.</p></div></li>
+            <li><span class="year">2026</span><div><strong>La boutique en ligne</strong><p>Celle que vous regardez en ce moment même.</p></div></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Avis -->
+    <section class="section avis" id="avis">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Ils ont craqué</p>
+          <h2>Ce que disent <em>nos clients</em></h2>
+        </div>
+        <div class="carousel reveal" id="carousel" aria-roledescription="carrousel" aria-label="Avis clients">
+          <button type="button" class="carousel-btn prev" id="carousel-prev" aria-label="Avis précédent">‹</button>
+          <div class="carousel-viewport">
+            <div class="carousel-track" id="carousel-track"></div>
+          </div>
+          <button type="button" class="carousel-btn next" id="carousel-next" aria-label="Avis suivant">›</button>
+          <div class="carousel-dots" id="carousel-dots" role="tablist"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section faq" id="faq">
+      <div class="container narrow">
+        <div class="section-head reveal">
+          <p class="eyebrow">Questions fréquentes</p>
+          <h2>Tout ce que vous <em>n'osiez pas demander</em></h2>
+        </div>
+        <div class="accordion reveal" id="faq-accordion">
+          <details>
+            <summary>Les montres sont-elles neuves ?</summary>
+            <p>Oui, sauf la gamme « Vintage » qui regroupe des pièces d'occasion révisées intégralement dans notre atelier. Chaque montre vintage est livrée avec son rapport de révision et une garantie de 2 ans, comme les neuves.</p>
+          </details>
+          <details>
+            <summary>Quels sont les délais et frais de livraison ?</summary>
+            <p>Colissimo suivi en 2 à 3 jours ouvrés : offert dès 150 € d'achat (5,90 € en dessous). Chronopost en 24 h : 9,90 €. Retrait à la boutique de Lyon : gratuit, avec un café.</p>
+          </details>
+          <details>
+            <summary>Puis-je retourner une montre ?</summary>
+            <p>Vous disposez de 30 jours pour changer d'avis. La montre doit nous revenir non portée, avec ses protections. Les montres gravées ne peuvent pas être reprises (on ne connaît pas d'autre Jean-Michel né le 14 mars).</p>
+          </details>
+          <details>
+            <summary>Faut-il être roux pour acheter chez vous ?</summary>
+            <p>Absolument pas. Mais les roux bénéficient d'un sourire supplémentaire à la boutique. C'est déjà beaucoup.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact & newsletter -->
+    <section class="section contact" id="contact">
+      <div class="container contact-grid">
+        <div class="contact-info reveal">
+          <p class="eyebrow">Contact</p>
+          <h2>Passez nous voir, <em>ou écrivez-nous.</em></h2>
+          <ul class="contact-list">
+            <li><span>📍</span><div><strong>La boutique</strong><br>14 rue des Capucins, 69001 Lyon</div></li>
+            <li><span>🕰️</span><div><strong>Horaires</strong><br>Mardi – samedi, 10 h – 19 h</div></li>
+            <li><span>📞</span><div><strong>Téléphone</strong><br><a href="tel:+33478000000">04 78 00 00 00</a></div></li>
+            <li><span>✉️</span><div><strong>E-mail</strong><br><a href="mailto:bonjour@larouxdutemps.fr">bonjour@larouxdutemps.fr</a></div></li>
+          </ul>
+
+          <form class="newsletter" id="newsletter" novalidate>
+            <label for="newsletter-email">La gazette rousse — une fois par mois, zéro spam</label>
+            <div class="newsletter-row">
+              <input type="email" id="newsletter-email" placeholder="votre@email.fr" autocomplete="email" required>
+              <button type="submit" class="btn btn-primary">Je m'abonne</button>
+            </div>
+            <small class="form-error" id="newsletter-error" aria-live="polite"></small>
+          </form>
+        </div>
+
+        <form class="contact-form reveal" id="contact-form" novalidate>
+          <div class="form-row">
+            <label>
+              <span>Prénom</span>
+              <input type="text" name="prenom" autocomplete="given-name" required>
+            </label>
+            <label>
+              <span>Nom</span>
+              <input type="text" name="nom" autocomplete="family-name" required>
+            </label>
+          </div>
+          <label>
+            <span>E-mail</span>
+            <input type="email" name="email" autocomplete="email" required>
+          </label>
+          <label>
+            <span>Sujet</span>
+            <select name="sujet">
+              <option>Question sur une montre</option>
+              <option>Demande de réparation</option>
+              <option>Suivi de commande</option>
+              <option>Autre</option>
+            </select>
+          </label>
+          <label>
+            <span>Message</span>
+            <textarea name="message" rows="5" required minlength="10" placeholder="Dites-nous tout…"></textarea>
+          </label>
+          <p class="form-error" id="contact-error" aria-live="polite"></p>
+          <button type="submit" class="btn btn-primary btn-block">Envoyer le message</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="brand-text"><span class="brand-la">La</span> Roux <span class="brand-du">du</span> Temps</span>
+        <p>Horlogerie indépendante à Lyon. Des montres avec du caractère, et des taches de rousseur.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Boutique</h4>
+        <a href="#collection">Collection</a>
+        <a href="#atelier">Atelier</a>
+        <a href="#faq">Questions fréquentes</a>
+      </div>
+      <div class="footer-col">
+        <h4>Informations</h4>
+        <a href="#" data-legal="cgv">Conditions générales de vente</a>
+        <a href="#" data-legal="mentions">Mentions légales</a>
+        <a href="#" data-legal="confidentialite">Confidentialité</a>
+      </div>
+      <div class="footer-col">
+        <h4>Paiement sécurisé</h4>
+        <div class="payment-badges" aria-label="Moyens de paiement acceptés"><span>CB</span><span>Visa</span><span>Mastercard</span><span>PayPal</span></div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>© <span id="year"></span> La Roux du Temps — Fait avec ❤️ et un peu de rouille.</p>
+      <button type="button" class="back-top" id="back-top" aria-label="Retour en haut">↑</button>
+    </div>
+  </footer>
+
+  <!-- Panier (tiroir) -->
+  <div class="drawer-backdrop" id="cart-backdrop" hidden></div>
+  <aside class="drawer" id="cart-drawer" aria-label="Panier" aria-hidden="true">
+    <div class="drawer-head">
+      <h3>Votre panier <span id="cart-drawer-count"></span></h3>
+      <button type="button" class="icon-btn" id="cart-close" aria-label="Fermer le panier">✕</button>
+    </div>
+    <div class="drawer-body" id="cart-items"></div>
+    <div class="drawer-foot" id="cart-foot">
+      <div class="promo-row">
+        <input type="text" id="promo-input" placeholder="Code promo" aria-label="Code promo">
+        <button type="button" class="btn btn-ghost" id="promo-apply">Appliquer</button>
+      </div>
+      <p class="promo-msg" id="promo-msg" aria-live="polite"></p>
+      <dl class="totals">
+        <div><dt>Sous-total</dt><dd id="cart-subtotal">0 €</dd></div>
+        <div id="cart-discount-row" hidden><dt>Remise</dt><dd id="cart-discount">0 €</dd></div>
+        <div><dt>Livraison</dt><dd id="cart-shipping">Offerte</dd></div>
+        <div class="total"><dt>Total</dt><dd id="cart-total">0 €</dd></div>
+      </dl>
+      <p class="free-shipping-hint" id="free-shipping-hint"></p>
+      <button type="button" class="btn btn-primary btn-block" id="checkout-btn">Passer la commande</button>
+    </div>
+  </aside>
+
+  <!-- Favoris (tiroir) -->
+  <aside class="drawer" id="wishlist-drawer" aria-label="Favoris" aria-hidden="true">
+    <div class="drawer-head">
+      <h3>Vos favoris</h3>
+      <button type="button" class="icon-btn" id="wishlist-close" aria-label="Fermer les favoris">✕</button>
+    </div>
+    <div class="drawer-body" id="wishlist-items"></div>
+  </aside>
+
+  <!-- Modale produit -->
+  <div class="modal" id="product-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-card product-modal-card">
+      <button type="button" class="icon-btn modal-close" data-close aria-label="Fermer">✕</button>
+      <div class="modal-visual" id="modal-visual"></div>
+      <div class="modal-content">
+        <p class="eyebrow" id="modal-category"></p>
+        <h3 id="modal-title"></h3>
+        <div class="rating" id="modal-rating"></div>
+        <p class="modal-desc" id="modal-desc"></p>
+        <div class="variant-picker">
+          <span class="label">Bracelet : <strong id="modal-variant-name"></strong></span>
+          <div class="swatches" id="modal-swatches" role="radiogroup" aria-label="Choix du bracelet"></div>
+        </div>
+        <dl class="specs" id="modal-specs"></dl>
+        <div class="modal-buy">
+          <div class="qty" aria-label="Quantité">
+            <button type="button" id="qty-minus" aria-label="Diminuer">−</button>
+            <input type="number" id="qty-input" value="1" min="1" max="5" aria-label="Quantité">
+            <button type="button" id="qty-plus" aria-label="Augmenter">+</button>
+          </div>
+          <strong class="modal-price" id="modal-price"></strong>
+          <button type="button" class="btn btn-primary" id="modal-add">Ajouter au panier</button>
+          <button type="button" class="icon-btn wish-toggle" id="modal-wish" aria-label="Ajouter aux favoris">♡</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modale commande -->
+  <div class="modal" id="checkout-modal" role="dialog" aria-modal="true" aria-labelledby="checkout-title" hidden>
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-card checkout-card">
+      <button type="button" class="icon-btn modal-close" data-close aria-label="Fermer">✕</button>
+      <h3 id="checkout-title">Finaliser la commande</h3>
+      <ol class="steps" id="checkout-steps">
+        <li class="is-active" data-step="1"><span>1</span>Coordonnées</li>
+        <li data-step="2"><span>2</span>Livraison</li>
+        <li data-step="3"><span>3</span>Paiement</li>
+      </ol>
+      <form id="checkout-form" novalidate>
+        <fieldset class="step" data-step="1">
+          <div class="form-row">
+            <label><span>Prénom</span><input type="text" name="prenom" autocomplete="given-name" required></label>
+            <label><span>Nom</span><input type="text" name="nom" autocomplete="family-name" required></label>
+          </div>
+          <label><span>E-mail</span><input type="email" name="email" autocomplete="email" required></label>
+          <label><span>Téléphone</span><input type="tel" name="tel" autocomplete="tel" placeholder="06 12 34 56 78" required></label>
+        </fieldset>
+
+        <fieldset class="step" data-step="2" hidden>
+          <label><span>Adresse</span><input type="text" name="adresse" autocomplete="street-address" required></label>
+          <div class="form-row">
+            <label><span>Code postal</span><input type="text" name="cp" inputmode="numeric" autocomplete="postal-code" pattern="\d{5}" required></label>
+            <label><span>Ville</span><input type="text" name="ville" autocomplete="address-level2" required></label>
+          </div>
+          <div class="radio-cards" id="shipping-options">
+            <label><input type="radio" name="livraison" value="colissimo" checked><span><strong>Colissimo suivi</strong><em>2 à 3 jours ouvrés</em></span><b data-ship-price="colissimo"></b></label>
+            <label><input type="radio" name="livraison" value="chronopost"><span><strong>Chronopost</strong><em>Demain avant 13 h</em></span><b data-ship-price="chronopost"></b></label>
+            <label><input type="radio" name="livraison" value="retrait"><span><strong>Retrait en boutique</strong><em>Lyon 1er, café offert</em></span><b data-ship-price="retrait"></b></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="step" data-step="3" hidden>
+          <div class="fake-card" id="fake-card" aria-hidden="true">
+            <span class="fake-card-brand">La Roux Pay</span>
+            <span class="fake-card-number" id="fake-card-number">•••• •••• •••• ••••</span>
+            <span class="fake-card-name" id="fake-card-name">NOM DU TITULAIRE</span>
+            <span class="fake-card-exp" id="fake-card-exp">MM/AA</span>
+          </div>
+          <label><span>Numéro de carte</span><input type="text" name="carte" inputmode="numeric" placeholder="4242 4242 4242 4242" autocomplete="cc-number" maxlength="19" required></label>
+          <label><span>Titulaire</span><input type="text" name="titulaire" autocomplete="cc-name" required></label>
+          <div class="form-row">
+            <label><span>Expiration</span><input type="text" name="exp" placeholder="MM/AA" autocomplete="cc-exp" maxlength="5" required></label>
+            <label><span>CVC</span><input type="text" name="cvc" inputmode="numeric" placeholder="123" autocomplete="cc-csc" maxlength="4" required></label>
+          </div>
+          <p class="hint">Démonstration : aucun paiement réel n'est effectué. Utilisez par exemple 4242 4242 4242 4242.</p>
+        </fieldset>
+
+        <p class="form-error" id="checkout-error" aria-live="polite"></p>
+        <div class="checkout-summary">
+          <span>Total à régler</span>
+          <strong id="checkout-total">0 €</strong>
+        </div>
+        <div class="checkout-actions">
+          <button type="button" class="btn btn-ghost" id="checkout-prev" hidden>Retour</button>
+          <button type="submit" class="btn btn-primary" id="checkout-next">Continuer</button>
+        </div>
+      </form>
+
+      <div class="order-success" id="order-success" hidden>
+        <div class="success-icon">✓</div>
+        <h3>Merci, c'est commandé !</h3>
+        <p>Votre commande <strong id="order-number"></strong> est confirmée. Un e-mail récapitulatif (fictif) part dans la seconde, et Roux commence déjà à la préparer.</p>
+        <div id="order-recap" class="order-recap"></div>
+        <button type="button" class="btn btn-primary" data-close>Retour à la boutique</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modale légale -->
+  <div class="modal" id="legal-modal" role="dialog" aria-modal="true" aria-labelledby="legal-title" hidden>
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-card legal-card">
+      <button type="button" class="icon-btn modal-close" data-close aria-label="Fermer">✕</button>
+      <h3 id="legal-title"></h3>
+      <div id="legal-body"></div>
+    </div>
+  </div>
+
+  <div class="toast-stack" id="toast-stack" aria-live="polite"></div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/watch.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

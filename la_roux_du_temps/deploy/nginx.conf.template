@@ -1,0 +1,20 @@
+server {
+    listen __PORT__;
+    listen [::]:__PORT__;
+    server_name _;
+
+    root __ROOT__;
+    index index.html;
+
+    gzip on;
+    gzip_types text/css application/javascript image/svg+xml;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    location ~* \.(css|js|svg)$ {
+        expires 7d;
+        add_header Cache-Control "public";
+    }
+}
