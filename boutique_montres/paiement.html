@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paiement — Maison Aurèle</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#09090b">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="curseur" aria-hidden="true"></div>
+  <div class="curseur-halo" aria-hidden="true"></div>
+
+  <header class="entete reduite" id="entete">
+    <div class="conteneur">
+      <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav-mobile"><span></span><span></span><span></span></button>
+      <nav class="nav" aria-label="Navigation principale">
+        <a href="index.html#collections">Collections</a>
+        <a href="index.html#catalogue">Catalogue</a>
+        <a href="index.html#savoir-faire">Savoir-faire</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+      <a href="index.html" class="logo" aria-label="Maison Aurèle, retour à l'accueil"><span class="marque">Aurèle</span><span class="ville">Paris · Manufacture</span></a>
+      <div class="entete-actions">
+        <button class="icone-btn" id="ouvrir-panier" aria-label="Ouvrir le panier">
+          <svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+          <span class="pastille" id="panier-compteur">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+  <nav class="nav-mobile" id="nav-mobile" aria-label="Navigation mobile">
+    <a href="index.html#collections">Collections</a><a href="index.html#catalogue">Catalogue</a><a href="index.html#savoir-faire">Savoir-faire</a><a href="index.html#contact">Contact</a><a href="informations.html">Informations</a>
+  </nav>
+
+  <main class="page-interne">
+    <div class="conteneur">
+      <div class="fil-ariane"><a href="index.html">Accueil</a><span>Panier</span><span>Paiement</span></div>
+      <span class="surtitre">Finaliser la commande</span>
+      <h1 style="font-size:clamp(2.4rem,5vw,4rem);margin-top:14px">Vos <em class="accent">coordonnées.</em></h1>
+
+      <div class="etapes" aria-label="Étapes de commande">
+        <div class="etape faite"><i>1</i><span>Panier</span></div>
+        <div class="etape active"><i>2</i><span>Coordonnées et livraison</span></div>
+        <div class="etape"><i>3</i><span>Paiement</span></div>
+        <div class="etape"><i>4</i><span>Confirmation</span></div>
+      </div>
+
+      <div class="paiement-grille" id="paiement-grille">
+        <form id="formulaire-paiement" novalidate>
+          <section class="bloc">
+            <h3><span>01</span> Identité</h3>
+            <div class="formulaire">
+              <div class="champ"><label for="prenom">Prénom</label><input id="prenom" name="prenom" required autocomplete="given-name"><span class="erreur">Veuillez indiquer votre prénom.</span></div>
+              <div class="champ"><label for="nom">Nom</label><input id="nom" name="nom" required autocomplete="family-name"><span class="erreur">Veuillez indiquer votre nom.</span></div>
+              <div class="champ"><label for="email">E-mail</label><input id="email" name="email" type="email" required autocomplete="email"><span class="erreur">Adresse e-mail invalide.</span></div>
+              <div class="champ"><label for="telephone">Téléphone</label><input id="telephone" name="telephone" type="tel" required autocomplete="tel"><span class="erreur">Numéro requis pour la livraison.</span></div>
+            </div>
+          </section>
+
+          <section class="bloc">
+            <h3><span>02</span> Adresse de livraison</h3>
+            <div class="formulaire">
+              <div class="champ pleine"><label for="adresse">Adresse</label><input id="adresse" name="adresse" required autocomplete="address-line1"><span class="erreur">Adresse requise.</span></div>
+              <div class="champ"><label for="complement">Complément (facultatif)</label><input id="complement" name="complement" autocomplete="address-line2"></div>
+              <div class="champ"><label for="code-postal">Code postal</label><input id="code-postal" name="codePostal" required autocomplete="postal-code" inputmode="numeric"><span class="erreur">Code postal requis.</span></div>
+              <div class="champ"><label for="ville">Ville</label><input id="ville" name="ville" required autocomplete="address-level2"><span class="erreur">Ville requise.</span></div>
+              <div class="champ"><label for="pays">Pays</label>
+                <select id="pays" name="pays" autocomplete="country">
+                  <option value="FR">France</option><option value="BE">Belgique</option><option value="CH">Suisse</option><option value="LU">Luxembourg</option><option value="MC">Monaco</option><option value="DE">Allemagne</option><option value="IT">Italie</option><option value="ES">Espagne</option><option value="GB">Royaume-Uni</option><option value="US">États-Unis</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <section class="bloc">
+            <h3><span>03</span> Mode de livraison</h3>
+            <div class="options-livraison" id="options-livraison"></div>
+          </section>
+
+          <section class="bloc">
+            <h3><span>04</span> Moyen de paiement</h3>
+            <div class="moyens" id="moyens-paiement">
+              <label class="moyen active" data-moyen="carte">
+                <input type="radio" name="moyen" value="carte" checked class="sr-only">
+                <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12"/><path d="M3 10h18M7 14h4"/></svg>
+                Carte bancaire
+              </label>
+              <label class="moyen" data-moyen="wallet">
+                <input type="radio" name="moyen" value="wallet" class="sr-only">
+                <svg viewBox="0 0 24 24"><path d="M4 7h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M4 7V6a2 2 0 0 1 2-2h10v3M16 13h4"/></svg>
+                Apple Pay / Google Pay
+              </label>
+              <label class="moyen" data-moyen="virement">
+                <input type="radio" name="moyen" value="virement" class="sr-only">
+                <svg viewBox="0 0 24 24"><path d="M3 10l9-6 9 6M5 10v9h14v-9M9 19v-5h6v5"/></svg>
+                Virement bancaire
+              </label>
+            </div>
+            <div class="info-paiement" id="info-paiement">
+              <svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/></svg>
+              <span id="info-paiement-texte"></span>
+            </div>
+            <div class="champ" style="margin-top:22px">
+              <label class="case-cocher">
+                <input type="checkbox" id="cgv">
+                <span>J'ai lu et j'accepte les <a href="informations.html#cgv" target="_blank">conditions générales de vente</a> et la politique de retour sous trente jours.</span>
+              </label>
+              <span class="erreur" id="erreur-cgv">Merci d'accepter les conditions générales de vente.</span>
+            </div>
+          </section>
+        </form>
+
+        <aside class="recap">
+          <div class="cadre-or">
+            <div class="recap-boite">
+              <h3>Votre commande</h3>
+              <div id="recap-articles"></div>
+              <div class="code-promo">
+                <input type="text" id="code-promo" placeholder="Code promotionnel" aria-label="Code promotionnel">
+                <button type="button" id="appliquer-promo">Appliquer</button>
+              </div>
+              <p class="promo-statut" id="promo-statut"></p>
+              <div class="ligne-total"><span>Sous-total</span><span id="recap-sous-total"></span></div>
+              <div class="ligne-total" id="ligne-remise" hidden><span>Remise</span><span id="recap-remise"></span></div>
+              <div class="ligne-total"><span>Livraison</span><span id="recap-livraison"></span></div>
+              <div class="ligne-total"><span>Dont TVA (20 %)</span><span id="recap-tva" class="texte-gris"></span></div>
+              <div class="ligne-total grand"><span>Total</span><span class="prix" id="recap-total"></span></div>
+              <button type="submit" form="formulaire-paiement" class="btn btn-or" id="bouton-payer">Payer <span id="bouton-montant"></span> <span class="reflet"></span></button>
+              <div class="securite"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Paiement chiffré · Stripe</div>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <div id="panier-vide-message" hidden style="text-align:center;padding:80px 0">
+        <p style="font-family:var(--serif);font-size:2rem;font-style:italic">Votre panier est vide.</p>
+        <a href="index.html#catalogue" class="btn btn-or">Découvrir les montres <span class="reflet"></span></a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="pied" style="margin-top:100px">
+    <div class="conteneur">
+      <div class="pied-bas" style="border-top:0;padding-top:0">
+        <span>© <span id="annee"></span> Maison Aurèle — Tous droits réservés</span>
+        <div class="paiements"><span>Visa</span><span>Mastercard</span><span>Amex</span><span>Apple Pay</span></div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="panier" id="panier" aria-hidden="true">
+    <div class="panier-fond" data-fermer-panier></div>
+    <aside class="panier-tiroir" role="dialog" aria-modal="true" aria-label="Votre panier">
+      <div class="panier-entete"><h3>Panier <small id="panier-nombre">0 article</small></h3>
+        <button class="icone-btn" data-fermer-panier aria-label="Fermer le panier"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <div class="panier-liste" id="panier-liste"></div>
+      <div class="panier-pied">
+        <div class="ligne-total"><span>Sous-total</span><span class="prix" id="panier-sous-total">0 €</span></div>
+        <div class="ligne-total grand"><span>Total</span><span class="prix" id="panier-total">0 €</span></div>
+        <button class="btn btn-or" data-fermer-panier id="panier-commander">Continuer <span class="reflet"></span></button>
+      </div>
+    </aside>
+  </div>
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/data/montres.js"></script>
+  <script src="assets/js/montre-svg.js"></script>
+  <script src="assets/js/commun.js"></script>
+  <script src="assets/js/paiement.js"></script>
+</body>
+</html>

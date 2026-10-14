@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maison Aurèle — Horlogerie de collection, Paris</title>
+  <meta name="description" content="Maison Aurèle, manufacture horlogère parisienne. Découvrez nos collections Héritage, Abysse et Chronographe : montres mécaniques assemblées à la main, livrées assurées dans le monde entier.">
+  <meta name="theme-color" content="#09090b">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <div class="curseur" aria-hidden="true"></div>
+  <div class="curseur-halo" aria-hidden="true"></div>
+
+  <!-- ============================================================ Entête -->
+  <header class="entete" id="entete">
+    <div class="conteneur">
+      <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav-mobile">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav" aria-label="Navigation principale">
+        <a href="#collections">Collections</a>
+        <a href="#catalogue">Catalogue</a>
+        <a href="#savoir-faire">Savoir-faire</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <a href="#accueil" class="logo" aria-label="Maison Aurèle, retour à l'accueil">
+        <span class="marque">Aurèle</span>
+        <span class="ville">Paris · Manufacture</span>
+      </a>
+      <div class="entete-actions">
+        <a href="#catalogue" class="icone-btn masquer-mobile" aria-label="Rechercher une montre" data-focus-recherche>
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        </a>
+        <button class="icone-btn" id="ouvrir-panier" aria-label="Ouvrir le panier">
+          <svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+          <span class="pastille" id="panier-compteur">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="nav-mobile" id="nav-mobile" aria-label="Navigation mobile">
+    <a href="#collections">Collections</a>
+    <a href="#catalogue">Catalogue</a>
+    <a href="#savoir-faire">Savoir-faire</a>
+    <a href="#contact">Contact</a>
+    <a href="informations.html">Informations</a>
+  </nav>
+
+  <main id="accueil">
+
+    <!-- ============================================================ Hero -->
+    <section class="hero">
+      <div class="conteneur hero-grille">
+        <div class="hero-texte">
+          <span class="surtitre">Manufacture parisienne depuis 1987</span>
+          <h1>
+            <span class="ligne"><span>Le temps,</span></span>
+            <span class="ligne"><span>travaillé</span></span>
+            <span class="ligne"><span><em class="accent">à la main.</em></span></span>
+          </h1>
+          <p>Chaque montre Maison Aurèle est assemblée, réglée et contrôlée par un seul horloger, dans nos ateliers du Marais. Des pièces conçues pour traverser les générations.</p>
+          <div class="hero-actions">
+            <a href="#catalogue" class="btn btn-or">Découvrir les montres <span class="reflet"></span></a>
+            <a href="#savoir-faire" class="btn-texte">Notre savoir-faire
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 12h16M14 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="hero-visuel" id="hero-visuel">
+          <div class="halo"></div>
+          <div class="anneau"></div>
+          <div class="hero-montre" id="hero-montre" data-produit="chrono-41-or"></div>
+          <div class="hero-etiquette droite"><strong>Chronographe 41</strong>Or jaune 18 carats</div>
+          <div class="hero-etiquette gauche"><strong>Heure locale</strong>Mouvement manufacture</div>
+        </div>
+      </div>
+      <div class="indice-defilement"><span>Défiler</span><span></span></div>
+    </section>
+
+    <!-- ========================================================== Bandeau -->
+    <div class="bandeau" aria-hidden="true">
+      <div class="bandeau-piste" id="bandeau-piste">
+        <span>Mouvements manufacture</span><span>Assemblage à la main</span><span>Garantie cinq ans</span><span>Livraison assurée dans le monde entier</span><span>Paiement sécurisé</span><span>Service après-vente à vie</span>
+      </div>
+    </div>
+
+    <!-- ====================================================== Collections -->
+    <section class="section" id="collections">
+      <div class="conteneur">
+        <div class="section-entete reveler">
+          <div>
+            <span class="surtitre">Trois collections</span>
+            <h2>Une maison, <em class="accent">trois caractères.</em></h2>
+          </div>
+          <p>Habillée, instrument de plongée ou chronographe : chaque collection répond à une manière de vivre le temps.</p>
+        </div>
+        <div class="collections" id="collections-grille"></div>
+      </div>
+    </section>
+
+    <!-- ======================================================== Catalogue -->
+    <section class="section" id="catalogue">
+      <div class="conteneur">
+        <div class="section-entete reveler">
+          <div>
+            <span class="surtitre">Le catalogue</span>
+            <h2>Les montres <em class="accent">disponibles.</em></h2>
+          </div>
+          <p>Toutes nos pièces sont en stock dans nos ateliers et expédiées sous 48 heures, dans leur écrin en bois de noyer.</p>
+        </div>
+
+        <div class="filtres reveler">
+          <div class="filtres-groupe" id="filtres-collections" role="group" aria-label="Filtrer par collection">
+            <button class="puce active" data-collection="toutes">Toutes</button>
+            <button class="puce" data-collection="heritage">Héritage</button>
+            <button class="puce" data-collection="abysse">Abysse</button>
+            <button class="puce" data-collection="chronographe">Chronographe</button>
+          </div>
+          <div class="filtres-outils">
+            <label class="champ-recherche">
+              <span class="sr-only">Rechercher</span>
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+              <input type="search" id="recherche" placeholder="Rechercher une montre…" autocomplete="off">
+            </label>
+            <label class="selecteur">
+              <span class="sr-only">Trier</span>
+              <select id="tri">
+                <option value="defaut">Sélection de la maison</option>
+                <option value="prix-asc">Prix croissant</option>
+                <option value="prix-desc">Prix décroissant</option>
+                <option value="nouveautes">Nouveautés d'abord</option>
+              </select>
+              <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </label>
+          </div>
+        </div>
+
+        <div class="grille-produits" id="grille-produits" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- ===================================================== Savoir-faire -->
+    <section class="section savoir-faire" id="savoir-faire">
+      <div class="conteneur savoir-grille">
+        <div class="visuel-montre reveler" id="savoir-visuel" data-produit="heritage-38-ivoire"></div>
+        <div class="savoir-texte reveler" data-delai="1">
+          <span class="surtitre">Savoir-faire</span>
+          <h2>Un horloger, <em class="accent">une montre.</em></h2>
+          <p>Nous ne travaillons pas à la chaîne. Chaque pièce est confiée à un seul horloger qui l'assemble, la règle dans six positions et la porte pendant trois jours avant de la signer.</p>
+          <p>Les platines sont anglées à la main, les ponts décorés de côtes de Genève, les vis bleuies à la flamme. Des gestes qui ne se voient pas toujours, mais qui se ressentent toute une vie.</p>
+          <div class="chiffres">
+            <div class="chiffre"><strong data-compteur="38">0</strong><span>Années d'atelier</span></div>
+            <div class="chiffre"><strong data-compteur="412">0</strong><span>Heures par montre</span></div>
+            <div class="chiffre"><strong data-compteur="5">0</strong><span>Ans de garantie</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= Services -->
+    <section class="section">
+      <div class="conteneur">
+        <div class="section-entete centre reveler">
+          <div>
+            <span class="surtitre centre">L'expérience Aurèle</span>
+            <h2>Au-delà de <em class="accent">l'achat.</em></h2>
+          </div>
+        </div>
+        <div class="services">
+          <article class="service reveler">
+            <svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4v10l-9 4-9-4z"/><path d="M3 7l9 4 9-4M12 11v10"/></svg>
+            <h3>Livraison assurée</h3>
+            <p>Expédition par transporteur spécialisé, assurée à la valeur totale, avec remise contre signature.</p>
+          </article>
+          <article class="service reveler" data-delai="1">
+            <svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
+            <h3>Garantie cinq ans</h3>
+            <p>Mouvement, boîtier et étanchéité garantis cinq ans, bien au-delà des usages de la profession.</p>
+          </article>
+          <article class="service reveler" data-delai="2">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            <h3>Essai de trente jours</h3>
+            <p>Portez votre montre un mois. Si elle ne vous convient pas, nous la reprenons sans question.</p>
+          </article>
+          <article class="service reveler" data-delai="3">
+            <svg viewBox="0 0 24 24"><path d="M14 4l6 6-9 9H5v-6z"/><path d="M12 6l6 6"/></svg>
+            <h3>Gravure offerte</h3>
+            <p>Une date, des initiales, quelques mots : nos graveurs personnalisent le fond de votre montre.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================= Témoignages -->
+    <section class="section temoignages">
+      <div class="conteneur">
+        <span class="surtitre centre reveler">Ils portent Aurèle</span>
+        <div class="guillemet reveler" aria-hidden="true">“</div>
+        <div class="temoignages-piste" id="temoignages">
+          <div class="temoignage actif">
+            <blockquote>Une Héritage 38 reçue pour mes quarante ans. Je la remonte chaque matin comme un rituel. Elle n'a pas pris une seconde en six mois.</blockquote>
+            <cite>Clément R. <span>Lyon — Héritage 38, cadran ardoise</span></cite>
+          </div>
+          <div class="temoignage">
+            <blockquote>J'ai hésité longtemps entre deux grandes manufactures suisses. L'accueil à l'atelier et la finition du mouvement ont fait la différence.</blockquote>
+            <cite>Isabelle M. <span>Bordeaux — Chronographe 41, cadran panda</span></cite>
+          </div>
+          <div class="temoignage">
+            <blockquote>Ma bronze a déjà une patine que personne d'autre n'aura. C'est exactement ce que je cherchais : un objet qui vieillit avec moi.</blockquote>
+            <cite>Thomas D. <span>Marseille — Abysse 40 Bronze</span></cite>
+          </div>
+        </div>
+        <div class="temoignages-nav" id="temoignages-nav" role="tablist" aria-label="Choisir un témoignage"></div>
+      </div>
+    </section>
+
+    <!-- =============================================================== FAQ -->
+    <section class="section" id="faq">
+      <div class="conteneur">
+        <div class="section-entete centre reveler">
+          <div>
+            <span class="surtitre centre">Questions fréquentes</span>
+            <h2>Ce que l'on nous <em class="accent">demande souvent.</em></h2>
+          </div>
+        </div>
+        <div class="faq reveler">
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">Quels moyens de paiement acceptez-vous&nbsp;? <span class="signe"></span></button>
+            <div class="faq-reponse"><p>Carte bancaire (Visa, Mastercard, American Express), Apple Pay et Google Pay via notre plateforme de paiement sécurisée Stripe. Le virement bancaire est également possible sur demande pour les pièces d'exception. Aucune donnée bancaire ne transite par nos serveurs.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">Comment se déroule la livraison&nbsp;? <span class="signe"></span></button>
+            <div class="faq-reponse"><p>Votre montre est expédiée sous 48 heures, dans son écrin et accompagnée de son certificat. Le colis est assuré à sa valeur totale et remis contre signature. En Île-de-France, un coursier peut vous la remettre en main propre le jour même.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">Puis-je retourner une montre&nbsp;? <span class="signe"></span></button>
+            <div class="faq-reponse"><p>Oui. Vous disposez de trente jours pour nous la retourner, à condition qu'elle n'ait pas été gravée et qu'elle soit accompagnée de ses accessoires. Le remboursement intervient sous dix jours après réception.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">Proposez-vous l'entretien et la révision&nbsp;? <span class="signe"></span></button>
+            <div class="faq-reponse"><p>Nos ateliers assurent l'entretien de toutes nos montres, à vie. Nous recommandons une révision tous les cinq à sept ans. Un contrôle d'étanchéité annuel est offert sur simple rendez-vous.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================= Newsletter -->
+    <section class="section newsletter">
+      <div class="conteneur">
+        <div class="reveler">
+          <span class="surtitre">La lettre d'Aurèle</span>
+          <h2>Les nouvelles pièces, <em class="accent">en avant-première.</em></h2>
+        </div>
+        <form class="reveler" data-delai="1" id="formulaire-newsletter" novalidate>
+          <div class="formulaire-ligne">
+            <input type="email" id="newsletter-email" placeholder="Votre adresse e-mail" required aria-label="Adresse e-mail">
+            <button type="submit">S'inscrire</button>
+          </div>
+          <p class="note-rgpd" id="newsletter-statut">Une lettre par mois, jamais plus. Désinscription en un clic.</p>
+        </form>
+      </div>
+    </section>
+
+    <!-- ========================================================== Contact -->
+    <section class="section" id="contact">
+      <div class="conteneur contact-grille">
+        <div class="coordonnees reveler">
+          <span class="surtitre">Nous rencontrer</span>
+          <h2>L'atelier <em class="accent">vous est ouvert.</em></h2>
+          <p class="texte-doux">Sur rendez-vous, venez découvrir les montres au poignet et rencontrer l'horloger qui assemblera la vôtre.</p>
+          <dl>
+            <dt>Adresse</dt><dd>12, rue des Francs-Bourgeois<br>75003 Paris</dd>
+            <dt>Horaires</dt><dd>Du mardi au samedi, de 10&nbsp;h à 19&nbsp;h</dd>
+            <dt>Téléphone</dt><dd><a href="tel:+33142000000">+33 1 42 00 00 00</a></dd>
+            <dt>E-mail</dt><dd><a href="mailto:atelier@maison-aurele.fr">atelier@maison-aurele.fr</a></dd>
+          </dl>
+        </div>
+        <form class="formulaire reveler" data-delai="1" id="formulaire-contact" novalidate>
+          <div class="champ">
+            <label for="contact-nom">Nom</label>
+            <input type="text" id="contact-nom" name="nom" required autocomplete="name">
+            <span class="erreur">Veuillez indiquer votre nom.</span>
+          </div>
+          <div class="champ">
+            <label for="contact-email">E-mail</label>
+            <input type="email" id="contact-email" name="email" required autocomplete="email">
+            <span class="erreur">Veuillez indiquer une adresse e-mail valide.</span>
+          </div>
+          <div class="champ pleine">
+            <label for="contact-sujet">Sujet</label>
+            <select id="contact-sujet" name="sujet">
+              <option>Prendre rendez-vous à l'atelier</option>
+              <option>Question sur une montre</option>
+              <option>Entretien et révision</option>
+              <option>Autre demande</option>
+            </select>
+          </div>
+          <div class="champ pleine">
+            <label for="contact-message">Message</label>
+            <textarea id="contact-message" name="message" required></textarea>
+            <span class="erreur">Veuillez écrire un message.</span>
+          </div>
+          <div class="pleine">
+            <button type="submit" class="btn">Envoyer <span class="reflet"></span></button>
+          </div>
+          <p class="formulaire-statut" id="contact-statut" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ====================================================== Pied de page -->
+  <footer class="pied">
+    <div class="conteneur">
+      <div class="pied-grille">
+        <div>
+          <a href="#accueil" class="logo"><span class="marque">Aurèle</span><span class="ville">Paris · Manufacture</span></a>
+          <p>Manufacture horlogère indépendante. Des montres mécaniques assemblées à la main dans le Marais, pensées pour durer.</p>
+        </div>
+        <div>
+          <h4>Collections</h4>
+          <ul>
+            <li><a href="#catalogue" data-filtre="heritage">Héritage</a></li>
+            <li><a href="#catalogue" data-filtre="abysse">Abysse</a></li>
+            <li><a href="#catalogue" data-filtre="chronographe">Chronographe</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>La maison</h4>
+          <ul>
+            <li><a href="#savoir-faire">Savoir-faire</a></li>
+            <li><a href="#faq">Questions fréquentes</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Informations</h4>
+          <ul>
+            <li><a href="informations.html#livraison">Livraison et retours</a></li>
+            <li><a href="informations.html#cgv">Conditions générales de vente</a></li>
+            <li><a href="informations.html#mentions">Mentions légales</a></li>
+            <li><a href="informations.html#confidentialite">Confidentialité</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="pied-bas">
+        <span>© <span id="annee"></span> Maison Aurèle — Tous droits réservés</span>
+        <div class="paiements" aria-label="Moyens de paiement acceptés"><span>Visa</span><span>Mastercard</span><span>Amex</span><span>Apple Pay</span></div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================================================== Modale produit -->
+  <div class="modale" id="modale-produit" role="dialog" aria-modal="true" aria-labelledby="modale-titre" aria-hidden="true">
+    <div class="modale-fond" data-fermer-modale></div>
+    <div class="modale-boite cadre-or">
+      <div class="modale-contenu">
+        <button class="modale-fermer" data-fermer-modale aria-label="Fermer">
+          <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <div class="modale-visuel" id="modale-visuel"></div>
+        <div class="modale-detail">
+          <span class="surtitre" id="modale-collection"></span>
+          <h2 id="modale-titre"></h2>
+          <p class="sous-titre" id="modale-sous-titre"></p>
+          <p class="description" id="modale-description"></p>
+          <div class="variantes">
+            <div class="variantes-titre"><span>Bracelet</span><strong id="modale-variante-nom"></strong></div>
+            <div class="variantes-liste" id="modale-variantes"></div>
+          </div>
+          <ul class="carac" id="modale-carac"></ul>
+          <div class="modale-pied">
+            <div>
+              <div class="prix" id="modale-prix"><small>Prix, TVA incluse</small></div>
+              <div class="stock" id="modale-stock"></div>
+            </div>
+            <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+              <div class="quantite" aria-label="Quantité">
+                <button type="button" data-quantite="-1" aria-label="Diminuer">−</button>
+                <span id="modale-quantite">1</span>
+                <button type="button" data-quantite="1" aria-label="Augmenter">+</button>
+              </div>
+              <button class="btn btn-or" id="modale-ajouter">Ajouter au panier <span class="reflet"></span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ Panier -->
+  <div class="panier" id="panier" aria-hidden="true">
+    <div class="panier-fond" data-fermer-panier></div>
+    <aside class="panier-tiroir" role="dialog" aria-modal="true" aria-label="Votre panier">
+      <div class="panier-entete">
+        <h3>Panier <small id="panier-nombre">0 article</small></h3>
+        <button class="icone-btn" data-fermer-panier aria-label="Fermer le panier">
+          <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <div class="panier-liste" id="panier-liste"></div>
+      <div class="panier-pied" id="panier-pied">
+        <div class="ligne-total"><span>Sous-total</span><span class="prix" id="panier-sous-total">0 €</span></div>
+        <div class="ligne-total"><span>Livraison</span><span>Offerte</span></div>
+        <div class="ligne-total grand"><span>Total</span><span class="prix" id="panier-total">0 €</span></div>
+        <a href="paiement.html" class="btn btn-or" id="panier-commander">Passer la commande <span class="reflet"></span></a>
+        <p class="note">Paiement sécurisé · Livraison assurée · Retour sous 30 jours</p>
+      </div>
+    </aside>
+  </div>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/data/montres.js"></script>
+  <script src="assets/js/montre-svg.js"></script>
+  <script src="assets/js/commun.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

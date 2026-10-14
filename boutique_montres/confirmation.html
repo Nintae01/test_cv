@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commande confirmée — Maison Aurèle</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#09090b">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="curseur" aria-hidden="true"></div>
+  <div class="curseur-halo" aria-hidden="true"></div>
+
+  <header class="entete reduite" id="entete">
+    <div class="conteneur">
+      <nav class="nav" aria-label="Navigation principale">
+        <a href="index.html#collections">Collections</a><a href="index.html#catalogue">Catalogue</a><a href="index.html#savoir-faire">Savoir-faire</a><a href="index.html#contact">Contact</a>
+      </nav>
+      <a href="index.html" class="logo" aria-label="Maison Aurèle, retour à l'accueil"><span class="marque">Aurèle</span><span class="ville">Paris · Manufacture</span></a>
+      <div class="entete-actions"></div>
+    </div>
+  </header>
+
+  <main class="confirmation">
+    <div class="conteneur" style="position:relative">
+      <div class="sceau"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div>
+      <span class="surtitre centre" id="confirmation-surtitre">Commande confirmée</span>
+      <h1 id="confirmation-titre">Merci, <em class="accent" id="confirmation-prenom">cher client</em>.</h1>
+      <p id="confirmation-texte">Votre montre est entre les mains de notre horloger pour un dernier contrôle avant expédition. Vous recevrez un e-mail de confirmation, puis un second avec le suivi de votre colis assuré.</p>
+      <div class="numero-commande"><small>Numéro de commande</small><span id="confirmation-numero">—</span></div>
+      <div class="recap-confirmation cadre-ligne" id="confirmation-recap" hidden>
+        <div style="background:var(--encre);padding:26px 28px" id="confirmation-recap-contenu"></div>
+      </div>
+      <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap">
+        <a href="index.html#catalogue" class="btn btn-or">Retour au catalogue <span class="reflet"></span></a>
+        <a href="index.html#contact" class="btn-texte">Une question ? Nous écrire <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 12h16M14 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+  </main>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/data/montres.js"></script>
+  <script src="assets/js/montre-svg.js"></script>
+  <script src="assets/js/commun.js"></script>
+  <script>
+    (function () {
+      const { $, formaterPrix, echapper, viderPanier } = window.Aurele;
+      const params = new URLSearchParams(window.location.search);
+      let commande = null;
+      try { commande = JSON.parse(sessionStorage.getItem("aurele_commande_en_cours")); } catch (e) {}
+      const sessionId = params.get("session_id");
+
+      async function verifierStripe() {
+        /* Retour de Stripe Checkout : on vérifie le statut auprès du serveur. */
+        try {
+          const r = await fetch(`${CONFIG.apiUrl}/api/commande/${encodeURIComponent(sessionId)}`);
+          if (!r.ok) throw new Error();
+          const data = await r.json();
+          if (data.statut === "paid" || data.statut === "complete") {
+            viderPanier();
+            if (commande) { commande.numero = data.numero || commande.numero; commande.statut = "payée"; }
+            return data;
+          }
+          $("#confirmation-surtitre").textContent = "Paiement en attente";
+          $("#confirmation-texte").textContent = "Votre paiement n'a pas encore été confirmé par notre prestataire. Vous recevrez un e-mail dès validation.";
+          return data;
+        } catch (e) {
+          $("#confirmation-surtitre").textContent = "Vérification impossible";
+          $("#confirmation-texte").textContent = "Nous n'avons pas pu vérifier le statut de votre paiement. Si vous avez été débité, votre commande est bien enregistrée et vous recevrez un e-mail de confirmation.";
+          return null;
+        }
+      }
+
+      function afficher(numero) {
+        if (!commande) {
+          $("#confirmation-titre").innerHTML = "Rien à <em class='accent'>confirmer</em>.";
+          $("#confirmation-texte").textContent = "Aucune commande en cours n'a été trouvée sur cet appareil.";
+          $("#confirmation-numero").textContent = numero || "—";
+          return;
+        }
+        $("#confirmation-prenom").textContent = commande.client && commande.client.prenom ? commande.client.prenom : "cher client";
+        $("#confirmation-numero").textContent = numero || commande.numero || "—";
+        if (commande.moyen === "virement") {
+          $("#confirmation-surtitre").textContent = "Commande enregistrée";
+          $("#confirmation-texte").textContent = "Nos coordonnées bancaires vous sont envoyées par e-mail. Votre montre est réservée cinq jours ouvrés et sera expédiée dès réception du virement.";
+        }
+        const recap = $("#confirmation-recap");
+        recap.hidden = false;
+        $("#confirmation-recap-contenu").innerHTML = commande.articles.map(a => `
+          <div class="ligne-total"><span>${echapper(a.nom)} — ${echapper(a.sousTitre)}${a.varianteNom ? " · " + echapper(a.varianteNom) : ""} × ${a.quantite}</span><span>${formaterPrix(a.total)}</span></div>`).join("")
+          + (commande.remise ? `<div class="ligne-total"><span>Remise ${commande.promo ? echapper(commande.promo.code) : ""}</span><span>− ${formaterPrix(commande.remise)}</span></div>` : "")
+          + `<div class="ligne-total"><span>${echapper(commande.livraison.nom)}</span><span>${commande.livraison.prix ? formaterPrix(commande.livraison.prix) : "Offerte"}</span></div>
+             <div class="ligne-total grand"><span>Total réglé</span><span class="prix">${formaterPrix(commande.total)}</span></div>
+             <p class="texte-gris" style="font-size:0.8rem;margin:14px 0 0">Livraison à ${echapper(commande.client.adresse.ligne1)}, ${echapper(commande.client.adresse.codePostal)} ${echapper(commande.client.adresse.ville)} · ${echapper(commande.livraison.delai)}</p>`;
+      }
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        if (sessionId && CONFIG.modePaiement === "stripe") {
+          const data = await verifierStripe();
+          afficher(data && data.numero);
+        } else {
+          afficher();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
