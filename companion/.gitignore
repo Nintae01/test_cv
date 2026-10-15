@@ -1,0 +1,8 @@
+node_modules/
+out/
+dist/
+.env
+# Live2D runtime and models are licensed separately; download them yourself (see README).
+src/renderer/public/live2dcubismcore.min.js
+src/renderer/public/model/*
+!src/renderer/public/model/README.md

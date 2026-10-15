@@ -1,0 +1,16 @@
+{
+  "// editor-only": "the real checks are tsconfig.node.json and tsconfig.web.json (npm run typecheck)",
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": { "@shared/*": ["src/shared/*"] }
+  },
+  "include": ["src/**/*.ts", "electron.vite.config.ts"]
+}
