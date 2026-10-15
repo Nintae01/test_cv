@@ -36,6 +36,14 @@ export interface Win32Api {
   QueryFullProcessImageNameW: (h: number, flags: number, buf: Buffer, inoutSize: [number]) => boolean
   CloseHandle: (h: number) => boolean
   DwmGetWindowAttribute: (hwnd: number, attr: number, out: [number], size: number) => number
+  // --- used by hands/icons.ts to talk to Explorer's desktop ListView ---
+  FindWindowW: (cls: string | null, title: string | null) => number
+  FindWindowExW: (parent: number, after: number, cls: string | null, title: string | null) => number
+  SendMessageW: (hwnd: number, msg: number, wParam: number, lParam: number) => number | bigint
+  VirtualAllocEx: (h: number, addr: number, size: number, type: number, protect: number) => number | bigint
+  VirtualFreeEx: (h: number, addr: number, size: number, type: number) => boolean
+  ReadProcessMemory: (h: number, addr: number, buf: Buffer, size: number, outRead: [number]) => boolean
+  WriteProcessMemory: (h: number, addr: number, buf: Buffer, size: number, outWritten: [number]) => boolean
 }
 
 export const WIN32 = {
@@ -48,7 +56,17 @@ export const WIN32 = {
   SWP_NOSIZE: 0x1,
   SWP_NOZORDER: 0x4,
   SWP_NOACTIVATE: 0x10,
+  GWL_STYLE: -16,
+  LVS_AUTOARRANGE: 0x0100,
+  /** PROCESS_VM_OPERATION | PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_QUERY_INFORMATION */
+  PROCESS_VM_ACCESS: 0x8 | 0x10 | 0x20 | 0x400,
+  MEM_COMMIT_RESERVE: 0x3000,
+  MEM_RELEASE: 0x8000,
+  PAGE_READWRITE: 0x4,
 } as const
+
+/** koffi hands back 64-bit values as numbers when they fit (user-mode addresses always do). */
+export const toNumber = (v: number | bigint): number => Number(v)
 
 function build(): Win32Api {
   const user32 = koffi.load('user32.dll')
@@ -75,6 +93,13 @@ function build(): Win32Api {
     QueryFullProcessImageNameW: kernel32.func('bool __stdcall QueryFullProcessImageNameW(intptr_t h, uint32_t flags, _Out_ char16_t *buf, _Inout_ uint32_t *size)'),
     CloseHandle: kernel32.func('bool __stdcall CloseHandle(intptr_t h)'),
     DwmGetWindowAttribute: dwmapi.func('int32_t __stdcall DwmGetWindowAttribute(intptr_t hwnd, uint32_t attr, _Out_ uint32_t *value, uint32_t size)'),
+    FindWindowW: user32.func('intptr_t __stdcall FindWindowW(str16 cls, str16 title)'),
+    FindWindowExW: user32.func('intptr_t __stdcall FindWindowExW(intptr_t parent, intptr_t after, str16 cls, str16 title)'),
+    SendMessageW: user32.func('intptr_t __stdcall SendMessageW(intptr_t hwnd, uint32_t msg, uintptr_t wParam, intptr_t lParam)'),
+    VirtualAllocEx: kernel32.func('intptr_t __stdcall VirtualAllocEx(intptr_t h, intptr_t addr, size_t size, uint32_t type, uint32_t protect)'),
+    VirtualFreeEx: kernel32.func('bool __stdcall VirtualFreeEx(intptr_t h, intptr_t addr, size_t size, uint32_t type)'),
+    ReadProcessMemory: kernel32.func('bool __stdcall ReadProcessMemory(intptr_t h, intptr_t addr, void *buf, size_t size, _Out_ size_t *read)'),
+    WriteProcessMemory: kernel32.func('bool __stdcall WriteProcessMemory(intptr_t h, intptr_t addr, const void *buf, size_t size, _Out_ size_t *written)'),
   }
 }
 

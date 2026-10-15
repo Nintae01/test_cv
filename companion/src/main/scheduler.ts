@@ -1,8 +1,9 @@
-import type { Snapshot, SpeakPayload, SystemStats, WindowInfo } from '@shared/types'
+import type { IconInfo, Snapshot, SpeakPayload, SystemStats, WindowInfo } from '@shared/types'
 import { Anthropic, think } from './brain/client'
 import { Memory } from './brain/memory'
 import type { Action, Reply } from './brain/schema'
 import { config } from './config'
+import { iconsMovable, listDesktopIcons, nudgeIcon, type DesktopIcon } from './hands/icons'
 import { minimizeWindow, nudgeWindow, peekTarget } from './hands/windowControl'
 import { readSystemStats } from './senses/system'
 import { listWindows } from './senses/windows'
@@ -57,10 +58,11 @@ export class Scheduler {
 
   async snapshot(): Promise<Snapshot> {
     const windows = listWindows(process.pid)
+    const icons = listDesktopIcons().map(toIconInfo)
     const stats = await readSystemStats()
     const events = [...this.pendingEvents, ...this.diff(windows, stats)]
     this.pendingEvents = []
-    return { at: new Date().toLocaleString(), windows, stats, events }
+    return { at: new Date().toLocaleString(), windows, icons, iconsMovable: iconsMovable(), stats, events }
   }
 
   private async tick(): Promise<void> {
@@ -101,8 +103,11 @@ export class Scheduler {
   }
 
   private async act(action: Action, snap: Snapshot): Promise<void> {
+    if (action.type === 'none') return
+    if (action.type === 'nudge_icon') return this.knockIcon(action)
+
     const target = snap.windows.find((w) => w.id === action.windowId)
-    if (action.type === 'none' || !target) return
+    if (!target) return
     // Hard rule, enforced in code as well as in the prompt.
     if (target.foreground && action.type !== 'peek_at_window') return
 
@@ -120,6 +125,22 @@ export class Scheduler {
         break
       }
     }
+  }
+
+  /** Walk over to a desktop icon and knock it a cell or two sideways. */
+  private async knockIcon(action: Action): Promise<void> {
+    const wanted = action.iconName.trim().toLowerCase()
+    const icon = listDesktopIcons().find((i) => i.name.toLowerCase() === wanted)
+    if (!icon || !iconsMovable()) return
+
+    const { width, height } = this.host.overlaySize()
+    // Stand on the icon: her feet (overlay bottom-centre) at the bottom of the icon cell.
+    await this.host.peekAt(icon.screenX + icon.cellW / 2 - width / 2, icon.screenY + icon.cellH - height + 10)
+
+    const cells = (v: number) => Math.max(-config.maxIconNudgeCells, Math.min(config.maxIconNudgeCells, Math.round(v)))
+    const dx = cells(action.dx)
+    const dy = cells(action.dy)
+    nudgeIcon(icon.index, dx === 0 && dy === 0 ? 1 : dx, dy)
   }
 
   /** Turn two consecutive snapshots into a short list of human-readable changes. */
@@ -153,3 +174,5 @@ export class Scheduler {
     return events
   }
 }
+
+const toIconInfo = (i: DesktopIcon): IconInfo => ({ name: i.name, x: i.screenX, y: i.screenY, cellW: i.cellW, cellH: i.cellH })

@@ -4,6 +4,7 @@ import type { RendererConfig, SpeakPayload } from '@shared/types'
 import { Memory } from './brain/memory'
 import { loadPersona } from './brain/persona'
 import { config, resourcePath } from './config'
+import { initIconLayout, restoreIcons } from './hands/icons'
 import { OverlayMover } from './mover'
 import { Scheduler } from './scheduler'
 import { isForegroundFullscreen, listWindows } from './senses/windows'
@@ -54,6 +55,7 @@ function createTray(): Tray {
       { type: 'separator' },
       { label: 'Mute', type: 'checkbox', checked: muted, click: (item) => (muted = item.checked) },
       { label: 'Poke', click: () => scheduler?.poke() },
+      { label: 'Put my icons back', click: () => restoreIcons() },
       { label: 'Toggle DevTools', click: () => win?.webContents.toggleDevTools() },
       { type: 'separator' },
       { label: 'Quit', click: () => app.quit() },
@@ -99,6 +101,7 @@ function trackCursor(): void {
 
 app.whenReady().then(() => {
   wireIpc()
+  initIconLayout(app.getPath('userData'))
   win = createOverlay()
   tray = createTray()
   mover = new OverlayMover(win)
@@ -121,6 +124,7 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => app.quit())
 app.on('before-quit', () => {
   scheduler?.stop()
+  restoreIcons()
   mover?.dispose()
   tray?.destroy()
 })

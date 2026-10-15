@@ -43,6 +43,8 @@ function renderSnapshot(s: Snapshot, recent: string[]): string {
     `CPU ${fmt(s.stats.cpuLoadPct, '%')} load, ${fmt(s.stats.cpuTempC, '°C')} | RAM ${fmt(s.stats.memUsedPct, '%')} | GPU ${fmt(s.stats.gpuLoadPct, '%')} load, ${fmt(s.stats.gpuTempC, '°C')}`,
     `Open windows (${s.windows.length}):`,
     windows || '- none visible',
+    `Desktop icons (${s.icons.length}, icons movable: ${s.iconsMovable}):`,
+    s.icons.length ? s.icons.slice(0, 20).map((i) => `- "${i.name}" at ${i.x},${i.y}`).join('\n') : '- none / not readable',
     `Recent lines you already said (do not repeat):`,
     recent.length ? recent.map((l) => `- ${l}`).join('\n') : '- (nothing yet)',
   ].join('\n')

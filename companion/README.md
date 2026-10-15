@@ -4,9 +4,11 @@ An AI-powered Live2D anime character that lives on your Windows desktop. She see
 windows are open and which one has focus, watches CPU/GPU load and temperatures, comments,
 teases, whispers, and occasionally shoves a window around for fun.
 
-**Status: skeleton, animated.** The structure, IPC, brain loop, prompt, Live2D rendering,
-walk cycle, fidgets and eye tracking are in place and type-check. The Win32 layer has not
-yet been exercised on a real Windows machine.
+**Status: skeleton, animated, rendered.** The structure, IPC, brain loop, prompt, Live2D
+rendering, walk cycle, fidgets, eye tracking and desktop-icon shoving are in place and
+type-check. The renderer has been exercised headless with the Hiyori sample model (it
+draws, speaks in bubbles, mirrors and leans for the walk). The Win32 layer has not yet been
+exercised on a real Windows machine.
 
 ## How it works
 
@@ -40,7 +42,7 @@ yet been exercised on a real Windows machine.
 | Memory | `src/main/brain/memory.ts` | Last 60 lines she said, so she doesn't repeat. |
 | Shoving / minimising windows | `src/main/hands/windowControl.ts` | Animated SetWindowPos, clamped to 200 px. |
 | Walking across the screen | `src/main/mover.ts` | Moves the overlay at walking pace, eased, clamped to the work area. Peeks end with a walk home. |
-| Desktop icons | `src/main/hands/icons.ts` | Stub with a how-to. Fragile Explorer internals, do last. |
+| Desktop icons | `src/main/hands/icons.ts` | Reads names and positions from Explorer's desktop ListView, knocks an icon a grid cell or two, restores everything on quit (and on next start after a crash). Fragile by nature. |
 | Voice | `src/main/voice/tts.ts` | ElevenLabs v3, `[whispers]` tags for whisper mode. Optional. |
 | Character | `src/renderer/src/character.ts` | Live2D + lip sync, walk cycle, facing, fidgets, cursor tracking. Placeholder blob when no model. |
 
@@ -89,6 +91,27 @@ holding. A click without dragging pokes her, which forces an immediate reaction.
 - **Real walk cycle**: if your model has one, name its motion group `Walk` and it plays over the
   procedural pose. The reaction-on-arrival group names are in `character.ts` too.
 
+## Icon shoving, and why it is the fragile bit
+
+Explorer draws the desktop with a plain ListView control and offers no API for icon
+positions, so `hands/icons.ts` talks to that control with window messages the way Explorer
+itself does. Reading positions and names needs memory *inside explorer.exe*, so the module
+rents a page there and copies structures in and out. It refuses to move anything while
+"Auto arrange icons" is on, moves in whole grid cells so "Align to grid" stays happy, and
+writes the original layout to the user-data folder so it can put every icon back on quit or
+on the next start. Any Windows update that changes the desktop control turns all of this
+into a no-op rather than a crash. The tray menu has "Put my icons back" for peace of mind.
+
+## Gotchas already handled
+
+- **Pixi and the Content Security Policy.** Pixi builds shader code with `new Function`,
+  which the renderer's CSP blocks. `@pixi/unsafe-eval` is imported in `character.ts` to swap
+  in a static implementation. Without it nothing draws and the console says so quietly.
+- **Older Cubism Core builds** lack `Memory.initializeAmountOfMemory`, which the framework
+  calls unconditionally; `character.ts` shims it. The current SDK core needs no shim.
+- **Model file names are case-sensitive on the web side.** The SDK sample is
+  `Hiyori.model3.json`, capital H.
+
 ## Tuning
 
 Everything that controls how chatty she is lives in `src/main/config.ts`: tick interval,
@@ -107,7 +130,7 @@ prefix. Expect a few hundred to a couple thousand calls on a heavy desk day.
 
 - [ ] First run on real Windows: fix whatever koffi signatures need fixing.
 - [x] Walk animation for `peek_at_window`.
-- [ ] Desktop icon pushing (`hands/icons.ts`).
+- [x] Desktop icon pushing (`hands/icons.ts`).
 - [ ] Voice input (local Whisper) so you can talk back.
 - [ ] Screenshot-to-vision for deeper awareness, behind an explicit opt-in.
 - [ ] Packaging and code signing (electron-builder).

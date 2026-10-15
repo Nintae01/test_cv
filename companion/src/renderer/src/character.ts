@@ -1,3 +1,6 @@
+// Pixi compiles shader uniform code with `new Function` by default, which our Content
+// Security Policy forbids. Importing this module swaps in a static implementation.
+import '@pixi/unsafe-eval'
 import { Application, Graphics, Ticker, type Container } from 'pixi.js'
 import type { Expression, WalkEvent } from '@shared/types'
 
@@ -39,6 +42,19 @@ const FIDGET_EVERY_MS: readonly [number, number] = [25_000, 70_000]
 const STRIDE_HZ = 2.6
 const WALK = { bobPx: 10, leanForward: 6, hipSway: 4, headTilt: 3, headTurn: 14 }
 
+/**
+ * Cubism Core builds older than 4-r.4 lack Memory.initializeAmountOfMemory, which the
+ * framework calls unconditionally at start-up (and then fails for good). Default memory
+ * sizing is fine for one model, so a no-op keeps old cores working.
+ */
+function shimOlderCore(core: unknown): void {
+  const c = core as { Memory?: { initializeAmountOfMemory?: (size: number) => void } }
+  c.Memory ??= {}
+  if (typeof c.Memory.initializeAmountOfMemory !== 'function') {
+    c.Memory.initializeAmountOfMemory = () => {}
+  }
+}
+
 interface WalkState {
   startedAt: number
   durationMs: number
@@ -74,6 +90,7 @@ export class Character {
       this.drawPlaceholder()
       return
     }
+    shimOlderCore(window.Live2DCubismCore)
     try {
       // Imported lazily so a missing core does not blow up at module-evaluation time.
       this.lib = await import('pixi-live2d-display-lipsyncpatch/cubism4')

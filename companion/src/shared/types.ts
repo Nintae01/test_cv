@@ -25,10 +25,22 @@ export interface SystemStats {
   gpuLoadPct?: number
 }
 
+/** A desktop icon, in screen coordinates. cellW/cellH is the icon grid spacing. */
+export interface IconInfo {
+  name: string
+  x: number
+  y: number
+  cellW: number
+  cellH: number
+}
+
 /** Everything the brain gets to look at on one tick. */
 export interface Snapshot {
   at: string
   windows: WindowInfo[]
+  icons: IconInfo[]
+  /** false when Explorer's "auto arrange" is on and icons snap back, or when we can't reach them. */
+  iconsMovable: boolean
   stats: SystemStats
   /** Human-readable things that changed since last tick, e.g. "foreground changed to chrome.exe". */
   events: string[]
