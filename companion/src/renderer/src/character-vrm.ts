@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { VRMLoaderPlugin, VRMUtils, type VRM, type VRMHumanBoneName } from '@pixiv/three-vrm'
 import { VRMAnimationLoaderPlugin, createVRMAnimationClip, type VRMAnimation } from '@pixiv/three-vrm-animation'
+import type { MToonMaterial } from '@pixiv/three-vrm'
 import type { Expression, GestureEvent, MotionEvent } from '@shared/types'
 import { SIT_DROP_PX } from '@shared/types'
 import type { Character } from './character-types'
@@ -47,6 +48,79 @@ interface MotionState {
 }
 
 type Bone = THREE.Object3D
+
+type RGB = [number, number, number]
+
+/**
+ * The "look": lights, per-material shading tweaks and a resting face, all applied at load
+ * time without touching the model file. Defaults suit VRoid-style models; a `look.json`
+ * next to the model overrides any part of it (same shape as this object).
+ */
+interface Look {
+  lights: {
+    key: { color: string; intensity: number; position: RGB }
+    fill: { color: string; intensity: number; position: RGB }
+    hemisphere: { sky: string; ground: string; intensity: number }
+  }
+  /** Applied in order to every MToon material whose name contains `match` (case-insensitive). */
+  materials: Array<{
+    match: string
+    /** Names from three-vrm's MToonMaterial; colors as [r, g, b] in 0..1. */
+    set?: Partial<{
+      shadeColorFactor: RGB
+      shadingShiftFactor: number
+      shadingToonyFactor: number
+      matcapFactor: RGB
+      parametricRimColorFactor: RGB
+      parametricRimFresnelPowerFactor: number
+      parametricRimLiftFactor: number
+      rimLightingMixFactor: number
+      outlineWidthFactor: number
+      outlineColorFactor: RGB
+      color: RGB
+      emissive: RGB
+    }>
+    /** Re-bake the base texture through a CSS filter string, e.g. "contrast(1.15) saturate(1.25)". */
+    textureFilter?: string
+  }>
+  /** Expression weights held at all times, under the moods: a friendlier default face. */
+  restingFace: Record<string, number>
+}
+
+const DEFAULT_LOOK: Look = {
+  lights: {
+    key: { color: '#fff6ee', intensity: Math.PI * 1.0, position: [0.6, 1.7, 1.5] },
+    fill: { color: '#d4e3ff', intensity: Math.PI * 0.32, position: [-1.3, 0.6, 1.0] },
+    hemisphere: { sky: '#fdf7f2', ground: '#6a7899', intensity: 0.55 },
+  },
+  materials: [
+    // VRoid exports faces with the shadow pushed almost entirely off (shift 0.7) and a hard
+    // terminator, which reads flat. Bring back a soft, warm shadow and a thinner line.
+    {
+      match: 'Face_00_SKIN',
+      set: {
+        shadingShiftFactor: 0.44,
+        shadingToonyFactor: 0.68,
+        shadeColorFactor: [0.9, 0.68, 0.64],
+        matcapFactor: [0.3, 0.3, 0.3],
+        outlineWidthFactor: 0.0006,
+        outlineColorFactor: [0.42, 0.2, 0.22],
+      },
+    },
+    { match: 'Body_00_SKIN', set: { shadingShiftFactor: 0.2, shadingToonyFactor: 0.62, shadeColorFactor: [0.9, 0.68, 0.64] } },
+    // Chrome armour: the matcap alone produces big white blobs; tame it so the face wins.
+    { match: 'Cuirass', set: { matcapFactor: [0.62, 0.62, 0.62] } },
+    { match: 'Cuirass_Matte', set: { matcapFactor: [0.14, 0.14, 0.15] } },
+    { match: 'Cuirass_Gold', set: { matcapFactor: [1, 1, 1] } },
+    { match: 'Cuirass_Brass', set: { matcapFactor: [0.7, 0.7, 0.7] } },
+    // Eyes: more contrast and colour in the iris, brighter sparkle.
+    { match: 'EyeIris', textureFilter: 'contrast(1.18) saturate(1.3) brightness(1.03)' },
+    { match: 'EyeHighlight', set: { emissive: [0.45, 0.45, 0.45] } },
+    // Hair: a cool rim so it separates from dark backgrounds.
+    { match: 'HAIR', set: { parametricRimColorFactor: [0.2, 0.26, 0.5], parametricRimFresnelPowerFactor: 5, parametricRimLiftFactor: 0, rimLightingMixFactor: 0.7 } },
+  ],
+  restingFace: { relaxed: 0.1, browFun: 0.22, mouthFun: 0.1, eyeSpread: 0.15 },
+}
 
 /**
  * Authored clips (.vrma) by state, listed in `<model dir>/anim/animations.json`:
@@ -150,6 +224,8 @@ export class VrmCharacter implements Character {
   private readonly clock = new THREE.Clock()
   private readonly lookTarget = new THREE.Object3D()
 
+  private readonly lights: THREE.Group
+  private look: Look = DEFAULT_LOOK
   private vrm: VRM | null = null
   private placeholder: THREE.Object3D | null = null
   private bones: Partial<Record<VRMHumanBoneName, Bone>> = {}
@@ -199,11 +275,9 @@ export class VrmCharacter implements Character {
     this.camera = new THREE.PerspectiveCamera(22, window.innerWidth / window.innerHeight, 0.1, 50)
     this.scene.add(this.lookTarget)
 
-    const key = new THREE.DirectionalLight(0xffffff, Math.PI * 0.9)
-    key.position.set(0.6, 1.4, 1.5)
-    const fill = new THREE.DirectionalLight(0xbfd4ff, Math.PI * 0.35)
-    fill.position.set(-1, 0.6, 0.8)
-    this.scene.add(key, fill, new THREE.AmbientLight(0xffffff, 0.35))
+    this.lights = new THREE.Group()
+    this.scene.add(this.lights)
+    this.applyLights(DEFAULT_LOOK.lights)
 
     window.addEventListener('resize', () => {
       this.renderer.setSize(window.innerWidth, window.innerHeight) // also sets the CSS size, so the canvas does not overflow at DPR > 1
@@ -234,6 +308,9 @@ export class VrmCharacter implements Character {
         vrm.lookAt.autoUpdate = true
       }
       this.frameCamera(vrm)
+      this.look = await loadLook(modelUrl)
+      this.applyLights(this.look.lights)
+      this.applyMaterialLook(vrm)
       this.clips = new ClipLayer(vrm)
       await this.clips.load(modelUrl)
       this.chooseClip()
@@ -602,7 +679,7 @@ export class VrmCharacter implements Character {
     const k = 1 - Math.exp(-delta * 8)
     for (const name of this.expressionNames()) {
       if (name.startsWith('blink') || VISEMES.has(name) || name === 'Summon') continue
-      const want = this.weights.get(name) ?? target[name] ?? 0
+      const want = this.weights.get(name) ?? Math.max(target[name] ?? 0, this.look.restingFace[name] ?? 0)
       const have = manager.getValue(name) ?? 0
       manager.setValue(name, have + (want - have) * k)
     }
@@ -686,6 +763,46 @@ export class VrmCharacter implements Character {
     this.screenBox = { x0: x0 - pad, y0: y0 - pad * 2.2, x1: x1 + pad, y1: y1 + pad * 0.6 }
   }
 
+  private applyLights(l: Look['lights']): void {
+    this.lights.clear()
+    const key = new THREE.DirectionalLight(new THREE.Color(l.key.color), l.key.intensity)
+    key.position.set(...l.key.position)
+    const fill = new THREE.DirectionalLight(new THREE.Color(l.fill.color), l.fill.intensity)
+    fill.position.set(...l.fill.position)
+    const hemi = new THREE.HemisphereLight(new THREE.Color(l.hemisphere.sky), new THREE.Color(l.hemisphere.ground), l.hemisphere.intensity)
+    this.lights.add(key, fill, hemi)
+  }
+
+  /** Shading tweaks per material name, see DEFAULT_LOOK. */
+  private applyMaterialLook(vrm: VRM): void {
+    const seen = new Set<THREE.Material>()
+    vrm.scene.traverse((obj) => {
+      const mesh = obj as THREE.Mesh
+      if (!mesh.isMesh) return
+      for (const mat of [mesh.material].flat()) {
+        if (seen.has(mat) || !(mat as MToonMaterial).isMToonMaterial) continue
+        seen.add(mat)
+        const m = mat as MToonMaterial
+        for (const rule of this.look.materials) {
+          if (!m.name.toLowerCase().includes(rule.match.toLowerCase())) continue
+          for (const [key, value] of Object.entries(rule.set ?? {})) {
+            const target = (m as unknown as Record<string, unknown>)[key]
+            if (target instanceof THREE.Color && Array.isArray(value)) target.setRGB(value[0], value[1], value[2])
+            else if (typeof value === 'number') (m as unknown as Record<string, number>)[key] = value
+          }
+          if (rule.textureFilter && m.map) {
+            const filtered = filterTexture(m.map, rule.textureFilter)
+            if (filtered) {
+              m.map = filtered
+              if (m.shadeMultiplyTexture) m.shadeMultiplyTexture = filtered
+            }
+          }
+          m.needsUpdate = true
+        }
+      }
+    })
+  }
+
   private scheduleBlink(): void {
     const [min, max] = BLINK_EVERY_MS
     this.blinkAt = performance.now() + min + Math.random() * (max - min)
@@ -731,4 +848,42 @@ function rot(bone: Bone | undefined, x: number, y: number, z: number, add = fals
   } else {
     bone.rotation.set(x, y, z)
   }
+}
+
+
+async function loadLook(modelUrl: string): Promise<Look> {
+  try {
+    const res = await fetch(new URL('look.json', new URL(modelUrl, window.location.href)))
+    if (!res.ok) return DEFAULT_LOOK
+    const custom = (await res.json()) as Partial<Look>
+    return {
+      lights: { ...DEFAULT_LOOK.lights, ...(custom.lights ?? {}) },
+      materials: custom.materials ?? DEFAULT_LOOK.materials,
+      restingFace: custom.restingFace ?? DEFAULT_LOOK.restingFace,
+    }
+  } catch {
+    return DEFAULT_LOOK
+  }
+}
+
+/** Re-bake a texture's image through a CSS filter (canvas 2D), keeping its sampling settings. */
+function filterTexture(source: THREE.Texture, filter: string): THREE.Texture | null {
+  const image = source.image as HTMLImageElement | ImageBitmap | HTMLCanvasElement | undefined
+  if (!image || !('width' in image) || !image.width) return null
+  const canvas = document.createElement('canvas')
+  canvas.width = image.width
+  canvas.height = image.height
+  const ctx = canvas.getContext('2d')
+  if (!ctx) return null
+  ctx.filter = filter
+  ctx.drawImage(image, 0, 0)
+  const tex = new THREE.CanvasTexture(canvas)
+  tex.flipY = source.flipY
+  tex.colorSpace = source.colorSpace
+  tex.wrapS = source.wrapS
+  tex.wrapT = source.wrapT
+  tex.minFilter = source.minFilter
+  tex.magFilter = source.magFilter
+  tex.needsUpdate = true
+  return tex
 }

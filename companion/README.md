@@ -106,6 +106,17 @@ python3 scripts/vrm-bind-expressions.py Midnight.vrm src/renderer/public/model/m
 It prints what it bound and leaves presets that already have binds alone. Open the overlay with
 `?debug` and call `window.__debug.character.playExpressionRaw('happy')` to try them.
 
+**The look.** Lighting, per-material shading tweaks and a resting face are applied at load
+time without touching the model file. The defaults suit VRoid-style models: a warm key and cool
+fill with a hemisphere, a softer and warmer shadow on the face (VRoid exports push the face
+shadow almost entirely off, which reads flat), a thinner face outline, more contrast and colour
+in the iris, a brighter eye highlight, a cool rim on the hair, a tamer chrome matcap on the
+cuirass, and a resting face that holds a hint of relaxed brows and mouth and slightly wider eyes
+under the moods. Override any part of it with a `look.json` next to the model; the shape is the
+`Look` interface at the top of `character-vrm.ts`. The resting-face keys are the custom
+expressions `vrm-bind-expressions.py` adds (`eyeSpread`, `browFun`, `mouthFun`, ...), so run
+it on your model first.
+
 ### 2D route (Live2D)
 
 Live2D models are illustrated and rigged by hand, so a truly custom look means commissioning

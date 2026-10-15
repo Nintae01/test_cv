@@ -36,6 +36,18 @@ MAPPING: dict[str, list[tuple[str, float]]] = {
 # Emotions should not fight with blinking and lip sync; "blend" lets them coexist.
 EMOTIONS = {"happy", "angry", "sad", "relaxed", "surprised"}
 
+# Extra custom expressions the renderer can hold at low weights for a friendlier resting face
+# (see look.json). Only added when the shape key exists and no custom of that name does.
+CUSTOM: dict[str, list[tuple[str, float]]] = {
+    "eyeSpread": [("Fcl_EYE_Spread", 1.0)],
+    "eyeNatural": [("Fcl_EYE_Natural", 1.0)],
+    "browFun": [("Fcl_BRW_Fun", 1.0)],
+    "browJoy": [("Fcl_BRW_Joy", 1.0)],
+    "mouthFun": [("Fcl_MTH_Fun", 1.0)],
+    "mouthUp": [("Fcl_MTH_Up", 1.0)],
+    "mouthSmall": [("Fcl_MTH_Small", 1.0)],
+}
+
 JSON_CHUNK = 0x4E4F534A
 BIN_CHUNK = 0x004E4942
 
@@ -113,8 +125,20 @@ def main() -> int:
             entry["overrideMouth"] = "blend"
         bound.append(preset)
 
+    customs = vrm["expressions"].setdefault("custom", {})
+    added = []
+    for name, keys in CUSTOM.items():
+        if name in customs:
+            continue
+        binds = [{"node": targets[k][0], "index": targets[k][1], "weight": w} for k, w in keys if k in targets]
+        if binds:
+            customs[name] = {"isBinary": False, "overrideBlink": "none", "overrideLookAt": "none", "overrideMouth": "none", "morphTargetBinds": binds}
+            added.append(name)
+
     write_glb(dst, gltf, chunks)
     print(f"bound: {', '.join(bound) or 'nothing'}")
+    if added:
+        print(f"custom added: {', '.join(added)}")
     if skipped:
         print(f"already bound, left alone: {', '.join(skipped)}")
     if missing:
