@@ -44,7 +44,8 @@ exercised on a real Windows machine.
 | Walking across the screen | `src/main/mover.ts` | Moves the overlay at walking pace, eased, clamped to the work area. Peeks end with a walk home. |
 | Desktop icons | `src/main/hands/icons.ts` | Reads names and positions from Explorer's desktop ListView, knocks an icon a grid cell or two, restores everything on quit (and on next start after a crash). Fragile by nature. |
 | Voice | `src/main/voice/tts.ts` | ElevenLabs v3, `[whispers]` tags for whisper mode. Optional. |
-| Character | `src/renderer/src/character.ts` | Live2D + lip sync, walk cycle, facing, fidgets, cursor tracking. Placeholder blob when no model. |
+| Character (3D) | `src/renderer/src/character-vrm.ts` | three.js + three-vrm. Procedural idle pose, breathing, blink, head and eye tracking, fidgets, walk cycle with a real turn, lip sync from the audio signal. **Default.** |
+| Character (2D) | `src/renderer/src/character-live2d.ts` | Live2D + lip sync, walk cycle, facing, fidgets, cursor tracking. Picked automatically for `.model3.json`. |
 
 ## Setup
 
@@ -58,9 +59,11 @@ cp .env.example .env         # then fill in ANTHROPIC_API_KEY (and ElevenLabs if
 
 1. **Live2D runtime** – download the Cubism SDK for Web from live2d.com and copy
    `Core/live2dcubismcore.min.js` into `src/renderer/public/`. See `src/renderer/public/README.md`.
-2. **A model** – drop a `.model3.json` model folder under `src/renderer/public/model/` and point
-   `LIVE2D_MODEL_URL` at it. The SDK ships free samples. The default expects the scarlet-haired
-   Haru described under *The character* below.
+2. **A model** – drop a `.vrm` file (3D, from VRoid Studio or Blender) or a Live2D
+   `.model3.json` folder under `src/renderer/public/model/` and point `LIVE2D_MODEL_URL` at it.
+   The renderer is picked from the extension. The default expects `model/midnight/midnight.vrm`;
+   see *The character* below for both routes. The Live2D runtime in step 1 is only needed for
+   the 2D route.
 3. **Expressions** – put an `expressions.json` next to the model mapping her moods to the
    model's expression names, e.g. `{ "neutral": "F01", "happy": "F02", ... }`. Missing keys
    simply mean no face change for that mood. Open the overlay with `?debug` and call
@@ -82,9 +85,32 @@ holding. A click without dragging pokes her, which forces an immediate reaction.
 
 ## The character
 
+### 3D route (VRM), the default
+
+Any VRM 0.x or 1.0 humanoid works: VRoid Studio exports, Blender exports via the VRM add-on,
+Booth purchases. The renderer relies on the standard VRM expression presets (`happy`, `angry`,
+`sad`, `relaxed`, `surprised`, `blink`, `aa`/`ih`/`ou`/`ee`/`oh`) and the humanoid bones, and
+does everything else itself: idle pose (arms down from the T-pose), breathing, blinking, head
+and eye tracking of the cursor, fidgets, a walk cycle with a real turn toward the direction of
+travel, and lip sync driven by the loudness of the voice clip. Spring bones (hair, cloth) run
+through three-vrm.
+
+**Check the presets are bound.** Blender's VRM add-on can export a model whose presets exist
+but bind nothing, which means no blinking, no lip sync and no emotions anywhere. If the face
+still has VRoid's `Fcl_*` shape keys, this fixes it on a copy:
+
+```bash
+python3 scripts/vrm-bind-expressions.py Midnight.vrm src/renderer/public/model/midnight/midnight.vrm
+```
+
+It prints what it bound and leaves presets that already have binds alone. Open the overlay with
+`?debug` and call `window.__debug.character.playExpressionRaw('happy')` to try them.
+
+### 2D route (Live2D)
+
 Live2D models are illustrated and rigged by hand, so a truly custom look means commissioning
 one (nizima, Booth, or an artist directly) or rigging your own in Cubism Editor. What the repo
-does instead, for free: it takes the adult sample model **Haru** from the SDK and recolors her
+offers instead, for free: it takes the adult sample model **Haru** from the SDK and recolors her
 hair with `scripts/recolor-hair.py`, which repaints whole atlas pieces inside given boxes while
 keeping the original shading.
 
@@ -111,13 +137,11 @@ redistributing a recolored copy.
 
 ### 2D or 3D?
 
-If you want a specific look without hiring an illustrator, a 3D VRM avatar is the easier
-road: VRoid Studio (free) lets you build an adult character with any hair colour and outfit in
-an afternoon, VRM has standard expression and viseme names so expression mapping disappears,
-and walk/gesture animations can be retargeted from stock clips instead of being drawn per
-model. The cost is the look: cel-shaded 3D instead of an illustration. The main process and
-brain do not care which renderer is used; swapping `character.ts` for a three.js + three-vrm
-implementation is the only change.
+3D is the easier road for a specific look without hiring an illustrator: VRoid Studio or
+Blender gets you any hair, face and outfit, the expression names are standard, and movement is
+procedural or retargeted rather than drawn per model. 2D wins on the illustrated look. Both
+renderers implement the same `Character` interface (`character-types.ts`) and the main process
+does not know which one is running.
 
 ## How she stays alive
 
@@ -175,6 +199,8 @@ prefix. Expect a few hundred to a couple thousand calls on a heavy desk day.
 - [ ] First run on real Windows: fix whatever koffi signatures need fixing.
 - [x] Walk animation for `peek_at_window`.
 - [x] Desktop icon pushing (`hands/icons.ts`).
+- [x] 3D (VRM) renderer with procedural animation and lip sync.
+- [ ] Retargeted animation clips (.vrma) for richer gestures on the VRM route.
 - [ ] Voice input (local Whisper) so you can talk back.
 - [ ] Screenshot-to-vision for deeper awareness, behind an explicit opt-in.
 - [ ] Packaging and code signing (electron-builder).

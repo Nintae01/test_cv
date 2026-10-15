@@ -1,12 +1,12 @@
 import { Bubble } from './bubble'
-import { Character } from './character'
+import { createCharacter } from './character'
 
 const api = window.companion
 
 async function boot(): Promise<void> {
   const cfg = await api.getConfig()
   const canvas = document.getElementById('stage') as HTMLCanvasElement
-  const character = new Character(canvas)
+  const character = await createCharacter(canvas, cfg.modelUrl)
   const bubble = new Bubble(document.getElementById('bubble')!)
 
   await character.load(cfg.modelUrl)
