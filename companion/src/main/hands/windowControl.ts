@@ -1,3 +1,4 @@
+import { screen } from 'electron'
 import type { WindowInfo } from '@shared/types'
 import { config } from '../config'
 import { win32, WIN32, type Rect } from '../native/win32'
@@ -36,15 +37,26 @@ export function minimizeWindow(id: string): void {
   win32?.ShowWindow(Number(id), WIN32.SW_MINIMIZE)
 }
 
+/** How far her feet sink below the target window's top edge when she stands on it. */
+const FEET_OVERLAP_PX = 40
+
 /**
- * "Peek" = she walks over to a window. The overlay is moved next to its top edge;
- * the renderer handles the walking animation. Returns the overlay target or null.
+ * Where the overlay should stand to "peek" at a window: on its top edge towards the right
+ * corner, feet on the title bar. When there is no room above, she leans in from the side
+ * instead. The mover clamps the result to the work area, so this only needs to be sensible.
  */
 export function peekTarget(target: WindowInfo, overlayW: number, overlayH: number): { x: number; y: number } {
-  return {
-    x: Math.round(target.x + target.width - overlayW * 0.6),
-    y: Math.round(target.y - overlayH * 0.85),
+  const { workArea } = screen.getDisplayMatching({ x: target.x, y: target.y, width: target.width, height: target.height })
+
+  let x = target.x + target.width - overlayW * 0.7
+  let y = target.y - overlayH + FEET_OVERLAP_PX
+
+  if (y < workArea.y) {
+    y = target.y + target.height / 2 - overlayH / 2
+    x = target.x + target.width - overlayW * 0.35
+    if (x + overlayW > workArea.x + workArea.width) x = target.x - overlayW * 0.65
   }
+  return { x: Math.round(x), y: Math.round(y) }
 }
 
 const easeOut = (t: number) => 1 - Math.pow(1 - t, 3)

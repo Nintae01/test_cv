@@ -43,6 +43,15 @@ export interface SpeakPayload {
   audioDataUrl?: string
 }
 
+/**
+ * main -> renderer: the overlay window is being moved across the screen. The main process
+ * owns the window position; the renderer owns what she looks like while it happens.
+ */
+export type WalkEvent =
+  | { phase: 'start'; direction: 'left' | 'right'; durationMs: number }
+  | { phase: 'arrive' }
+  | { phase: 'cancel' }
+
 export interface RendererConfig {
   name: string
   modelUrl: string
@@ -53,9 +62,14 @@ export interface CompanionApi {
   getConfig(): Promise<RendererConfig>
   onSpeak(cb: (payload: SpeakPayload) => void): () => void
   onExpression(cb: (expression: Expression) => void): () => void
+  onWalk(cb: (event: WalkEvent) => void): () => void
+  /** Global cursor position in overlay-window coordinates, a few times a second. */
+  onCursor(cb: (x: number, y: number) => void): () => void
   /** true = clicks pass through to whatever is behind the overlay. */
   setIgnoreMouse(ignore: boolean): void
   moveWindowBy(dx: number, dy: number): void
+  /** The user finished dragging her: wherever she is now is home. */
+  dragEnd(): void
   /** The user clicked her. */
   poke(): void
   quit(): void

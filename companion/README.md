@@ -4,8 +4,9 @@ An AI-powered Live2D anime character that lives on your Windows desktop. She see
 windows are open and which one has focus, watches CPU/GPU load and temperatures, comments,
 teases, whispers, and occasionally shoves a window around for fun.
 
-**Status: skeleton.** The structure, IPC, brain loop, prompt, and Live2D rendering are in
-place and type-check. The Win32 layer has not yet been exercised on a real Windows machine.
+**Status: skeleton, animated.** The structure, IPC, brain loop, prompt, Live2D rendering,
+walk cycle, fidgets and eye tracking are in place and type-check. The Win32 layer has not
+yet been exercised on a real Windows machine.
 
 ## How it works
 
@@ -38,9 +39,10 @@ place and type-check. The Win32 layer has not yet been exercised on a real Windo
 | Brain | `src/main/brain/` | Claude with structured JSON output. Persona in `persona.md`. |
 | Memory | `src/main/brain/memory.ts` | Last 60 lines she said, so she doesn't repeat. |
 | Shoving / minimising windows | `src/main/hands/windowControl.ts` | Animated SetWindowPos, clamped to 200 px. |
+| Walking across the screen | `src/main/mover.ts` | Moves the overlay at walking pace, eased, clamped to the work area. Peeks end with a walk home. |
 | Desktop icons | `src/main/hands/icons.ts` | Stub with a how-to. Fragile Explorer internals, do last. |
 | Voice | `src/main/voice/tts.ts` | ElevenLabs v3, `[whispers]` tags for whisper mode. Optional. |
-| Character | `src/renderer/src/character.ts` | Live2D + lip sync, placeholder blob when no model. |
+| Character | `src/renderer/src/character.ts` | Live2D + lip sync, walk cycle, facing, fidgets, cursor tracking. Placeholder blob when no model. |
 
 ## Setup
 
@@ -71,11 +73,28 @@ npm run build        # bundles to out/
 Right-click the pink tray icon for Mute, Poke, DevTools, Quit. Drag her by clicking and
 holding. A click without dragging pokes her, which forces an immediate reaction.
 
+## How she stays alive
+
+- **From the model itself**: idle motions, breathing, blinking. Any Cubism 4 model has these.
+- **Eyes follow your cursor** anywhere on screen. The main process forwards the global cursor
+  position; the renderer feeds it to the model's focus controller.
+- **Fidgets**: every 25 to 70 seconds she plays a random non-idle motion from whatever groups
+  your model has (tap reactions, flicks, and so on).
+- **Walking**: when the brain picks `peek_at_window`, the main process slides the overlay to the
+  window's top-right corner at a fixed pace. The renderer mirrors her to face the way she is
+  going, bobs her with each stride, leans her forward, sways the hips and counter-tilts the head
+  by driving the standard Cubism parameters (`ParamBodyAngleX/Z`, `ParamAngleX/Z`) right before
+  the core updates, so physics (hair, skirt) still reacts to it. On arrival she plays a small
+  reaction motion, lingers, and walks home. Dragging her mid-walk cancels it and sets a new home.
+- **Real walk cycle**: if your model has one, name its motion group `Walk` and it plays over the
+  procedural pose. The reaction-on-arrival group names are in `character.ts` too.
+
 ## Tuning
 
 Everything that controls how chatty she is lives in `src/main/config.ts`: tick interval,
 minimum silence between lines, idle-chatter delay and probability, CPU/temperature
-thresholds. Her personality is `persona.md`; the hard output rules she must follow are
+thresholds, walking speed, how long she lingers after a peek. The swing amplitudes of the
+procedural walk are the `WALK` constant at the top of `src/renderer/src/character.ts`. Her personality is `persona.md`; the hard output rules she must follow are
 appended in `src/main/brain/persona.ts`.
 
 ## Costs
@@ -87,7 +106,7 @@ prefix. Expect a few hundred to a couple thousand calls on a heavy desk day.
 ## Roadmap
 
 - [ ] First run on real Windows: fix whatever koffi signatures need fixing.
-- [ ] Walk animation for `peek_at_window` instead of a window teleport.
+- [x] Walk animation for `peek_at_window`.
 - [ ] Desktop icon pushing (`hands/icons.ts`).
 - [ ] Voice input (local Whisper) so you can talk back.
 - [ ] Screenshot-to-vision for deeper awareness, behind an explicit opt-in.

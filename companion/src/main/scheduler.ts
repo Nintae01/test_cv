@@ -10,8 +10,8 @@ import { synthesize } from './voice/tts'
 
 export interface SchedulerHost {
   speak(payload: SpeakPayload): void
-  /** Move the overlay (used by peek_at_window). */
-  moveOverlayTo(x: number, y: number): void
+  /** Walk the overlay over to (x, y), linger, then wander home. Resolves on arrival. */
+  peekAt(x: number, y: number): Promise<void>
   overlaySize(): { width: number; height: number }
 }
 
@@ -116,7 +116,7 @@ export class Scheduler {
       case 'peek_at_window': {
         const { width, height } = this.host.overlaySize()
         const { x, y } = peekTarget(target, width, height)
-        this.host.moveOverlayTo(x, y)
+        await this.host.peekAt(x, y) // she arrives before she speaks
         break
       }
     }

@@ -45,8 +45,13 @@ async function boot(): Promise<void> {
   window.addEventListener('mouseup', () => {
     if (!dragging) return
     dragging = false
-    if (!moved) api.poke()
+    if (moved) api.dragEnd()
+    else api.poke()
   })
+
+  // --- being alive ---------------------------------------------------------------------
+  api.onCursor((x, y) => character.lookAt(x, y))
+  api.onWalk((event) => character.onWalk(event))
 
   // --- speaking ------------------------------------------------------------------------
   api.onSpeak(async (payload) => {

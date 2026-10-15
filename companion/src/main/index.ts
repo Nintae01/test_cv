@@ -4,6 +4,7 @@ import type { RendererConfig, SpeakPayload } from '@shared/types'
 import { Memory } from './brain/memory'
 import { loadPersona } from './brain/persona'
 import { config, resourcePath } from './config'
+import { OverlayMover } from './mover'
 import { Scheduler } from './scheduler'
 import { isForegroundFullscreen, listWindows } from './senses/windows'
 
@@ -11,6 +12,7 @@ const OVERLAY = { width: 420, height: 620 }
 
 let win: BrowserWindow | null = null
 let tray: Tray | null = null
+let mover: OverlayMover | null = null
 let scheduler: Scheduler | null = null
 let muted = false
 
@@ -65,9 +67,11 @@ function wireIpc(): void {
   ipcMain.on('set-ignore-mouse', (_e, ignore: boolean) => win?.setIgnoreMouseEvents(ignore, { forward: true }))
   ipcMain.on('move-window-by', (_e, dx: number, dy: number) => {
     if (!win) return
+    mover?.interrupt() // the user grabbed her; whatever she was doing can wait
     const [x, y] = win.getPosition()
     win.setPosition(x + Math.round(dx), y + Math.round(dy))
   })
+  ipcMain.on('drag-end', () => mover?.setHomeHere())
   ipcMain.on('poke', () => scheduler?.poke())
   ipcMain.on('quit', () => app.quit())
 }
@@ -83,31 +87,40 @@ function watchFullscreen(): void {
   }, 2_000)
 }
 
+/** Forward the global cursor so her eyes follow it anywhere on screen, not just over the overlay. */
+function trackCursor(): void {
+  setInterval(() => {
+    if (!win || !win.isVisible()) return
+    const cursor = screen.getCursorScreenPoint()
+    const [x, y] = win.getPosition()
+    win.webContents.send('cursor', cursor.x - x, cursor.y - y)
+  }, 1000 / config.cursorTrackHz)
+}
+
 app.whenReady().then(() => {
   wireIpc()
   win = createOverlay()
   tray = createTray()
+  mover = new OverlayMover(win)
 
   const host = {
     speak(payload: SpeakPayload) {
       if (muted) payload = { ...payload, audioDataUrl: undefined }
       win?.webContents.send('speak', payload)
     },
-    moveOverlayTo(x: number, y: number) {
-      win?.setPosition(x, y, true)
-    },
-    overlaySize() {
-      return OVERLAY
-    },
+    peekAt: (x: number, y: number) => mover?.peek(x, y) ?? Promise.resolve(),
+    overlaySize: () => OVERLAY,
   }
 
   scheduler = new Scheduler(host, loadPersona(), new Memory(app.getPath('userData')))
   scheduler.start()
   watchFullscreen()
+  trackCursor()
 })
 
 app.on('window-all-closed', () => app.quit())
 app.on('before-quit', () => {
   scheduler?.stop()
+  mover?.dispose()
   tray?.destroy()
 })

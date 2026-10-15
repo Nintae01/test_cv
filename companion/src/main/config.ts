@@ -35,6 +35,13 @@ export const config = {
   tempHighC: 85,
   /** Clamp for window shoving so she can't throw things off-screen. */
   maxNudgePx: 200,
+
+  /** Walking speed of the overlay for peek_at_window. */
+  walkSpeedPxPerSec: 380,
+  /** How long she lingers by the window she peeked at before wandering back home. */
+  peekLingerMs: 25_000,
+  /** How often the global cursor position is forwarded so her eyes can follow it. */
+  cursorTrackHz: 20,
 } as const
 
 export function resourcePath(...parts: string[]): string {
