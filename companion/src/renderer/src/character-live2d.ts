@@ -2,7 +2,7 @@
 // Security Policy forbids. Importing this module swaps in a static implementation.
 import '@pixi/unsafe-eval'
 import { Application, Graphics, Ticker, type Container } from 'pixi.js'
-import type { Expression, WalkEvent } from '@shared/types'
+import type { Expression, GestureEvent, MotionEvent } from '@shared/types'
 import type { Character } from './character-types'
 
 type Live2DLib = typeof import('pixi-live2d-display-lipsyncpatch/cubism4')
@@ -151,14 +151,16 @@ export class Live2DCharacter implements Character {
     this.model?.focus(x, y)
   }
 
-  /** React to the overlay window being walked across the screen by the main process. */
-  onWalk(event: WalkEvent): void {
-    if (event.phase === 'start') {
-      this.facing = event.direction === 'right' ? 1 : -1
-      this.applyFacing()
-      this.walk = { startedAt: performance.now(), durationMs: event.durationMs }
-      // Eyes on the road: far off in the travel direction, slightly above the horizon.
-      this.model?.focus(this.facing > 0 ? window.innerWidth * 1.5 : -window.innerWidth * 0.5, window.innerHeight * 0.35, true)
+  /** 2D has no legs to speak of: walking and climbing use the walk cycle, everything else stands. */
+  onMotion(event: MotionEvent): void {
+    if (event.kind === 'walk' || event.kind === 'climb') {
+      if (event.kind === 'walk') {
+        this.facing = event.direction === 'right' ? 1 : -1
+        this.applyFacing()
+        // Eyes on the road: far off in the travel direction, slightly above the horizon.
+        this.model?.focus(this.facing > 0 ? window.innerWidth * 1.5 : -window.innerWidth * 0.5, window.innerHeight * 0.35, true)
+      }
+      this.walk = { startedAt: performance.now(), durationMs: 60_000 }
       this.playFirstExisting([WALK_MOTION_GROUP], 'FORCE')
       return
     }
@@ -166,7 +168,11 @@ export class Live2DCharacter implements Character {
     this.walk = null
     const target = this.body()
     if (target) target.y = this.baseY
-    if (event.phase === 'arrive') this.playFirstExisting(ARRIVE_MOTION_GROUPS, 'NORMAL')
+    if (event.kind === 'land' || event.kind === 'sit') this.playFirstExisting(ARRIVE_MOTION_GROUPS, 'NORMAL')
+  }
+
+  gesture(_event: GestureEvent): void {
+    // No sword in 2D. A model with a "Summon" motion group could play it here.
   }
 
   /** Play audio with lip sync when we have a model, plain playback otherwise. Resolves when done. */

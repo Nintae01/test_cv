@@ -11,8 +11,9 @@ export function listWindows(selfPid: number): WindowInfo[] {
   const foreground = api.GetForegroundWindow()
   const out: WindowInfo[] = []
 
+  // EnumWindows walks top-level windows in z-order, topmost first.
   const cb = koffi.register((hwnd: number) => {
-    const info = describe(hwnd, foreground, selfPid)
+    const info = describe(hwnd, foreground, selfPid, out.length)
     if (info) out.push(info)
     return true // keep enumerating
   }, koffi.pointer(api.EnumWindowsProc))
@@ -32,7 +33,7 @@ export function isForegroundFullscreen(windows: WindowInfo[], screenW: number, s
   return fg.width >= screenW && fg.height >= screenH && fg.process.toLowerCase() !== 'explorer.exe'
 }
 
-function describe(hwnd: number, foreground: number, selfPid: number): WindowInfo | null {
+function describe(hwnd: number, foreground: number, selfPid: number, z: number): WindowInfo | null {
   const api = win32!
   if (!api.IsWindowVisible(hwnd) || api.IsIconic(hwnd)) return null
   if (api.GetWindowTextLengthW(hwnd) === 0) return null
@@ -62,6 +63,7 @@ function describe(hwnd: number, foreground: number, selfPid: number): WindowInfo
     width: right - left,
     height: bottom - top,
     foreground: hwnd === foreground,
+    z,
   }
 }
 

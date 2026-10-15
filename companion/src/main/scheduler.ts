@@ -4,16 +4,19 @@ import { Memory } from './brain/memory'
 import type { Action, Reply } from './brain/schema'
 import { config } from './config'
 import { iconsMovable, listDesktopIcons, nudgeIcon, type DesktopIcon } from './hands/icons'
-import { minimizeWindow, nudgeWindow, peekTarget } from './hands/windowControl'
+import { minimizeWindow, nudgeWindow } from './hands/windowControl'
 import { readSystemStats } from './senses/system'
 import { listWindows } from './senses/windows'
 import { synthesize } from './voice/tts'
 
 export interface SchedulerHost {
   speak(payload: SpeakPayload): void
-  /** Walk the overlay over to (x, y), linger, then wander home. Resolves on arrival. */
-  peekAt(x: number, y: number): Promise<void>
-  overlaySize(): { width: number; height: number }
+  /** Make her way onto the top of this window and sit on its edge. Resolves on arrival. */
+  peekWindow(target: WindowInfo): Promise<void>
+  /** Make her way to the floor under a screen x. Resolves on arrival. */
+  standUnder(x: number): Promise<void>
+  /** A special move, held while active. */
+  gesture(name: 'summon', active: boolean): void
 }
 
 /**
@@ -118,12 +121,9 @@ export class Scheduler {
       case 'minimize_window':
         minimizeWindow(target.id)
         break
-      case 'peek_at_window': {
-        const { width, height } = this.host.overlaySize()
-        const { x, y } = peekTarget(target, width, height)
-        await this.host.peekAt(x, y) // she arrives before she speaks
+      case 'peek_at_window':
+        await this.host.peekWindow(target) // she arrives before she speaks
         break
-      }
     }
   }
 
@@ -133,9 +133,8 @@ export class Scheduler {
     const icon = listDesktopIcons().find((i) => i.name.toLowerCase() === wanted)
     if (!icon || !iconsMovable()) return
 
-    const { width, height } = this.host.overlaySize()
-    // Stand on the icon: her feet (overlay bottom-centre) at the bottom of the icon cell.
-    await this.host.peekAt(icon.screenX + icon.cellW / 2 - width / 2, icon.screenY + icon.cellH - height + 10)
+    // Walk over and stand under it (icons live on the desktop, so the floor is as close as she gets).
+    await this.host.standUnder(icon.screenX + icon.cellW / 2)
 
     const cells = (v: number) => Math.max(-config.maxIconNudgeCells, Math.min(config.maxIconNudgeCells, Math.round(v)))
     const dx = cells(action.dx)
@@ -164,8 +163,14 @@ export class Scheduler {
       const temp = stats.cpuTempC ?? stats.gpuTempC
       const prevTemp = prev.cpuTempC ?? prev.gpuTempC
       if (temp !== undefined && prevTemp !== undefined) {
-        if (temp >= config.tempHighC && prevTemp < config.tempHighC) events.push(`temperature reached ${Math.round(temp)}°C`)
-        if (temp < config.tempHighC - 10 && prevTemp >= config.tempHighC) events.push('temperature back to normal')
+        if (temp >= config.tempHighC && prevTemp < config.tempHighC) {
+          events.push(`temperature reached ${Math.round(temp)}°C (you drew your sword)`)
+          this.host.gesture('summon', true)
+        }
+        if (temp < config.tempHighC - 10 && prevTemp >= config.tempHighC) {
+          events.push('temperature back to normal (sword away)')
+          this.host.gesture('summon', false)
+        }
       }
     }
 

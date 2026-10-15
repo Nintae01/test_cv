@@ -1,4 +1,4 @@
-import type { Expression, WalkEvent } from '@shared/types'
+import type { Expression, GestureEvent, MotionEvent } from '@shared/types'
 
 /**
  * What the rest of the renderer needs from "her", whatever draws her. Two implementations:
@@ -11,8 +11,10 @@ export interface Character {
   setExpression(expression: Expression): void
   /** Point her eyes (and a bit of head) at a window-space position. */
   lookAt(x: number, y: number): void
-  /** React to the overlay window being walked across the screen by the main process. */
-  onWalk(event: WalkEvent): void
+  /** React to what the main process's physics is doing with the overlay: walk, climb, fall, land, sit. */
+  onMotion(event: MotionEvent): void
+  /** A special move, held while active (the sword). */
+  gesture(event: GestureEvent): void
   /** Play audio with lip sync. Resolves when playback ends. */
   speak(audioUrl: string | undefined, expression: Expression): Promise<void>
   /** Play one of the model's own expressions by name; for tuning from DevTools. */

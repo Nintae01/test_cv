@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer, type IpcRendererEvent } from 'electron'
-import type { CompanionApi, Expression, RendererConfig, SpeakPayload, WalkEvent } from '@shared/types'
+import type { CompanionApi, Expression, GestureEvent, MotionEvent, RendererConfig, SpeakPayload } from '@shared/types'
 
 function subscribe<T extends unknown[]>(channel: string, cb: (...args: T) => void): () => void {
   const handler = (_e: IpcRendererEvent, ...args: unknown[]) => cb(...(args as T))
@@ -12,7 +12,8 @@ const api: CompanionApi = {
 
   onSpeak: (cb) => subscribe<[SpeakPayload]>('speak', cb),
   onExpression: (cb) => subscribe<[Expression]>('expression', cb),
-  onWalk: (cb) => subscribe<[WalkEvent]>('walk', cb),
+  onMotion: (cb) => subscribe<[MotionEvent]>('motion', cb),
+  onGesture: (cb) => subscribe<[GestureEvent]>('gesture', cb),
   onCursor: (cb) => subscribe<[number, number]>('cursor', cb),
 
   setIgnoreMouse: (ignore) => ipcRenderer.send('set-ignore-mouse', ignore),

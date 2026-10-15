@@ -1,7 +1,9 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { VRMLoaderPlugin, VRMUtils, type VRM, type VRMHumanBoneName } from '@pixiv/three-vrm'
-import type { Expression, WalkEvent } from '@shared/types'
+import { VRMAnimationLoaderPlugin, createVRMAnimationClip, type VRMAnimation } from '@pixiv/three-vrm-animation'
+import type { Expression, GestureEvent, MotionEvent } from '@shared/types'
+import { SIT_DROP_PX } from '@shared/types'
 import type { Character } from './character-types'
 
 /**
@@ -30,14 +32,116 @@ const FIDGET_EVERY_MS: readonly [number, number] = [12_000, 35_000]
 
 const STRIDE_HZ = 2.2
 const WALK = { turnRad: 1.15, bob: 0.025, legSwing: 0.55, kneeBend: 0.5, armSwing: 0.35, lean: 0.08 }
+const CLIMB_HZ = 1.4
+/** Resting pose: arms hanging. */
+const ARM_DOWN = 1.22
 
-interface WalkState {
-  startedAt: number
-  durationMs: number
+type Motion = MotionEvent['kind']
+
+interface MotionState {
+  kind: Motion
+  since: number
   dir: 1 | -1
+  /** Landing crouch strength. */
+  impact: number
 }
 
 type Bone = THREE.Object3D
+
+/**
+ * Authored clips (.vrma) by state, listed in `<model dir>/anim/animations.json`:
+ *   { "idle": ["idle_01.vrma", "idle_02.vrma"], "walk": "walk.vrma", "climb": "climb.vrma",
+ *     "fall": "fall.vrma", "land": "land.vrma", "sit": "sit_down.vrma", "sitting": "sitting.vrma",
+ *     "held": "dangle.vrma", "sword": "draw_sword.vrma" }
+ * Keys with several files pick a random variant each time. Any key that is missing falls back
+ * to the procedural motion, and the two layers crossfade, so a half-filled manifest is fine.
+ * Clips should animate the whole body (arms included) or the missing bones rest in T-pose.
+ */
+class ClipLayer {
+  private readonly mixer: THREE.AnimationMixer
+  private readonly clips = new Map<string, THREE.AnimationClip[]>()
+  private current: THREE.AnimationAction | null = null
+  private currentKey = ''
+
+  constructor(private readonly vrm: VRM) {
+    this.mixer = new THREE.AnimationMixer(vrm.scene)
+  }
+
+  async load(modelUrl: string): Promise<void> {
+    const base = new URL('anim/', new URL(modelUrl, window.location.href))
+    let manifest: Record<string, string | string[]> | null = null
+    try {
+      const res = await fetch(new URL('animations.json', base))
+      manifest = res.ok ? ((await res.json()) as Record<string, string | string[]>) : null
+    } catch {
+      manifest = null
+    }
+    if (!manifest) return
+
+    const loader = new GLTFLoader()
+    loader.register((parser) => new VRMAnimationLoaderPlugin(parser))
+    for (const [key, files] of Object.entries(manifest)) {
+      for (const file of [files].flat()) {
+        try {
+          const gltf = await loader.loadAsync(new URL(file, base).toString())
+          const animation = (gltf.userData.vrmAnimations as VRMAnimation[] | undefined)?.[0]
+          if (!animation) throw new Error('no VRMC_vrm_animation in file')
+          const clip = createVRMAnimationClip(animation, this.vrm)
+          clip.name = `${key}:${file}`
+          this.clips.set(key, [...(this.clips.get(key) ?? []), clip])
+        } catch (err) {
+          console.warn('[vrm] clip', file, 'failed:', err)
+        }
+      }
+    }
+    console.info('[vrm] clips:', [...this.clips].map(([k, v]) => `${k}(${v.length})`).join(' ') || 'none')
+  }
+
+  has(key: string): boolean {
+    return (this.clips.get(key)?.length ?? 0) > 0
+  }
+
+  get key(): string {
+    return this.currentKey
+  }
+
+  /** Crossfade into a clip for this key. Returns false when there is none. */
+  play(key: string, opts: { loop?: boolean; fade?: number; onEnd?: () => void } = {}): boolean {
+    const variants = this.clips.get(key)
+    if (!variants?.length) return false
+    const { loop = true, fade = 0.35, onEnd } = opts
+    const clip = variants[Math.floor(Math.random() * variants.length)]
+    const action = this.mixer.clipAction(clip)
+    if (this.current === action && loop) return true
+
+    this.current?.fadeOut(fade)
+    action.reset().setLoop(loop ? THREE.LoopRepeat : THREE.LoopOnce, Infinity)
+    action.clampWhenFinished = !loop
+    action.setEffectiveTimeScale(1).setEffectiveWeight(1).fadeIn(fade).play()
+    this.current = action
+    this.currentKey = key
+
+    if (!loop && onEnd) {
+      const handler = (e: { action: THREE.AnimationAction }) => {
+        if (e.action !== action) return
+        this.mixer.removeEventListener('finished', handler)
+        if (this.current === action) onEnd()
+      }
+      this.mixer.addEventListener('finished', handler)
+    }
+    return true
+  }
+
+  stop(fade = 0.35): void {
+    this.current?.fadeOut(fade)
+    this.current = null
+    this.currentKey = ''
+  }
+
+  update(delta: number): void {
+    this.mixer.update(delta)
+  }
+}
 
 export class VrmCharacter implements Character {
   private readonly renderer: THREE.WebGLRenderer
@@ -50,6 +154,11 @@ export class VrmCharacter implements Character {
   private placeholder: THREE.Object3D | null = null
   private bones: Partial<Record<VRMHumanBoneName, Bone>> = {}
   private baseY = 0
+  private clips: ClipLayer | null = null
+  /** 0 = procedural pose, 1 = authored clip; eased on every state change. */
+  private clipBlend = 0
+  private clipWanted = false
+  private readonly clipSnapshot = new Map<Bone, { q: THREE.Quaternion; p: THREE.Vector3 }>()
 
   private mood: Expression = 'neutral'
   private moodSetAt = 0
@@ -63,15 +172,25 @@ export class VrmCharacter implements Character {
   private headTargetPitch = 0
   private fidget: { until: number; tilt: number; shift: number } | null = null
   private fidgetAt = 0
-  private walk: WalkState | null = null
+  private motion: MotionState = { kind: 'stand', since: 0, dir: 1, impact: 0 }
   private facing = 0
+  private drop = 0
+  private sword = 0
+  private swordOut = false
+  private pxPerMeter = 280
   private mouth = 0
   private analyser: AnalyserNode | null = null
   private analyserBuf: Uint8Array<ArrayBuffer> | null = null
   private screenBox: { x0: number; y0: number; x1: number; y1: number } | null = null
 
   constructor(canvas: HTMLCanvasElement) {
-    this.renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true })
+    this.renderer = new THREE.WebGLRenderer({
+      canvas,
+      alpha: true,
+      antialias: true,
+      // Lets the ?debug recorder read the canvas back after a frame; costs a little otherwise.
+      preserveDrawingBuffer: window.location.search.includes('debug'),
+    })
     this.renderer.setPixelRatio(window.devicePixelRatio)
     this.renderer.setSize(window.innerWidth, window.innerHeight) // also sets the CSS size, so the canvas does not overflow at DPR > 1
     this.renderer.setClearColor(0x000000, 0)
@@ -115,6 +234,9 @@ export class VrmCharacter implements Character {
         vrm.lookAt.autoUpdate = true
       }
       this.frameCamera(vrm)
+      this.clips = new ClipLayer(vrm)
+      await this.clips.load(modelUrl)
+      this.chooseClip()
       this.scheduleBlink()
       this.scheduleFidget()
       console.info('[vrm] loaded', (vrm.meta as { name?: string; title?: string }).name ?? (vrm.meta as { title?: string }).title, 'expressions:', this.expressionNames().join(','))
@@ -135,7 +257,8 @@ export class VrmCharacter implements Character {
   }
 
   lookAt(x: number, y: number): void {
-    if (this.walk) return
+    const k = this.motion.kind
+    if (k === 'walk' || k === 'climb' || k === 'fall') return
     // Cursor -> a point on the plane z = 1 in front of her face, so the eyes converge on it.
     const ndcX = THREE.MathUtils.clamp((x / window.innerWidth) * 2 - 1, -2.5, 2.5)
     const ndcY = THREE.MathUtils.clamp(-((y / window.innerHeight) * 2 - 1), -2.5, 2.5)
@@ -148,15 +271,61 @@ export class VrmCharacter implements Character {
     this.headTargetPitch = THREE.MathUtils.clamp(-ndcY * 0.25, -0.3, 0.3)
   }
 
-  onWalk(event: WalkEvent): void {
-    if (event.phase === 'start') {
-      this.walk = { startedAt: performance.now(), durationMs: event.durationMs, dir: event.direction === 'right' ? 1 : -1 }
+  onMotion(event: MotionEvent): void {
+    const prev = this.motion
+    this.motion = {
+      kind: event.kind,
+      since: performance.now(),
+      dir: event.kind === 'walk' ? (event.direction === 'right' ? 1 : -1) : prev.dir,
+      impact: event.kind === 'land' ? event.impact : 0,
+    }
+    if (event.kind === 'walk' || event.kind === 'climb' || event.kind === 'fall') {
       this.headTargetYaw = 0
       this.headTargetPitch = 0
-      return
     }
-    this.walk = null
-    if (event.phase === 'arrive') this.setExpression('happy')
+    if (event.kind === 'fall' && prev.kind !== 'held') this.setExpression('surprised')
+    if (event.kind === 'land' && event.impact > 0.6) this.setExpression('annoyed')
+    if (event.kind === 'sit') this.setExpression('smug')
+    this.chooseClip()
+  }
+
+  gesture(event: GestureEvent): void {
+    if (event.name === 'summon') {
+      this.swordOut = event.active
+      if (event.active) this.setExpression('annoyed')
+      this.chooseClip()
+    }
+  }
+
+  /** Map the current state (and sword) onto an authored clip, or fall back to the procedural pose. */
+  private chooseClip(): void {
+    const clips = this.clips
+    if (!clips) return
+    const idle = () => clips.play('idle', { loop: false, onEnd: idle }) // chain random idle variants
+    let played = false
+    if (this.swordOut && clips.has('sword')) {
+      played = clips.play('sword', { loop: false })
+    } else {
+      switch (this.motion.kind) {
+        case 'stand':
+          played = idle()
+          break
+        case 'walk':
+        case 'climb':
+        case 'fall':
+        case 'held':
+          played = clips.play(this.motion.kind)
+          break
+        case 'land':
+          played = clips.play('land', { loop: false, onEnd: idle }) || idle()
+          break
+        case 'sit':
+          played = clips.play('sit', { loop: false, onEnd: () => clips.play('sitting') }) || clips.play('sitting')
+          break
+      }
+    }
+    if (!played) clips.stop()
+    this.clipWanted = played
   }
 
   speak(audioUrl: string | undefined, expression: Expression): Promise<void> {
@@ -206,10 +375,33 @@ export class VrmCharacter implements Character {
     const delta = Math.min(this.clock.getDelta(), 0.1)
     const now = performance.now()
     if (this.vrm) {
+      const k = 1 - Math.exp(-delta * 6)
+      this.clipBlend += ((this.clipWanted ? 1 : 0) - this.clipBlend) * k
+
+      // Layer 1: the authored clip, sampled into a snapshot.
+      this.clipSnapshot.clear()
+      if (this.clips && this.clipBlend > 0.001) {
+        this.vrm.humanoid.resetNormalizedPose()
+        this.clips.update(delta)
+        for (const bone of Object.values(this.bones)) {
+          if (bone) this.clipSnapshot.set(bone, { q: bone.quaternion.clone(), p: bone.position.clone() })
+        }
+      }
+
+      // Layer 2: the procedural pose.
       this.vrm.humanoid.resetNormalizedPose()
       this.applyIdle(now)
+      this.applyMotion(now, delta)
+
+      // Blend: clips win as they fade in, the procedural pose as they fade out.
+      for (const [bone, snap] of this.clipSnapshot) {
+        bone.quaternion.slerp(snap.q, this.clipBlend)
+        bone.position.lerp(snap.p, this.clipBlend)
+      }
+
+      // Additive bits on top of either layer.
       this.applyHead(delta)
-      this.applyWalk(now)
+      this.applySword(delta)
       this.applyExpressions(now, delta)
       this.vrm.update(delta)
       this.updateScreenBox()
@@ -225,8 +417,8 @@ export class VrmCharacter implements Character {
     const b = this.bones
     const breath = Math.sin(t * 1.1) * 0.5 + 0.5
 
-    rot(b.leftUpperArm, 0, 0, -1.22)
-    rot(b.rightUpperArm, 0, 0, 1.22)
+    rot(b.leftUpperArm, 0, 0, -ARM_DOWN)
+    rot(b.rightUpperArm, 0, 0, ARM_DOWN)
     rot(b.leftLowerArm, 0, 0.35, -0.12)
     rot(b.rightLowerArm, 0, -0.35, 0.12)
     rot(b.leftHand, 0, 0, -0.1)
@@ -244,7 +436,9 @@ export class VrmCharacter implements Character {
       this.fidget = null
     }
     if (now >= this.fidgetAt) {
-      this.fidget = { until: now + 2_600, tilt: (Math.random() - 0.5) * 0.3, shift: (Math.random() - 0.5) * 0.12 }
+      if (this.motion.kind === 'stand' || this.motion.kind === 'sit') {
+        this.fidget = { until: now + 2_600, tilt: (Math.random() - 0.5) * 0.3, shift: (Math.random() - 0.5) * 0.12 }
+      }
       this.scheduleFidget()
     }
   }
@@ -253,36 +447,136 @@ export class VrmCharacter implements Character {
     const k = 1 - Math.exp(-delta * 6)
     this.headYaw += (this.headTargetYaw - this.headYaw) * k
     this.headPitch += (this.headTargetPitch - this.headPitch) * k
-    rot(this.bones.head, this.headPitch, this.headYaw, 0, true)
-    rot(this.bones.neck, this.headPitch * 0.3, this.headYaw * 0.3, 0, true)
+    const w = 1 - this.clipBlend * 0.5 // let an authored clip keep most of its head motion
+    rot(this.bones.head, this.headPitch * w, this.headYaw * w, 0, true)
+    rot(this.bones.neck, this.headPitch * 0.3 * w, this.headYaw * 0.3 * w, 0, true)
   }
 
-  /** Turn toward the travel direction, swing legs and arms, bob, lean. Eases in and out. */
-  private applyWalk(now: number): void {
+  /**
+   * The body for each motion state. Walking turns her toward the travel direction and swings
+   * limbs; climbing turns her back to us and reaches hand over hand; falling spreads the
+   * arms; landing crouches by impact; sitting drops the hips to the ledge and dangles the legs.
+   * Transitions ease over ~300 ms.
+   */
+  private applyMotion(now: number, delta: number): void {
     if (!this.vrm) return
-    const w = this.walk
-    const targetFacing = w ? w.dir * WALK.turnRad : 0
-    this.facing += (targetFacing - this.facing) * 0.12
-    this.vrm.scene.rotation.y = this.facing
-
-    if (!w) {
-      this.vrm.scene.position.y = this.baseY
-      return
-    }
-    const elapsed = now - w.startedAt
-    const ease = Math.min(1, elapsed / 300, Math.max(0, (w.durationMs - elapsed) / 300))
-    const phase = (elapsed / 1000) * Math.PI * 2 * STRIDE_HZ
-    const s = Math.sin(phase)
+    const m = this.motion
     const b = this.bones
+    const age = now - m.since
+    const ease = Math.min(1, age / 300)
+    const k = 1 - Math.exp(-delta * 8)
 
-    rot(b.leftUpperLeg, s * WALK.legSwing * ease, 0, 0)
-    rot(b.rightUpperLeg, -s * WALK.legSwing * ease, 0, 0)
-    rot(b.leftLowerLeg, Math.max(0, -s) * WALK.kneeBend * ease, 0, 0)
-    rot(b.rightLowerLeg, Math.max(0, s) * WALK.kneeBend * ease, 0, 0)
-    rot(b.leftUpperArm, -s * WALK.armSwing * ease, 0, -1.22)
-    rot(b.rightUpperArm, s * WALK.armSwing * ease, 0, 1.22)
-    rot(b.spine, WALK.lean * ease, 0, 0, true)
-    this.vrm.scene.position.y = this.baseY + Math.abs(s) * WALK.bob * ease
+    let targetFacing = 0
+    let targetDrop = 0
+    const phase = (age / 1000) * Math.PI * 2
+
+    switch (m.kind) {
+      case 'walk': {
+        targetFacing = m.dir * WALK.turnRad
+        const s = Math.sin(phase * STRIDE_HZ)
+        rot(b.leftUpperLeg, s * WALK.legSwing * ease, 0, 0)
+        rot(b.rightUpperLeg, -s * WALK.legSwing * ease, 0, 0)
+        rot(b.leftLowerLeg, Math.max(0, -s) * WALK.kneeBend * ease, 0, 0)
+        rot(b.rightLowerLeg, Math.max(0, s) * WALK.kneeBend * ease, 0, 0)
+        rot(b.leftUpperArm, -s * WALK.armSwing * ease, 0, -ARM_DOWN)
+        rot(b.rightUpperArm, s * WALK.armSwing * ease, 0, ARM_DOWN)
+        rot(b.spine, WALK.lean * ease, 0, 0, true)
+        this.vrm.scene.position.y = this.baseY + Math.abs(s) * WALK.bob * ease
+        break
+      }
+      case 'climb': {
+        targetFacing = Math.PI // back to us, face to the window
+        const s = Math.sin(phase * CLIMB_HZ)
+        // Hand over hand: one arm reaching up while the other pulls.
+        rot(b.leftUpperArm, -0.2 * ease, 0, -ARM_DOWN + (2.75 + s * 0.35) * ease)
+        rot(b.rightUpperArm, -0.2 * ease, 0, ARM_DOWN - (2.75 - s * 0.35) * ease)
+        rot(b.leftLowerArm, 0, 0.5 * ease, -(0.9 - s * 0.4) * ease)
+        rot(b.rightLowerArm, 0, -0.5 * ease, (0.9 + s * 0.4) * ease)
+        rot(b.leftUpperLeg, -Math.max(0, s) * 0.9 * ease, 0, 0)
+        rot(b.rightUpperLeg, -Math.max(0, -s) * 0.9 * ease, 0, 0)
+        rot(b.leftLowerLeg, Math.max(0, s) * 1.1 * ease, 0, 0)
+        rot(b.rightLowerLeg, Math.max(0, -s) * 1.1 * ease, 0, 0)
+        rot(b.spine, -0.15 * ease, 0, 0, true)
+        this.vrm.scene.position.y = this.baseY
+        break
+      }
+      case 'fall': {
+        const flail = Math.sin(phase * 1.5) * 0.15
+        rot(b.leftUpperArm, -0.7 * ease, 0, -ARM_DOWN + 0.55 * ease + flail)
+        rot(b.rightUpperArm, -0.7 * ease, 0, ARM_DOWN - 0.55 * ease - flail)
+        rot(b.leftLowerArm, -0.3 * ease, 0, -0.3 * ease)
+        rot(b.rightLowerArm, -0.3 * ease, 0, 0.3 * ease)
+        rot(b.leftUpperLeg, -0.35 * ease, 0, -0.1 * ease)
+        rot(b.rightUpperLeg, -0.25 * ease, 0, 0.1 * ease)
+        rot(b.leftLowerLeg, 0.6 * ease, 0, 0)
+        rot(b.rightLowerLeg, 0.45 * ease, 0, 0)
+        rot(b.spine, -0.12 * ease, 0, 0, true)
+        this.vrm.scene.position.y = this.baseY
+        break
+      }
+      case 'land': {
+        // A crouch that pops back up: strongest right after touching down.
+        const c = Math.max(0, 1 - age / 450) * (0.35 + 0.65 * m.impact)
+        rot(b.leftUpperLeg, -1.0 * c, 0, 0)
+        rot(b.rightUpperLeg, -1.0 * c, 0, 0)
+        rot(b.leftLowerLeg, 1.5 * c, 0, 0)
+        rot(b.rightLowerLeg, 1.5 * c, 0, 0)
+        rot(b.spine, 0.45 * c, 0, 0, true)
+        rot(b.leftUpperArm, -0.5 * c, 0, -ARM_DOWN + 0.4 * c)
+        rot(b.rightUpperArm, -0.5 * c, 0, ARM_DOWN - 0.4 * c)
+        targetDrop = 0.28 * c
+        this.vrm.scene.position.y = this.baseY
+        break
+      }
+      case 'sit': {
+        rot(b.leftUpperLeg, -1.5 * ease, 0, -0.08 * ease)
+        rot(b.rightUpperLeg, -1.5 * ease, 0, 0.08 * ease)
+        rot(b.leftLowerLeg, 1.35 * ease, 0, 0)
+        rot(b.rightLowerLeg, 1.35 * ease, 0, 0)
+        rot(b.leftUpperArm, -0.35 * ease, 0, -ARM_DOWN + 0.15 * ease)
+        rot(b.rightUpperArm, -0.35 * ease, 0, ARM_DOWN - 0.15 * ease)
+        rot(b.leftLowerArm, -0.9 * ease, 0.4 * ease, -0.3 * ease)
+        rot(b.rightLowerArm, -0.9 * ease, -0.4 * ease, 0.3 * ease)
+        rot(b.spine, 0.12 * ease, 0, 0, true)
+        if (!this.clips?.has('sit') && !this.clips?.has('sitting')) targetDrop = SIT_DROP_PX / this.pxPerMeter
+        this.vrm.scene.position.y = this.baseY
+        break
+      }
+      case 'held': {
+        // Dangling by the scruff: limp arms, feet together.
+        rot(b.leftUpperArm, 0.1 * ease, 0, -ARM_DOWN - 0.1 * ease)
+        rot(b.rightUpperArm, 0.1 * ease, 0, ARM_DOWN + 0.1 * ease)
+        rot(b.leftLowerLeg, 0.25 * ease, 0, 0)
+        rot(b.rightLowerLeg, 0.25 * ease, 0, 0)
+        this.vrm.scene.position.y = this.baseY
+        break
+      }
+      case 'stand':
+      default:
+        this.vrm.scene.position.y = this.baseY
+    }
+
+    this.facing += (targetFacing - this.facing) * k
+    this.vrm.scene.rotation.y = this.facing
+    this.drop += (targetDrop - this.drop) * k
+    this.vrm.scene.position.y -= this.drop
+  }
+
+  /** Draw the sword (the model's "Summon" expression) and hold it up while the gesture is active. */
+  private applySword(delta: number): void {
+    const manager = this.vrm?.expressionManager
+    if (!manager || !manager.getExpression('Summon')) return
+    const k = 1 - Math.exp(-delta * 5)
+    this.sword += ((this.swordOut ? 1 : 0) - this.sword) * k
+    manager.setValue('Summon', this.sword)
+    if (this.sword > 0.01 && !this.clips?.has('sword')) {
+      // Right arm forward and up, blade raised; a touch of stance in the spine.
+      const b = this.bones
+      rot(b.rightUpperArm, -1.6 * this.sword, 0.3 * this.sword, 0.5 * this.sword, true)
+      rot(b.rightLowerArm, -0.4 * this.sword, 0, 0, true)
+      rot(b.spine, 0, -0.25 * this.sword, 0, true)
+      rot(b.leftUpperArm, 0, 0, 0.25 * this.sword, true)
+    }
   }
 
   /** Blink timer, mood weights with fade, eyelid droop, lip sync. */
@@ -295,7 +589,7 @@ export class VrmCharacter implements Character {
     const target = MOODS[this.mood]
     const k = 1 - Math.exp(-delta * 8)
     for (const name of this.expressionNames()) {
-      if (name.startsWith('blink') || VISEMES.has(name)) continue
+      if (name.startsWith('blink') || VISEMES.has(name) || name === 'Summon') continue
       const want = this.weights.get(name) ?? target[name] ?? 0
       const have = manager.getValue(name) ?? 0
       manager.setValue(name, have + (want - have) * k)
@@ -356,7 +650,8 @@ export class VrmCharacter implements Character {
     this.camera.position.set(hips.x, aimY, hips.z + distance)
     this.camera.lookAt(hips.x, aimY, hips.z)
     this.lookTarget.position.set(hips.x, head.y, hips.z + 1)
-    console.info('[vrm] framed', { height: height.toFixed(2), hipsX: hips.x.toFixed(2), distance: distance.toFixed(2) })
+    this.pxPerMeter = window.innerHeight / (height * 1.3)
+    console.info('[vrm] framed', { height: height.toFixed(2), hipsX: hips.x.toFixed(2), distance: distance.toFixed(2), pxPerMeter: this.pxPerMeter.toFixed(0) })
   }
 
   /** Window-space box around the body, from projected bone positions. */

@@ -51,7 +51,8 @@ async function boot(): Promise<void> {
 
   // --- being alive ---------------------------------------------------------------------
   api.onCursor((x, y) => character.lookAt(x, y))
-  api.onWalk((event) => character.onWalk(event))
+  api.onMotion((event) => character.onMotion(event))
+  api.onGesture((event) => character.gesture(event))
 
   // --- speaking ------------------------------------------------------------------------
   api.onSpeak(async (payload) => {
@@ -62,9 +63,29 @@ async function boot(): Promise<void> {
   api.onExpression((expression) => character.setExpression(expression))
 
   // Open the overlay with ?debug (or from the preview harness) to poke at her from DevTools:
-  // window.__debug.character.playExpressionRaw('F05'), .expressionNames(), .onWalk({...}) ...
+  // window.__debug.character.playExpressionRaw('happy'), .expressionNames(), .onMotion({ kind: 'climb' }) ...
   if (window.location.search.includes('debug')) {
-    ;(window as unknown as { __debug: unknown }).__debug = { character, bubble }
+    // record(true) grabs a JPEG of the canvas every frame; record(false) returns them.
+    let frames: string[] = []
+    let recording = false
+    let startedAt = 0
+    const grab = () => {
+      if (recording) frames.push(canvas.toDataURL('image/jpeg', 0.85))
+      requestAnimationFrame(grab)
+    }
+    requestAnimationFrame(grab)
+    const record = (on: boolean) => {
+      if (on) {
+        frames = []
+        startedAt = performance.now()
+        recording = true
+        return { frames: [], fps: 0 }
+      }
+      recording = false
+      const fps = (frames.length / Math.max(1, performance.now() - startedAt)) * 1000
+      return { frames, fps }
+    }
+    ;(window as unknown as { __debug: unknown }).__debug = { character, bubble, record }
   }
 
   console.info(`[${cfg.name}] ready`)

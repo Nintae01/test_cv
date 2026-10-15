@@ -38,8 +38,15 @@ export const config = {
   /** Clamp for icon shoving, in desktop grid cells. */
   maxIconNudgeCells: 2,
 
-  /** Walking speed of the overlay for peek_at_window. */
+  /** Walking speed of the overlay. */
   walkSpeedPxPerSec: 380,
+  /** Climbing speed up a window's face. */
+  climbSpeedPxPerSec: 300,
+  /** Gravity and terminal velocity for falling, in screen pixels (she is ~1.7 m for ~500 px). */
+  gravityPxPerSec2: 2600,
+  maxFallPxPerSec: 2600,
+  /** Minimum uncovered width of a window's top edge for her to stand on it. */
+  minLedgePx: 120,
   /** How long she lingers by the window she peeked at before wandering back home. */
   peekLingerMs: 25_000,
   /** How often the global cursor position is forwarded so her eyes can follow it. */

@@ -15,6 +15,8 @@ export interface WindowInfo {
   width: number
   height: number
   foreground: boolean
+  /** Position in the z-order, 0 = topmost. Used to find which window tops are uncovered. */
+  z: number
 }
 
 export interface SystemStats {
@@ -56,13 +58,29 @@ export interface SpeakPayload {
 }
 
 /**
- * main -> renderer: the overlay window is being moved across the screen. The main process
- * owns the window position; the renderer owns what she looks like while it happens.
+ * main -> renderer: what her body is doing. The main process owns the overlay position and
+ * the physics; the renderer owns what she looks like while it happens.
  */
-export type WalkEvent =
-  | { phase: 'start'; direction: 'left' | 'right'; durationMs: number }
-  | { phase: 'arrive' }
-  | { phase: 'cancel' }
+export type MotionEvent =
+  | { kind: 'walk'; direction: 'left' | 'right' }
+  | { kind: 'stand' }
+  | { kind: 'climb' }
+  | { kind: 'fall' }
+  /** impact 0..1 from the landing speed. */
+  | { kind: 'land'; impact: number }
+  /** Sitting on a ledge; hips are SIT_DROP_PX above the overlay bottom. */
+  | { kind: 'sit' }
+  /** Picked up by the user. */
+  | { kind: 'held' }
+
+/** Hips-to-overlay-bottom distance while sitting, so legs can dangle over the ledge. */
+export const SIT_DROP_PX = 150
+
+/** main -> renderer: a special move, held while active. */
+export interface GestureEvent {
+  name: 'summon'
+  active: boolean
+}
 
 export interface RendererConfig {
   name: string
@@ -74,7 +92,8 @@ export interface CompanionApi {
   getConfig(): Promise<RendererConfig>
   onSpeak(cb: (payload: SpeakPayload) => void): () => void
   onExpression(cb: (expression: Expression) => void): () => void
-  onWalk(cb: (event: WalkEvent) => void): () => void
+  onMotion(cb: (event: MotionEvent) => void): () => void
+  onGesture(cb: (event: GestureEvent) => void): () => void
   /** Global cursor position in overlay-window coordinates, a few times a second. */
   onCursor(cb: (x: number, y: number) => void): () => void
   /** true = clicks pass through to whatever is behind the overlay. */

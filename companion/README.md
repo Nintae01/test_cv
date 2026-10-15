@@ -41,7 +41,7 @@ exercised on a real Windows machine.
 | Brain | `src/main/brain/` | Claude with structured JSON output. Persona in `persona.md`. |
 | Memory | `src/main/brain/memory.ts` | Last 60 lines she said, so she doesn't repeat. |
 | Shoving / minimising windows | `src/main/hands/windowControl.ts` | Animated SetWindowPos, clamped to 200 px. |
-| Walking across the screen | `src/main/mover.ts` | Moves the overlay at walking pace, eased, clamped to the work area. Peeks end with a walk home. |
+| Physics and navigation | `src/main/physics.ts` | Window tops are ledges. She walks along them, climbs a window's face to reach its top, steps off edges and falls, lands, sits on ledges, rides a window dragged under her, drops when one closes under her. Always clamped to the work area. |
 | Desktop icons | `src/main/hands/icons.ts` | Reads names and positions from Explorer's desktop ListView, knocks an icon a grid cell or two, restores everything on quit (and on next start after a crash). Fragile by nature. |
 | Voice | `src/main/voice/tts.ts` | ElevenLabs v3, `[whispers]` tags for whisper mode. Optional. |
 | Character (3D) | `src/renderer/src/character-vrm.ts` | three.js + three-vrm. Procedural idle pose, breathing, blink, head and eye tracking, fidgets, walk cycle with a real turn, lip sync from the audio signal. **Default.** |
@@ -150,14 +150,40 @@ does not know which one is running.
   position; the renderer feeds it to the model's focus controller.
 - **Fidgets**: every 25 to 70 seconds she plays a random non-idle motion from whatever groups
   your model has (tap reactions, flicks, and so on).
-- **Walking**: when the brain picks `peek_at_window`, the main process slides the overlay to the
-  window's top-right corner at a fixed pace. The renderer mirrors her to face the way she is
-  going, bobs her with each stride, leans her forward, sways the hips and counter-tilts the head
-  by driving the standard Cubism parameters (`ParamBodyAngleX/Z`, `ParamAngleX/Z`) right before
-  the core updates, so physics (hair, skirt) still reacts to it. On arrival she plays a small
-  reaction motion, lingers, and walks home. Dragging her mid-walk cancels it and sets a new home.
-- **Real walk cycle**: if your model has one, name its motion group `Walk` and it plays over the
-  procedural pose. The reaction-on-arrival group names are in `character.ts` too.
+- **Physics**: the overlay is a small platformer body simulated in the main process at 60 Hz.
+  The uncovered top edge of every window (z-order aware) is a ledge, the work area bottom is the
+  floor, the edges are walls. Gravity, terminal velocity, landing, and riding a window that is
+  dragged under her are all handled there, and she can never leave the work area.
+- **Navigation**: `peek_at_window` asks for the top of that window. She walks along her current
+  ledge, climbs the window's face when its uncovered top is above her, steps off an edge and
+  falls when the target is lower, re-plans after every landing, and sits on the edge when she
+  arrives, legs over the front of the window. After a while she makes her way back home. Pick her
+  up and drop her anywhere: gravity takes it from there, and wherever she lands is home.
+- **What the renderer does with it**: walk turns her toward the direction of travel with a
+  stride; climb turns her back to us and goes hand over hand; fall spreads the arms; land
+  crouches by impact; sit drops the hips to the ledge and dangles the legs. Live2D models get
+  the walk cycle for walking and climbing and stand for the rest.
+- **Authored animation clips** (VRM Animation, `.vrma`) replace the procedural motion state by
+  state, with crossfades between clips and between the two layers. Put clips under
+  `<model dir>/anim/` and list them in `anim/animations.json`:
+
+  ```json
+  {
+    "idle": ["idle_01.vrma", "idle_02.vrma", "idle_03.vrma"],
+    "walk": "walk.vrma", "climb": "climb.vrma", "fall": "fall.vrma", "land": "land.vrma",
+    "sit": "sit_down.vrma", "sitting": "sitting.vrma", "held": "dangle.vrma", "sword": "draw_sword.vrma"
+  }
+  ```
+
+  Several files under one key are variants picked at random, so three idle clips already make
+  her feel alive. Missing keys fall back to the procedural motion. Where to get clips: VRoid Hub
+  publishes free sample `.vrma` files; Mixamo clips can be retargeted onto the model in Blender
+  with the VRM add-on and exported as VRM Animation; or animate in Blender directly and export.
+  Clips should animate the whole body, arms included, and a `sit`/`sitting` clip should carry
+  the hips drop itself.
+- **The sword**: when the CPU or GPU temperature crosses the threshold she draws her sword
+  (the model's `Summon` expression) and holds it up until temps come back down. There is a
+  "Draw sword (test)" item in the tray menu.
 
 ## Icon shoving, and why it is the fragile bit
 
@@ -184,8 +210,8 @@ into a no-op rather than a crash. The tray menu has "Put my icons back" for peac
 
 Everything that controls how chatty she is lives in `src/main/config.ts`: tick interval,
 minimum silence between lines, idle-chatter delay and probability, CPU/temperature
-thresholds, walking speed, how long she lingers after a peek. The swing amplitudes of the
-procedural walk are the `WALK` constant at the top of `src/renderer/src/character.ts`. Her personality is `persona.md`; the hard output rules she must follow are
+thresholds, walking and climbing speed, gravity, how long she lingers after a peek. The pose
+amplitudes are the constants at the top of `src/renderer/src/character-vrm.ts`. Her personality is `persona.md`; the hard output rules she must follow are
 appended in `src/main/brain/persona.ts`.
 
 ## Costs
@@ -200,7 +226,8 @@ prefix. Expect a few hundred to a couple thousand calls on a heavy desk day.
 - [x] Walk animation for `peek_at_window`.
 - [x] Desktop icon pushing (`hands/icons.ts`).
 - [x] 3D (VRM) renderer with procedural animation and lip sync.
-- [ ] Retargeted animation clips (.vrma) for richer gestures on the VRM route.
+- [x] Authored animation clips (.vrma) with crossfades on the VRM route.
+- [ ] A set of real clips for Midnight (idle variants, walk, climb, fall, land, sit, sword).
 - [ ] Voice input (local Whisper) so you can talk back.
 - [ ] Screenshot-to-vision for deeper awareness, behind an explicit opt-in.
 - [ ] Packaging and code signing (electron-builder).
