@@ -485,19 +485,31 @@ export class VrmCharacter implements Character {
         break
       }
       case 'climb': {
-        targetFacing = Math.PI // back to us, face to the window
+        // Back to us, face to the window. Both arms overhead and a little toward the wall,
+        // reaching hand over hand: one arm stretches higher while the other pulls (elbow bent),
+        // knees come up alternately against the wall, body leans in, eyes up.
+        targetFacing = Math.PI
         const s = Math.sin(phase * CLIMB_HZ)
-        // Hand over hand: one arm reaching up while the other pulls.
-        rot(b.leftUpperArm, -0.2 * ease, 0, -ARM_DOWN + (2.75 + s * 0.35) * ease)
-        rot(b.rightUpperArm, -0.2 * ease, 0, ARM_DOWN - (2.75 - s * 0.35) * ease)
-        rot(b.leftLowerArm, 0, 0.5 * ease, -(0.9 - s * 0.4) * ease)
-        rot(b.rightLowerArm, 0, -0.5 * ease, (0.9 + s * 0.4) * ease)
-        rot(b.leftUpperLeg, -Math.max(0, s) * 0.9 * ease, 0, 0)
-        rot(b.rightUpperLeg, -Math.max(0, -s) * 0.9 * ease, 0, 0)
-        rot(b.leftLowerLeg, Math.max(0, s) * 1.1 * ease, 0, 0)
-        rot(b.rightLowerLeg, Math.max(0, -s) * 1.1 * ease, 0, 0)
-        rot(b.spine, -0.15 * ease, 0, 0, true)
-        this.vrm.scene.position.y = this.baseY
+        const reachL = 0.5 + 0.5 * s // 1 = left arm fully stretched, 0 = pulling
+        const reachR = 1 - reachL
+        // Upper arms: z lifts them overhead (±1.57 is straight up), x tips them toward the wall.
+        rot(b.leftUpperArm, 0.35 * ease, 0, -ARM_DOWN + (ARM_DOWN + 1.25 + 0.3 * reachL) * ease)
+        rot(b.rightUpperArm, 0.35 * ease, 0, ARM_DOWN - (ARM_DOWN + 1.25 + 0.3 * reachR) * ease)
+        // Elbows bend toward the wall (about the bone's local Y) more on the pulling arm.
+        rot(b.leftLowerArm, 0, -(0.25 + 0.9 * (1 - reachL)) * ease, 0)
+        rot(b.rightLowerArm, 0, (0.25 + 0.9 * (1 - reachR)) * ease, 0)
+        rot(b.leftHand, 0, 0, 0.3 * ease)
+        rot(b.rightHand, 0, 0, -0.3 * ease)
+        // Legs: the knee opposite the stretched arm comes up against the wall.
+        const kneeL = 0.5 + 0.5 * -s
+        const kneeR = 1 - kneeL
+        rot(b.leftUpperLeg, -(0.15 + 0.85 * kneeL) * ease, 0, -0.08 * ease)
+        rot(b.rightUpperLeg, -(0.15 + 0.85 * kneeR) * ease, 0, 0.08 * ease)
+        rot(b.leftLowerLeg, (0.2 + 1.0 * kneeL) * ease, 0, 0)
+        rot(b.rightLowerLeg, (0.2 + 1.0 * kneeR) * ease, 0, 0)
+        rot(b.spine, -0.18 * ease, 0, 0, true)
+        rot(b.head, -0.35 * ease, 0, 0, true)
+        this.vrm.scene.position.y = this.baseY + Math.abs(s) * 0.01 * ease
         break
       }
       case 'fall': {
