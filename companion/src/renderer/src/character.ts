@@ -18,17 +18,21 @@ interface UpdateEvents {
 }
 
 /**
- * Map the brain's expression enum onto the expression names inside your .model3.json
- * (look under "Expressions" > "Name"). Leave null to skip. Live2D's free "Hiyori" sample
- * has no expressions, so everything is null until you fill it for your model.
+ * Maps the brain's expression enum onto the expression names inside a .model3.json
+ * ("Expressions" > "Name"). Loaded from an `expressions.json` next to the model, e.g.
+ *   { "neutral": "F01", "happy": "F02", "smug": "F05", "surprised": "F08", "sleepy": "F03", "annoyed": "F04" }
+ * Missing file or missing keys mean "no expression change" for that mood.
  */
-const EXPRESSION_MAP: Record<Expression, string | null> = {
-  neutral: null,
-  happy: null,
-  smug: null,
-  surprised: null,
-  sleepy: null,
-  annoyed: null,
+type ExpressionMap = Partial<Record<Expression, string>>
+
+async function loadExpressionMap(modelUrl: string): Promise<ExpressionMap> {
+  const url = new URL('expressions.json', new URL(modelUrl, window.location.href)).toString()
+  try {
+    const res = await fetch(url)
+    return res.ok ? ((await res.json()) as ExpressionMap) : {}
+  } catch {
+    return {}
+  }
 }
 
 /** If your model has a real walk cycle, name its motion group this and it replaces the procedural one. */
@@ -73,6 +77,7 @@ export class Character {
   private model: Live2DModel | null = null
   private placeholder: Graphics | null = null
 
+  private expressions: ExpressionMap = {}
   private baseY = 0
   private baseScale = 1
   private facing: 1 | -1 = 1
@@ -112,6 +117,7 @@ export class Character {
 
       this.app.stage.addChild(model)
       this.model = model
+      this.expressions = await loadExpressionMap(modelUrl)
       this.scheduleFidget()
     } catch (err) {
       console.warn('[character] could not load model, showing placeholder', err)
@@ -126,8 +132,18 @@ export class Character {
   }
 
   setExpression(expression: Expression): void {
-    const name = EXPRESSION_MAP[expression]
+    const name = this.expressions[expression]
     if (this.model && name) void this.model.expression(name)
+  }
+
+  /** Play a model expression by its own name. For tuning expressions.json; see ?debug in main.ts. */
+  playExpressionRaw(name: string): void {
+    if (this.model) void this.model.expression(name)
+  }
+
+  /** The expression names this model ships with. */
+  expressionNames(): string[] {
+    return this.model?.internalModel.motionManager.expressionManager?.definitions.map((d) => d.Name) ?? []
   }
 
   /** Point her eyes and head at a window-space position. */
@@ -163,7 +179,7 @@ export class Character {
       return new Promise((resolve) => {
         model.speak(audioUrl, {
           volume: 1,
-          expression: EXPRESSION_MAP[expression] ?? undefined,
+          expression: this.expressions[expression],
           resetExpression: true,
           onFinish: () => resolve(),
           onError: (err: unknown) => {

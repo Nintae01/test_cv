@@ -20,7 +20,7 @@ export const config = {
   elevenLabsVoice: process.env.ELEVENLABS_VOICE_ID || undefined,
 
   lhmUrl: process.env.LHM_URL ?? 'http://localhost:8085',
-  live2dModelUrl: process.env.LIVE2D_MODEL_URL ?? '/model/hiyori/Hiyori.model3.json',
+  live2dModelUrl: process.env.LIVE2D_MODEL_URL ?? '/model/haru-scarlet/Haru.model3.json',
 
   /** How often senses are sampled. */
   tickMs: 5_000,

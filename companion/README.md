@@ -59,11 +59,16 @@ cp .env.example .env         # then fill in ANTHROPIC_API_KEY (and ElevenLabs if
 1. **Live2D runtime** – download the Cubism SDK for Web from live2d.com and copy
    `Core/live2dcubismcore.min.js` into `src/renderer/public/`. See `src/renderer/public/README.md`.
 2. **A model** – drop a `.model3.json` model folder under `src/renderer/public/model/` and point
-   `LIVE2D_MODEL_URL` at it. The SDK ships free samples. Then fill `EXPRESSION_MAP` in
-   `character.ts` with the expression names your model actually has.
-3. **Temps (optional)** – run LibreHardwareMonitor, enable *Options → Remote Web Server*.
+   `LIVE2D_MODEL_URL` at it. The SDK ships free samples. The default expects the scarlet-haired
+   Haru described under *The character* below.
+3. **Expressions** – put an `expressions.json` next to the model mapping her moods to the
+   model's expression names, e.g. `{ "neutral": "F01", "happy": "F02", ... }`. Missing keys
+   simply mean no face change for that mood. Open the overlay with `?debug` and call
+   `window.__debug.character.expressionNames()` / `.playExpressionRaw('F05')` from DevTools to
+   find out which is which.
+4. **Temps (optional)** – run LibreHardwareMonitor, enable *Options → Remote Web Server*.
    Without it you still get CPU/RAM/GPU load, just no CPU temperature.
-4. **Voice (optional)** – set `ELEVENLABS_API_KEY` and `ELEVENLABS_VOICE_ID`. Without them
+5. **Voice (optional)** – set `ELEVENLABS_API_KEY` and `ELEVENLABS_VOICE_ID`. Without them
    she talks in speech bubbles only.
 
 ```bash
@@ -74,6 +79,45 @@ npm run build        # bundles to out/
 
 Right-click the pink tray icon for Mute, Poke, DevTools, Quit. Drag her by clicking and
 holding. A click without dragging pokes her, which forces an immediate reaction.
+
+## The character
+
+Live2D models are illustrated and rigged by hand, so a truly custom look means commissioning
+one (nizima, Booth, or an artist directly) or rigging your own in Cubism Editor. What the repo
+does instead, for free: it takes the adult sample model **Haru** from the SDK and recolors her
+hair with `scripts/recolor-hair.py`, which repaints whole atlas pieces inside given boxes while
+keeping the original shading.
+
+```bash
+# Haru lives in the Cubism SDK for Web under Samples/Resources/Haru. Copy it to
+# src/renderer/public/model/haru/, then:
+python3 scripts/recolor-hair.py src/renderer/public/model/haru src/renderer/public/model/haru-scarlet \
+  --hue 352 --sat 215 \
+  --region texture_00.png:735,25,1155,420 --region texture_00.png:650,400,1210,1060 \
+  --region texture_00.png:650,1000,835,1345 --region texture_00.png:1040,1000,1205,1335 \
+  --region texture_01.png:1690,1560,2048,2048
+```
+
+Then drop this `expressions.json` next to it (verified by rendering each of Haru's eight
+expressions):
+
+```json
+{ "neutral": "F01", "happy": "F02", "smug": "F08", "surprised": "F06", "sleepy": "F05", "annoyed": "F03" }
+```
+
+`--hue` takes any angle, so the same command makes her blonde (45), blue (215) or green (130).
+The sample models are free for personal use under Live2D's terms; check them before
+redistributing a recolored copy.
+
+### 2D or 3D?
+
+If you want a specific look without hiring an illustrator, a 3D VRM avatar is the easier
+road: VRoid Studio (free) lets you build an adult character with any hair colour and outfit in
+an afternoon, VRM has standard expression and viseme names so expression mapping disappears,
+and walk/gesture animations can be retargeted from stock clips instead of being drawn per
+model. The cost is the look: cel-shaded 3D instead of an illustration. The main process and
+brain do not care which renderer is used; swapping `character.ts` for a three.js + three-vrm
+implementation is the only change.
 
 ## How she stays alive
 

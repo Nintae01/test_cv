@@ -61,6 +61,12 @@ async function boot(): Promise<void> {
   })
   api.onExpression((expression) => character.setExpression(expression))
 
+  // Open the overlay with ?debug (or from the preview harness) to poke at her from DevTools:
+  // window.__debug.character.playExpressionRaw('F05'), .expressionNames(), .onWalk({...}) ...
+  if (window.location.search.includes('debug')) {
+    ;(window as unknown as { __debug: unknown }).__debug = { character, bubble }
+  }
+
   console.info(`[${cfg.name}] ready`)
 }
 
